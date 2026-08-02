@@ -10,14 +10,39 @@
  * standard icon there is what produces the well-known "cropped logo" bug.
  */
 
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const source = join(root, 'public', 'favicon.svg')
 const outDir = join(root, 'public', 'icons')
+
+/**
+ * Source artwork, best first.
+ *
+ * The church's own logo wins when it is in the repository. `assets/` holds the
+ * full-resolution original, which is never served to the browser but is exactly
+ * what an icon should be rasterised from. The drawn SVG is the fallback so a
+ * fresh clone can still generate a full icon set.
+ */
+const SOURCES = [
+  join(root, 'assets', 'logo-original.png'),
+  join(root, 'public', 'logo.png'),
+  join(root, 'public', 'favicon.svg'),
+]
+
+async function pickSource() {
+  for (const candidate of SOURCES) {
+    try {
+      await access(candidate)
+      return candidate
+    } catch {
+      /* try the next one */
+    }
+  }
+  throw new Error('No source artwork found.')
+}
 
 /** Behind the seal on maskable icons, so the crop never exposes the page. */
 const BRAND = '#2B2750'
@@ -30,21 +55,23 @@ const TARGETS = [
 ]
 
 async function main() {
-  const svg = await readFile(source)
+  const source = await pickSource()
+  const art = await readFile(source)
+  console.log(`  source: ${source.replace(root, '.')}`)
   await mkdir(outDir, { recursive: true })
 
   for (const target of TARGETS) {
     const { size, maskable } = target
 
     if (!maskable) {
-      await sharp(svg, { density: 384 })
+      await sharp(art, { density: 384 })
         .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
         .png({ compressionLevel: 9 })
         .toFile(join(outDir, target.file))
     } else {
       // 80% safe zone: render the art smaller, then centre it on brand colour.
       const inner = Math.round(size * 0.8)
-      const art = await sharp(svg, { density: 384 })
+      const inset = await sharp(art, { density: 384 })
         .resize(inner, inner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
         .png()
         .toBuffer()
@@ -52,7 +79,7 @@ async function main() {
       await sharp({
         create: { width: size, height: size, channels: 4, background: BRAND },
       })
-        .composite([{ input: art, gravity: 'centre' }])
+        .composite([{ input: inset, gravity: 'centre' }])
         .png({ compressionLevel: 9 })
         .toFile(join(outDir, target.file))
     }
@@ -61,7 +88,7 @@ async function main() {
   }
 
   // A tiny ICO-free favicon fallback for browsers that ignore SVG icons.
-  await sharp(svg, { density: 192 })
+  await sharp(art, { density: 192 })
     .resize(48, 48, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png({ compressionLevel: 9 })
     .toFile(join(root, 'public', 'favicon-48.png'))
@@ -69,7 +96,7 @@ async function main() {
 
   await writeFile(
     join(outDir, 'README.md'),
-    '# Generated icons\n\nRun `npm run icons` after editing `public/favicon.svg`.\nThese files are committed so the deploy workflow does not need sharp.\n',
+    '# Generated icons\n\nRun `npm run icons` after changing the church artwork in `assets/logo-original.png`.\nThese files are committed so the deploy workflow does not need sharp.\n',
     'utf8',
   )
 }
