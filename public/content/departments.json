@@ -1,19 +1,5 @@
 [
   {
-    "id": "dep_44972a7b-318c-4379-976f-f91163cdcf69",
-    "key": "choir",
-    "name": "Choir",
-    "slug": "choir",
-    "summary": "Leading the congregation in worship through song.",
-    "description": "",
-    "accent": "vestry",
-    "icon": "music",
-    "active": true,
-    "order": 1,
-    "createdAt": "2026-08-02T21:18:33.528Z",
-    "updatedAt": "2026-08-02T21:18:33.528Z"
-  },
-  {
     "id": "dep_fda26766-2a10-4731-aa41-dd32485b1eb9",
     "key": "ushers",
     "name": "Ushers",
@@ -23,7 +9,7 @@
     "accent": "gold",
     "icon": "hand",
     "active": true,
-    "order": 2,
+    "order": 1,
     "createdAt": "2026-08-02T21:18:33.528Z",
     "updatedAt": "2026-08-02T21:18:33.528Z"
   },
@@ -36,6 +22,20 @@
     "description": "",
     "accent": "azure",
     "icon": "video",
+    "active": false,
+    "order": 2,
+    "createdAt": "2026-08-02T21:18:33.528Z",
+    "updatedAt": "2026-08-02T21:19:31.670Z"
+  },
+  {
+    "id": "dep_44972a7b-318c-4379-976f-f91163cdcf69",
+    "key": "choir",
+    "name": "Choir",
+    "slug": "choir",
+    "summary": "Leading the congregation in worship through song.",
+    "description": "",
+    "accent": "vestry",
+    "icon": "music",
     "active": true,
     "order": 3,
     "createdAt": "2026-08-02T21:18:33.528Z",
@@ -115,21 +115,6 @@
     "updatedAt": "2026-08-02T21:18:33.528Z"
   },
   {
-    "id": "dep_84901953-7e97-4257-b3f5-36f0199a27ff",
-    "key": "mmu",
-    "name": "Men's Missionary Union",
-    "slug": "mens-missionary-union",
-    "shortName": "MMU",
-    "summary": "The men of the church in mission, prayer and service.",
-    "description": "",
-    "accent": "vestry",
-    "icon": "shield",
-    "active": true,
-    "order": 9,
-    "createdAt": "2026-08-02T21:18:33.528Z",
-    "updatedAt": "2026-08-02T21:18:33.528Z"
-  },
-  {
     "id": "dep_51cddf76-b424-4610-b3e3-b26871e7603e",
     "key": "ra",
     "name": "Royal Ambassadors",
@@ -140,7 +125,7 @@
     "accent": "azure",
     "icon": "flag",
     "active": true,
-    "order": 10,
+    "order": 9,
     "createdAt": "2026-08-02T21:18:33.528Z",
     "updatedAt": "2026-08-02T21:18:33.528Z"
   },
@@ -153,6 +138,21 @@
     "description": "",
     "accent": "crimson",
     "icon": "flower",
+    "active": true,
+    "order": 10,
+    "createdAt": "2026-08-02T21:18:33.528Z",
+    "updatedAt": "2026-08-02T21:18:33.528Z"
+  },
+  {
+    "id": "dep_84901953-7e97-4257-b3f5-36f0199a27ff",
+    "key": "mmu",
+    "name": "Men's Missionary Union",
+    "slug": "mens-missionary-union",
+    "shortName": "MMU",
+    "summary": "The men of the church in mission, prayer and service.",
+    "description": "",
+    "accent": "vestry",
+    "icon": "shield",
     "active": true,
     "order": 11,
     "createdAt": "2026-08-02T21:18:33.528Z",
