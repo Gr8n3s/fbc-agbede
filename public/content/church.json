@@ -15,7 +15,7 @@
   "pastorName": "",
   "pastorTitle": "Resident Pastor",
   "pastorMessage": "",
-  "about": "First Baptist Church Agbede, Ikorodu — the Chapel of Grace — is a Baptist congregation committed to the worship of God, the teaching of His word, and the care of one another. Whoever you are, and however you arrive, there is a seat for you here.",
+  "about": "First Baptist Church Agbede, Ikorodu - the Chapel of Grace  is a Baptist congregation committed to the worship of God, the teaching of His word, and the care of one another. Whoever you are, and however you arrive, there is a seat for you here.",
   "history": "",
   "mission": "",
   "vision": "",
@@ -45,11 +45,19 @@
       "id": "svc_bible_study",
       "day": "Wednesday",
       "name": "Bible Study",
-      "startTime": "17:00",
-      "endTime": "18:30"
+      "startTime": "18:00",
+      "endTime": "19:00"
     }
   ],
-  "bankAccounts": [],
+  "bankAccounts": [
+    {
+      "id": "acc_32bf146e-ed15-4279-bc93-9202d51e504c",
+      "purpose": "Tithes & Offerings",
+      "bankName": "",
+      "accountName": "",
+      "accountNumber": ""
+    }
+  ],
   "socials": [],
-  "updatedAt": "2026-01-01T00:00:00.000Z"
+  "updatedAt": "2026-08-02T21:12:04.084Z"
 }
