@@ -8,10 +8,10 @@
     "description": "",
     "accent": "gold",
     "icon": "hand",
-    "active": true,
+    "active": false,
     "order": 1,
     "createdAt": "2026-08-02T21:18:33.528Z",
-    "updatedAt": "2026-08-02T21:18:33.528Z"
+    "updatedAt": "2026-08-02T22:08:44.838Z"
   },
   {
     "id": "dep_2bc6d862-5d18-4af6-a550-10ec0cca20a6",
