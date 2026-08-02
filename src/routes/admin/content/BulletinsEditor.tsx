@@ -154,7 +154,7 @@ export function BulletinsEditor() {
       renderForm={(draft, set) => (
         <>
           {/* ---------------------------------------------------- masthead */}
-          <Group title="Masthead" hint="The block at the very top of the printed sheet.">
+          <Group title="Masthead" defaultOpen hint="The block at the very top of the printed sheet.">
             <Input
               label="Theme for the year"
               value={draft.yearTheme ?? ''}
@@ -617,23 +617,45 @@ export function BulletinsEditor() {
 // Pieces
 // ---------------------------------------------------------------------------
 
+/**
+ * A collapsible block of the form.
+ *
+ * The bulletin has eleven sections and runs to hundreds of fields. As one long
+ * scroll it is unusable on a phone and, worse, sections simply get missed. Each
+ * block therefore collapses, so the form opens as a readable table of contents
+ * and the admin expands only the part they are filling in.
+ *
+ * Built on native <details>, so it works without JavaScript state, keyboard
+ * users get it for free, and browser find-in-page still reaches inside.
+ */
 function Group({
   title,
   hint,
+  defaultOpen = false,
   children,
 }: {
   title: string
   hint?: string
+  defaultOpen?: boolean
   children: React.ReactNode
 }) {
   return (
-    <fieldset className="rounded-xl border border-line bg-sunken/25 p-3.5 sm:p-4">
-      <legend className="px-1.5 font-display text-[0.9375rem] font-semibold text-ink">
+    <details
+      open={defaultOpen}
+      className="group rounded-xl border border-line bg-sunken/25 [&[open]]:bg-sunken/40"
+    >
+      <summary className="flex cursor-pointer list-none items-center gap-2 rounded-xl px-3.5 py-3 font-display text-[0.9375rem] font-semibold text-ink hover:bg-sunken">
+        <ChevronDown
+          className="size-4 shrink-0 text-ink-faint transition-transform group-open:rotate-180"
+          aria-hidden
+        />
         {title}
-      </legend>
-      {hint && <p className="mb-3 text-[0.75rem] leading-snug text-ink-faint">{hint}</p>}
-      <div className="space-y-4">{children}</div>
-    </fieldset>
+      </summary>
+      <div className="border-t border-line px-3.5 pb-4 pt-4 sm:px-4">
+        {hint && <p className="mb-3 text-[0.75rem] leading-snug text-ink-faint">{hint}</p>}
+        <div className="space-y-4">{children}</div>
+      </div>
+    </details>
   )
 }
 

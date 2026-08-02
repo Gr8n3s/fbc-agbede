@@ -23,6 +23,7 @@ const EventDetailPage = lazy(() => import('./routes/public/EventDetailPage'))
 const SermonsPage = lazy(() => import('./routes/public/SermonsPage'))
 const SermonDetailPage = lazy(() => import('./routes/public/SermonDetailPage'))
 const DevotionalPage = lazy(() => import('./routes/public/DevotionalPage'))
+const BiblePage = lazy(() => import('./routes/public/BiblePage'))
 const DepartmentsPage = lazy(() => import('./routes/public/DepartmentsPage'))
 const DepartmentDetailPage = lazy(() => import('./routes/public/DepartmentDetailPage'))
 const AnnouncementsPage = lazy(() => import('./routes/public/AnnouncementsPage'))
@@ -68,6 +69,9 @@ export default function App() {
           <Route path="sermons/:slug" element={<SermonDetailPage />} />
 
           <Route path="devotional" element={<DevotionalPage />} />
+          <Route path="bible" element={<BiblePage />} />
+          {/* Members look for "reading plan" by name. Keep it working. */}
+          <Route path="reading-plan" element={<Navigate to="/bible" replace />} />
           <Route path="departments" element={<DepartmentsPage />} />
           <Route path="departments/:slug" element={<DepartmentDetailPage />} />
           <Route path="announcements" element={<AnnouncementsPage />} />

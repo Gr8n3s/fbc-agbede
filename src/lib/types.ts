@@ -530,6 +530,55 @@ export interface Devotional extends Timestamped {
   published: boolean
 }
 
+// --- Bible reading plan -----------------------------------------------------
+
+/** One day of a reading plan. */
+export interface ReadingPlanDay {
+  id: string
+  /**
+   * Day number within the plan, starting at 1. Deliberately not a date: a
+   * church runs the same plan again next year, and a member who starts in
+   * March should be on day 1, not eleven weeks behind.
+   */
+  day: number
+  /** Passages for the day, e.g. ["Genesis 1-2", "Matthew 1"]. */
+  references: string[]
+  note?: string
+}
+
+export interface ReadingPlan extends Timestamped {
+  id: string
+  title: string
+  slug: string
+  description: string
+  /** Where day 1 falls when the church reads it together. Optional. */
+  startDate?: IsoDate
+  days: ReadingPlanDay[]
+  published: boolean
+}
+
+/**
+ * A general Bible teaching.
+ *
+ * Distinct from a sermon on purpose: a sermon is an event, tied to a date, a
+ * preacher and a service. A teaching is reference material the church keeps
+ * available, on doctrine, Christian living, or how to study scripture.
+ */
+export interface Teaching extends Timestamped {
+  id: string
+  title: string
+  slug: string
+  /** Free text so the church is not boxed in, e.g. "Doctrine", "Baptist Faith". */
+  topic: string
+  scriptures: string[]
+  summary: string
+  /** Markdown-ish body: headings, lists, blockquotes, bold. */
+  body: string
+  author?: string
+  order: number
+  published: boolean
+}
+
 /** Prayer points the pastor publishes for the whole church to agree with. */
 export interface PrayerPoint extends Timestamped {
   id: string
@@ -553,6 +602,8 @@ export interface PublishedContent {
   downloads: DownloadItem[]
   devotionals: Devotional[]
   prayerPoints: PrayerPoint[]
+  readingPlans: ReadingPlan[]
+  teachings: Teaching[]
 }
 
 export type CollectionName = keyof PublishedContent

@@ -26,7 +26,10 @@ import type {
   GalleryContent,
   PrayerPoint,
   PublishedContent,
+  ReadingPlan,
+  ReadingPlanDay,
   Sermon,
+  Teaching,
 } from './types'
 import { BASE_URL, nowIso } from './utils'
 
@@ -44,6 +47,8 @@ export const CONTENT_FILES: Record<CollectionName, string> = {
   downloads: 'downloads.json',
   devotionals: 'devotionals.json',
   prayerPoints: 'prayer-points.json',
+  readingPlans: 'reading-plans.json',
+  teachings: 'teachings.json',
 }
 
 export const CONTENT_DIR = 'public/content'
@@ -98,6 +103,8 @@ export const EMPTY_CONTENT: PublishedContent = {
   downloads: [],
   devotionals: [],
   prayerPoints: [],
+  readingPlans: [],
+  teachings: [],
 }
 
 // ---------------------------------------------------------------------------
@@ -283,6 +290,37 @@ export function publishedPrayerPoints(items: PrayerPoint[]): PrayerPoint[] {
 
 export function publishedAlbums(gallery: GalleryContent): GalleryContent['albums'] {
   return gallery.albums.filter(isPublished).sort((a, b) => b.date.localeCompare(a.date))
+}
+
+/**
+ * The plan the church is currently reading, and which day it is on.
+ *
+ * Day is worked out from the plan's start date and wraps at the end, so a plan
+ * shorter than the year simply repeats rather than running out. A plan with no
+ * start date has no "today", and the page shows it as a list instead.
+ */
+export function currentReadingPlan(
+  plans: ReadingPlan[],
+): { plan: ReadingPlan; day: ReadingPlanDay | undefined; dayNumber: number } | undefined {
+  const published = plans.filter(isPublished)
+  const plan = published.find((p) => p.startDate) ?? published[0]
+  if (!plan || plan.days.length === 0) return undefined
+
+  if (!plan.startDate) return { plan, day: undefined, dayNumber: 0 }
+
+  const start = new Date(`${plan.startDate}T00:00:00`)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const elapsed = Math.floor((today.getTime() - start.getTime()) / 86_400_000)
+  if (elapsed < 0) return { plan, day: plan.days[0], dayNumber: 1 }
+
+  const dayNumber = (elapsed % plan.days.length) + 1
+  return { plan, day: plan.days.find((d) => d.day === dayNumber), dayNumber }
+}
+
+/** Published teachings, in the order the church arranged them. */
+export function publishedTeachings(items: Teaching[]): Teaching[] {
+  return items.filter(isPublished).sort((a, b) => a.order - b.order)
 }
 
 /** Today's devotional, else the most recent one already published. */

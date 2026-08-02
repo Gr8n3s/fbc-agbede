@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   AlertTriangle,
+  BookMarked,
   BookOpenText,
   Building2,
   CalendarDays,
@@ -9,6 +10,7 @@ import {
   CloudUpload,
   Download,
   ExternalLink,
+  GraduationCap,
   HandHeart,
   Images,
   Megaphone,
@@ -36,6 +38,7 @@ import type { CollectionName } from '@/lib/types'
 import { formatDate, pluralise } from '@/lib/utils'
 import { ChurchEditor } from './content/ChurchEditor'
 import { BulletinsEditor } from './content/BulletinsEditor'
+import { ReadingPlansEditor, TeachingsEditor } from './content/bible'
 import {
   AnnouncementsEditor,
   DevotionalsEditor,
@@ -128,6 +131,24 @@ const SECTIONS: Section[] = [
     icon: HandHeart,
     render: () => <PrayerPointsEditor />,
     count: (content) => content.prayerPoints.length,
+  },
+  {
+    slug: 'readingPlans',
+    collection: 'readingPlans',
+    label: 'Reading plan',
+    description: 'Day-by-day journey through the Bible',
+    icon: BookMarked,
+    render: () => <ReadingPlansEditor />,
+    count: (content) => content.readingPlans.length,
+  },
+  {
+    slug: 'teachings',
+    collection: 'teachings',
+    label: 'Bible teachings',
+    description: 'Doctrine, Christian living and Bible study',
+    icon: GraduationCap,
+    render: () => <TeachingsEditor />,
+    count: (content) => content.teachings.length,
   },
   {
     slug: 'gallery',

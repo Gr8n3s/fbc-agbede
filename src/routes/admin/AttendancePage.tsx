@@ -223,6 +223,23 @@ export default function AttendancePage() {
     { key: 'notes', header: 'Notes', value: (r) => r.notes, width: 220 },
   ]
 
+  /** One row per class, flattened across the registers in view. */
+  const classRows = filtered.flatMap((record) =>
+    (record.groups ?? []).map((group) => ({ record, group })),
+  )
+
+  const classColumns: Column<(typeof classRows)[number]>[] = [
+    { key: 'date', header: 'Date', value: (r) => r.record.date, type: 'date' },
+    {
+      key: 'service',
+      header: 'Service',
+      value: (r) => SERVICE_TYPE_LABELS[r.record.serviceType],
+    },
+    { key: 'class', header: 'Class', value: (r) => r.group.name, width: 160 },
+    { key: 'present', header: 'Present', value: (r) => r.group.count, type: 'number' },
+    { key: 'offering', header: 'Offering (₦)', value: (r) => r.group.offering, type: 'number' },
+  ]
+
   return (
     <div className="mx-auto max-w-6xl space-y-5">
       <header className="flex flex-wrap items-end justify-between gap-3">
@@ -364,11 +381,18 @@ export default function AttendancePage() {
             disabled={filtered.length === 0}
             onClick={() => {
               exportExcel(
-                [{ name: 'Attendance', rows: filtered, columns }],
+                [
+                  { name: 'Attendance', rows: filtered, columns },
+                  // Sunday School is counted by class, so the classes get their
+                  // own sheet rather than being flattened into one number.
+                  ...(classRows.length > 0
+                    ? [{ name: 'Classes', rows: classRows, columns: classColumns }]
+                    : []),
+                ] as never,
                 'fbc-attendance',
                 'FBC Agbede Attendance',
               )
-              toast.success('Excel file downloaded')
+              toast.success('Excel file downloaded', 'Registers, and a sheet per class where used.')
             }}
           >
             Excel
@@ -649,7 +673,10 @@ function RegisterEditor({
           ))}
         </div>
 
-        {/* Classes. Sunday School always splits; other services rarely do. */}
+        {/* Classes belong to Sunday School. Other services are one room, so the
+            editor only offers this where it actually applies, or where a
+            previous register already used it. */}
+        {(draft.serviceType === 'sunday-school' || (draft.groups?.length ?? 0) > 0) && (
         <div className="rounded-lg border border-line bg-sunken/40 p-3.5">
           <ListEditor<AttendanceGroup>
             label="Classes / groups"
@@ -706,6 +733,7 @@ function RegisterEditor({
             </button>
           )}
         </div>
+        )}
 
         <p className="rounded-lg bg-brand/[0.07] px-3 py-2.5 text-center text-[0.875rem] font-semibold text-brand">
           Total present: {formatNumber(countTotal || groupTotal)}

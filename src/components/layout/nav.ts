@@ -1,4 +1,5 @@
 import {
+  BookMarked,
   BookOpenText,
   CalendarDays,
   Church,
@@ -48,6 +49,12 @@ export const PRIMARY_NAV: NavItem[] = [
 
 /** Everything else, shown in the desktop bar and the mobile "More" sheet. */
 export const SECONDARY_NAV: NavItem[] = [
+  {
+    to: '/bible',
+    label: 'Bible',
+    icon: BookMarked,
+    description: 'Reading plan and Christian teaching',
+  },
   { to: '/about', label: 'About', icon: Info, description: 'Our story, beliefs and leadership' },
   { to: '/departments', label: 'Departments', icon: Users, description: 'Choir, ushers, WMU, MMU, RA and more' },
   { to: '/announcements', label: 'Notice Board', icon: Megaphone, description: 'Church announcements' },
