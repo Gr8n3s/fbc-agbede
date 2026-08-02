@@ -1,0 +1,62 @@
+name: Deploy to GitHub Pages
+
+# Runs on every push to main, and whenever the app publishes content from the
+# admin (which is itself a commit to main). Also available manually.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Pages needs these; nothing here can write to the repository contents.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time. Content commits can arrive in quick succession when an
+# admin publishes several sections, and only the newest needs to go live —
+# but never cancel a run mid-deploy, or Pages is left half-updated.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci` needs the lockfile to match package.json exactly, which is what
+      # makes the deployed build reproducible.
+      - run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Build
+        env:
+          # Project pages are served from /<repo>/. For a user page
+          # (<user>.github.io) or a custom domain, set this to "/".
+          BASE_PATH: /${{ github.event.repository.name }}/
+        run: npm run build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

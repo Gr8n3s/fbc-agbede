@@ -1,0 +1,38 @@
+{
+  "name": "fbc-agbede",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Progressive Web App for First Baptist Church Agbede, Ikorodu — Chapel of Grace",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && node scripts/post-build.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --noEmit",
+    "icons": "node scripts/generate-icons.mjs",
+    "seed:encrypt": "node scripts/encrypt-seed.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.2.5",
+    "@fontsource-variable/fraunces": "^5.2.5",
+    "chart.js": "^4.5.0",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.544.0",
+    "react": "^19.2.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.3",
+    "sharp": "^0.34.4",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.7",
+    "vite-plugin-pwa": "^1.0.3"
+  }
+}

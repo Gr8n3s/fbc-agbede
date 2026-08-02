@@ -1,0 +1,549 @@
+@import 'tailwindcss';
+
+/* Self-hosted fonts — no third-party font CDN, nothing to pay for, works offline. */
+@import '@fontsource-variable/fraunces/index.css';
+@import '@fontsource-variable/archivo/index.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   FBC Agbede — "Chapel of Grace" design language
+   --------------------------------------------------------------------------
+   Palette lifted directly from the church seal:
+     vestry  — the deep plum-indigo of the outer ring
+     crimson — the red banner carrying "CHAPEL OF GRACE"
+     azure   — the blue of the cross
+     sky     — the sky behind the dove
+     gold    — ornament, rules and dividers only (never a background)
+     parchment — the warm paper the light theme is printed on
+
+   Two motifs recur throughout the app and are the reason it does not look
+   like a generic dashboard:
+     1. THE ARCH — the chapel window silhouette. Cards, images and section
+        headers are capped with a semicircular arch (.arch, .arch-sm).
+     2. THE SEAL — the circular ring device from the logo, used for section
+        markers, avatars and the loading state (.seal).
+   ========================================================================== */
+
+@theme {
+  /* --- raw brand scales --------------------------------------------- */
+  --color-vestry-50: #f2f1f8;
+  --color-vestry-100: #e3e1f0;
+  --color-vestry-200: #c7c3e1;
+  --color-vestry-300: #a29ccd;
+  --color-vestry-400: #7b73b3;
+  --color-vestry-500: #5c5397;
+  --color-vestry-600: #463f79;
+  --color-vestry-700: #383163;
+  --color-vestry-800: #2b2750;
+  --color-vestry-900: #1f1c3c;
+  --color-vestry-950: #151230;
+
+  --color-crimson-50: #fdf3f4;
+  --color-crimson-100: #fbe5e7;
+  --color-crimson-200: #f7ccd2;
+  --color-crimson-300: #efa2ad;
+  --color-crimson-400: #e46d80;
+  --color-crimson-500: #d43f58;
+  --color-crimson-600: #c4142f;
+  --color-crimson-700: #a30f27;
+  --color-crimson-800: #871025;
+  --color-crimson-900: #741124;
+  --color-crimson-950: #40040f;
+
+  --color-azure-50: #f0f7fe;
+  --color-azure-100: #ddedfc;
+  --color-azure-200: #c3e0fa;
+  --color-azure-300: #99cdf6;
+  --color-azure-400: #68b2ef;
+  --color-azure-500: #4593e8;
+  --color-azure-600: #2f76d9;
+  --color-azure-700: #1a5c9c;
+  --color-azure-800: #1c4d80;
+  --color-azure-900: #1c426b;
+  --color-azure-950: #142a47;
+
+  --color-gold-50: #fbf8ec;
+  --color-gold-100: #f5eecd;
+  --color-gold-200: #ecdb9d;
+  --color-gold-300: #e0c266;
+  --color-gold-400: #d5aa3f;
+  --color-gold-500: #c9a43a;
+  --color-gold-600: #a87526;
+  --color-gold-700: #875722;
+  --color-gold-800: #714622;
+  --color-gold-900: #613b22;
+
+  --color-parchment-50: #fdfbf6;
+  --color-parchment-100: #f8f3e9;
+  --color-parchment-200: #f1e8d6;
+  --color-parchment-300: #e6d8bd;
+  --color-parchment-400: #d8c39c;
+
+  /* --- semantic tokens (resolved per theme below) -------------------- */
+  --color-canvas: var(--c-canvas);
+  --color-surface: var(--c-surface);
+  --color-raised: var(--c-raised);
+  --color-sunken: var(--c-sunken);
+  --color-ink: var(--c-ink);
+  --color-ink-soft: var(--c-ink-soft);
+  --color-ink-faint: var(--c-ink-faint);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-brand: var(--c-brand);
+  --color-brand-soft: var(--c-brand-soft);
+  --color-accent: var(--c-accent);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-ornament: var(--c-ornament);
+  --color-info: var(--c-info);
+  --color-success: #157f5b;
+  --color-warning: #b1750f;
+  --color-danger: var(--color-crimson-600);
+  --color-on-brand: var(--c-on-brand);
+
+  /* --- type --------------------------------------------------------- */
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+
+  --text-hero: clamp(2.5rem, 1.4rem + 5.2vw, 5rem);
+  --text-hero--line-height: 0.98;
+  --text-hero--letter-spacing: -0.03em;
+  --text-title: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  --text-title--line-height: 1.08;
+  --text-title--letter-spacing: -0.02em;
+
+  /* --- motion ------------------------------------------------------- */
+  --ease-chapel: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-vault: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --animate-rise: rise 0.6s var(--ease-chapel) both;
+  --animate-veil: veil 0.5s var(--ease-chapel) both;
+  --animate-seal-in: seal-in 0.7s var(--ease-chapel) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-halo: halo 5s ease-in-out infinite;
+
+  /* --- radii, shadow ------------------------------------------------ */
+  --radius-arch: 14rem 14rem 0.75rem 0.75rem;
+  --shadow-pew: 0 1px 2px -1px rgb(21 18 48 / 0.12), 0 6px 20px -12px rgb(21 18 48 / 0.35);
+  --shadow-lift: 0 2px 4px -2px rgb(21 18 48 / 0.14), 0 18px 40px -20px rgb(21 18 48 / 0.45);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes veil {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes seal-in {
+  from {
+    opacity: 0;
+    transform: rotate(-14deg) scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes shimmer {
+  from {
+    background-position: -180% 0;
+  }
+  to {
+    background-position: 180% 0;
+  }
+}
+@keyframes halo {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.06);
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================================
+   Theme resolution
+   ========================================================================== */
+:root {
+  --c-canvas: var(--color-parchment-100);
+  --c-surface: #fffdf8;
+  --c-raised: #ffffff;
+  --c-sunken: var(--color-parchment-200);
+  --c-ink: var(--color-vestry-950);
+  --c-ink-soft: #4b466b;
+  --c-ink-faint: #78738f;
+  --c-line: color-mix(in oklab, var(--color-vestry-900) 13%, transparent);
+  --c-line-strong: color-mix(in oklab, var(--color-vestry-900) 26%, transparent);
+  --c-brand: var(--color-vestry-800);
+  --c-brand-soft: var(--color-vestry-100);
+  --c-accent: var(--color-crimson-600);
+  --c-accent-soft: var(--color-crimson-100);
+  --c-ornament: var(--color-gold-600);
+  --c-info: var(--color-azure-700);
+  --c-on-brand: #fffdf8;
+
+  --grain-opacity: 0.032;
+  --halo-a: color-mix(in oklab, var(--color-azure-300) 55%, transparent);
+  --halo-b: color-mix(in oklab, var(--color-gold-200) 60%, transparent);
+}
+
+.dark {
+  --c-canvas: var(--color-vestry-950);
+  --c-surface: #1c1839;
+  --c-raised: #241f45;
+  --c-sunken: #120f28;
+  --c-ink: #f3f0fb;
+  --c-ink-soft: #c0bad9;
+  --c-ink-faint: #8e88ab;
+  --c-line: color-mix(in oklab, #ffffff 12%, transparent);
+  --c-line-strong: color-mix(in oklab, #ffffff 24%, transparent);
+  --c-brand: var(--color-vestry-200);
+  --c-brand-soft: var(--color-vestry-800);
+  --c-accent: var(--color-crimson-400);
+  --c-accent-soft: color-mix(in oklab, var(--color-crimson-600) 28%, transparent);
+  --c-ornament: var(--color-gold-300);
+  --c-info: var(--color-azure-300);
+  --c-on-brand: var(--color-vestry-950);
+
+  --grain-opacity: 0.055;
+  --halo-a: color-mix(in oklab, var(--color-azure-700) 45%, transparent);
+  --halo-b: color-mix(in oklab, var(--color-vestry-600) 55%, transparent);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    /* Paper grain. An inline SVG so there is no extra network request. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+    background-blend-mode: multiply;
+  }
+
+  .dark body {
+    background-blend-mode: screen;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 0, 'WONK' 1;
+    font-weight: 600;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-info);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-gold-400) 45%, transparent);
+    color: var(--color-ink);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border-radius: 99px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* Respect the user's motion preference everywhere, no exceptions. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ==========================================================================
+   Motifs & utilities
+   ========================================================================== */
+@utility arch {
+  border-start-start-radius: 9999px;
+  border-start-end-radius: 9999px;
+  border-end-start-radius: 0.875rem;
+  border-end-end-radius: 0.875rem;
+}
+
+@utility arch-sm {
+  border-start-start-radius: 4rem;
+  border-start-end-radius: 4rem;
+  border-end-start-radius: 0.75rem;
+  border-end-end-radius: 0.75rem;
+}
+
+/* Gold hairline rule with a diamond at its centre — the section divider. */
+@utility rule-gold {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-ornament) 70%, transparent) 18%,
+    color-mix(in oklab, var(--color-ornament) 70%, transparent) 82%,
+    transparent
+  );
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: 50%;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    translate: -50% -50%;
+    rotate: 45deg;
+    background: var(--color-ornament);
+  }
+}
+
+/* The seal: a double ring echoing the church logo. */
+@utility seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+  box-shadow:
+    0 0 0 2px var(--color-canvas),
+    0 0 0 3.5px color-mix(in oklab, var(--color-ornament) 85%, transparent);
+}
+
+@utility card-chapel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-pew);
+  transition:
+    transform 0.35s var(--ease-chapel),
+    box-shadow 0.35s var(--ease-chapel),
+    border-color 0.35s var(--ease-chapel);
+}
+
+@utility hoverable {
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lift);
+      border-color: color-mix(in oklab, var(--color-ornament) 45%, var(--color-line));
+    }
+  }
+}
+
+/* Small-caps eyebrow label used above every section heading. */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ornament);
+}
+
+@utility stack-lines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 1.9rem,
+    var(--color-line) 1.9rem,
+    var(--color-line) calc(1.9rem + 1px)
+  );
+}
+
+@utility skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-sunken) 25%,
+    color-mix(in oklab, var(--color-sunken) 55%, var(--color-surface)) 50%,
+    var(--color-sunken) 75%
+  );
+  background-size: 220% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: 0.5rem;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Reveal-on-scroll: elements start hidden and are released by an
+   IntersectionObserver adding [data-revealed]. Progressive — if JS never
+   runs, `.reveal:not([data-revealed])` is overridden by the no-js fallback. */
+@layer components {
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+    transition:
+      opacity 0.7s var(--ease-chapel),
+      transform 0.7s var(--ease-chapel);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal[data-revealed] {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .prose-chapel {
+    color: var(--color-ink-soft);
+    line-height: 1.75;
+
+    & h2 {
+      color: var(--color-ink);
+      font-size: 1.5rem;
+      margin-block: 2rem 0.75rem;
+    }
+    & h3 {
+      color: var(--color-ink);
+      font-size: 1.175rem;
+      margin-block: 1.5rem 0.5rem;
+    }
+    & p {
+      margin-block: 0.9rem;
+    }
+    & ul,
+    & ol {
+      margin-block: 0.9rem;
+      padding-inline-start: 1.35rem;
+    }
+    & ul {
+      list-style: none;
+    }
+    & ul > li {
+      position: relative;
+    }
+    & ul > li::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: -1rem;
+      top: 0.7em;
+      width: 5px;
+      height: 5px;
+      rotate: 45deg;
+      background: var(--color-ornament);
+    }
+    & ol {
+      list-style: decimal;
+    }
+    & li {
+      margin-block: 0.35rem;
+    }
+    & strong {
+      color: var(--color-ink);
+      font-weight: 650;
+    }
+    & a {
+      color: var(--color-info);
+      text-underline-offset: 3px;
+      text-decoration: underline;
+    }
+    & blockquote {
+      margin-block: 1.5rem;
+      padding-inline-start: 1.25rem;
+      border-inline-start: 2px solid var(--color-ornament);
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-style: italic;
+      color: var(--color-ink);
+    }
+    & code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      background: var(--color-sunken);
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+    }
+  }
+}
+
+/* Print: reports should come out clean on paper. */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    background-image: none !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .card-chapel {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# The church office is a device-local admin area. There is nothing there for a
+# crawler to index — it renders only after a passphrase unlocks local storage.
+Disallow: /admin

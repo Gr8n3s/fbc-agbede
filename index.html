@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F3E9" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#151230" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="FBC Agbede" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="color-scheme" content="light dark" />
+
+    <title>First Baptist Church Agbede, Ikorodu — Chapel of Grace</title>
+    <meta
+      name="description"
+      content="Chapel of Grace. Worship times, sermons, events, daily devotionals and church life at First Baptist Church Agbede, Ikorodu."
+    />
+    <meta property="og:title" content="First Baptist Church Agbede, Ikorodu" />
+    <meta property="og:description" content="Chapel of Grace — a household of faith in Ikorodu." />
+    <meta property="og:type" content="website" />
+
+    <!--
+      Theme is applied before first paint so the app never flashes the wrong palette.
+      Kept inline and tiny on purpose; it must run synchronously.
+    -->
+    <script>
+      ;(function () {
+        try {
+          var stored = localStorage.getItem('fbc.theme')
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          var dark = stored ? stored === 'dark' : prefersDark
+          document.documentElement.classList.toggle('dark', dark)
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <div style="padding: 2rem; font-family: system-ui, sans-serif">
+        <h1>First Baptist Church Agbede, Ikorodu</h1>
+        <p>This app needs JavaScript enabled. Please turn it on and reload.</p>
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

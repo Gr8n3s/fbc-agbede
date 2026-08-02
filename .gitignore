@@ -1,0 +1,25 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+.env
+.env.local
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+*.tsbuildinfo
+.idea/
+Thumbs.db
+
+# ---------------------------------------------------------------------------
+# PERSONAL DATA MUST NEVER BE COMMITTED.
+# This repository is public. Member records, attendance registers and prayer
+# requests live only in the admin's browser (IndexedDB) and in encrypted
+# .fbcvault backups kept off this repository. See docs/DATA-PRIVACY.md.
+# ---------------------------------------------------------------------------
+*.fbcvault
+backups/
+private/
+**/members*.json
+**/attendance*.json
+**/prayer-requests*.json
