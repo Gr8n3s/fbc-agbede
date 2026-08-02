@@ -62,7 +62,9 @@ export function AccessGate({ onUnlocked }: { onUnlocked: () => void }) {
         <Card className="overflow-hidden">
           <div className="border-b border-line px-6 py-7 text-center">
             <Seal className="mx-auto size-16" decorative />
-            <span className="mx-auto -mt-5 grid size-9 place-items-center rounded-full bg-brand text-on-brand ring-4 ring-surface">
+            {/* Sits clear of the seal. It used to tuck into the drawn ring,
+                which collides with the church's real badge. */}
+            <span className="mx-auto mt-3 grid size-9 place-items-center rounded-full bg-brand text-on-brand">
               <KeyRound className="size-4.5" aria-hidden />
             </span>
             <h1 className="mt-4 font-display text-xl font-semibold text-ink">Church office</h1>

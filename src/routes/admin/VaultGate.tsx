@@ -87,7 +87,7 @@ function Shell({
             <Seal className="mx-auto size-16" decorative />
             <span
               className={cx(
-                'mx-auto -mt-5 grid size-9 place-items-center rounded-full ring-4 ring-surface',
+                'mx-auto mt-3 grid size-9 place-items-center rounded-full',
                 tone === 'danger' ? 'bg-danger text-white' : 'bg-brand text-on-brand',
               )}
             >
