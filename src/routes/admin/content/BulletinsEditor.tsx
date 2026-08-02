@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ChevronDown, Plus, ScrollText, Trash2 } from 'lucide-react'
 import {
   FileField,
@@ -928,6 +929,18 @@ function AttendanceEditor({
   )
 }
 
+/**
+ * The month's birthday list.
+ *
+ * A typical month runs to forty-odd names, so the primary input is a paste box
+ * rather than a row editor: the church already keeps this list in a document,
+ * and clicking "add row" forty times is not a workflow.
+ *
+ * The parser is deliberately forgiving, because the pasted list is whatever the
+ * secretary typed. It copes with the numbering the church actually uses
+ * ("1.", "2:"), with ordinal suffixes ("28th"), and with the day sitting either
+ * at the end of the line or after a comma or dash.
+ */
 function BirthdaysEditor({
   rows,
   onChange,
@@ -935,48 +948,101 @@ function BirthdaysEditor({
   rows: BulletinBirthday[]
   onChange: (next: BulletinBirthday[]) => void
 }) {
-  const sorted = [...rows].sort((a, b) => a.day - b.day)
+  const [bulk, setBulk] = useState(false)
+
+  const asText = rows.map((row) => `${row.name} ${row.day}`).join('\n')
 
   return (
-    <div className="space-y-2">
-      <ListEditor<BulletinBirthday>
-        label="Celebrants"
-        items={rows}
-        onChange={onChange}
-        createItem={() => ({ id: newId('bd'), name: '', day: 1 })}
-        addLabel="Add a celebrant"
-        emptyLabel="No birthdays listed for this month."
-        reorderable={false}
-        renderRow={(item, updateItem) => (
-          <div className="grid gap-1.5 sm:grid-cols-[1fr_6rem]">
-            <RowInput
-              label="Name"
-              value={item.name}
-              onChange={(e) => updateItem({ name: e.target.value })}
-            />
-            <RowInput
-              label="Day"
-              type="number"
-              min={1}
-              max={31}
-              value={item.day || ''}
-              onChange={(e) => updateItem({ day: Number(e.target.value) || 1 })}
-            />
-          </div>
-        )}
-      />
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-[0.8125rem] text-ink-soft">
+          {rows.length === 0
+            ? 'No birthdays listed for this month.'
+            : `${rows.length} celebrants listed.`}
+        </p>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => setBulk((v) => !v)}
+            className="text-[0.75rem] font-semibold text-info underline underline-offset-2"
+          >
+            {bulk ? 'Edit one at a time' : 'Paste a whole list'}
+          </button>
+          {rows.length > 1 && (
+            <button
+              type="button"
+              onClick={() => onChange([...rows].sort((a, b) => a.day - b.day))}
+              className="text-[0.75rem] font-semibold text-info underline underline-offset-2"
+            >
+              Sort by day
+            </button>
+          )}
+        </div>
+      </div>
 
-      {rows.length > 1 && (
-        <button
-          type="button"
-          onClick={() => onChange(sorted)}
-          className="text-[0.75rem] font-semibold text-info underline underline-offset-2"
-        >
-          Sort by day of the month
-        </button>
+      {bulk ? (
+        <Textarea
+          label="Celebrants"
+          rows={12}
+          value={asText}
+          onChange={(e) => onChange(parseBirthdays(e.target.value))}
+          hint="One person per line, with the day of the month. “1. Mr. Rotimi Ajayi 1st”, “Akande Rachael, 8” and “Bolarin Damilola 31” all work."
+        />
+      ) : (
+        <ListEditor<BulletinBirthday>
+          label="Celebrants"
+          items={rows}
+          onChange={onChange}
+          createItem={() => ({ id: newId('bd'), name: '', day: 1 })}
+          addLabel="Add a celebrant"
+          emptyLabel="No birthdays listed for this month."
+          reorderable={false}
+          renderRow={(item, updateItem) => (
+            <div className="grid gap-1.5 sm:grid-cols-[1fr_6rem]">
+              <RowInput
+                label="Name"
+                value={item.name}
+                onChange={(e) => updateItem({ name: e.target.value })}
+              />
+              <RowInput
+                label="Day"
+                type="number"
+                min={1}
+                max={31}
+                value={item.day || ''}
+                onChange={(e) => updateItem({ day: Number(e.target.value) || 1 })}
+              />
+            </div>
+          )}
+        />
       )}
     </div>
   )
+}
+
+/** Turn a pasted list into celebrants. See BirthdaysEditor for the shapes handled. */
+export function parseBirthdays(text: string): BulletinBirthday[] {
+  return text
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((raw) => {
+      // Drop the list numbering the church types. Real sheets are inconsistent
+      // about it, so allow repeats and mixtures: "1.", "2:", "8..", "25.-".
+      const line = raw.replace(/^\s*\d{1,3}\s*[.):\-]+\s*/, '').trim()
+
+      // The day is the last number on the line, ordinal suffix optional, and
+      // may be preceded by a comma or dash.
+      const match = line.match(/^(.*?)[\s,\-]*(\d{1,2})\s*(?:st|nd|rd|th)?\s*$/i)
+      const name = (match?.[1] ?? line)
+        .replace(/^[\s.,\-]+/, '') // stray punctuation left by odd numbering
+        .replace(/[\s,\-]+$/, '')
+        .trim()
+      const day = Math.min(31, Math.max(1, Number(match?.[2]) || 1))
+
+      return { id: newId('bd'), name, day }
+    })
+    .filter((entry) => entry.name.length > 0)
 }
 
 function ThemesEditor({

@@ -242,6 +242,7 @@
   }
 
   html {
+    overflow-x: clip;
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
     scroll-padding-top: 5.5rem;
@@ -255,7 +256,15 @@
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    /*
+      `clip`, not `hidden`.
+      `overflow-x: hidden` turns the body into a scroll container, and a scroll
+      container silently breaks `position: sticky` for everything inside it —
+      which is what made the header slide away instead of staying put. `clip`
+      contains stray width without creating that container, so the header
+      sticks and the page still cannot be dragged sideways.
+    */
+    overflow-x: clip;
     /* Paper grain. An inline SVG so there is no extra network request. */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
     background-attachment: fixed;
