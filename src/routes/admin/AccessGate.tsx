@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, KeyRound, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, KeyRound, RefreshCw, ShieldCheck } from 'lucide-react'
 import { Button, Card, Input, Seal } from '@/components/ui'
 import { rememberUnlocked, verifyAccessKey } from '@/lib/access'
 
@@ -20,6 +20,32 @@ export function AccessGate({ onUnlocked }: { onUnlocked: () => void }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [attempts, setAttempts] = useState(0)
+  const [refreshing, setRefreshing] = useState(false)
+
+  /**
+   * Throw away the offline copy and reload from the network.
+   *
+   * The service worker is what makes this app usable without data, but it also
+   * means a device can keep running a build from before the access key was
+   * changed, rejecting a key that is perfectly correct. Unregistering it and
+   * emptying the caches is the only reliable way out from inside the app.
+   */
+  const forceRefresh = async () => {
+    setRefreshing(true)
+    try {
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations()
+        await Promise.all(registrations.map((r) => r.unregister()))
+      }
+      if ('caches' in window) {
+        const names = await caches.keys()
+        await Promise.all(names.map((name) => caches.delete(name)))
+      }
+    } finally {
+      // Cache-busted so the browser cannot serve index.html from memory either.
+      window.location.replace(`${window.location.pathname}?fresh=${Date.now()}`)
+    }
+  }
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -75,12 +101,20 @@ export function AccessGate({ onUnlocked }: { onUnlocked: () => void }) {
 
           <div className="p-6">
             <form onSubmit={submit} className="space-y-4" noValidate>
+              {/*
+                A phone keyboard will happily capitalise the first letter of a
+                hyphenated key and quietly break it, so every helpful text
+                behaviour is turned off here.
+              */}
               <Input
                 label="Access key"
                 type="password"
                 required
                 autoFocus
                 autoComplete="off"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 value={key}
                 onChange={(e) => setKey(e.target.value)}
                 error={error ?? undefined}
@@ -90,6 +124,29 @@ export function AccessGate({ onUnlocked }: { onUnlocked: () => void }) {
                 Continue
               </Button>
             </form>
+
+            {attempts >= 2 && (
+              <div className="mt-5 rounded-lg border border-line bg-sunken/60 p-3.5">
+                <p className="text-[0.8125rem] font-semibold text-ink">
+                  Certain the key is right?
+                </p>
+                <p className="mt-1 text-[0.8125rem] leading-relaxed text-ink-soft">
+                  This app keeps working offline, which means it can still be running an older copy
+                  of itself. If the key was changed recently, this device may not have caught up
+                  yet.
+                </p>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  icon={RefreshCw}
+                  className="mt-3"
+                  loading={refreshing}
+                  onClick={forceRefresh}
+                >
+                  Fetch the latest version
+                </Button>
+              </div>
+            )}
 
             {attempts >= 3 && (
               <p className="mt-4 text-center text-[0.8125rem] leading-relaxed text-ink-faint">
