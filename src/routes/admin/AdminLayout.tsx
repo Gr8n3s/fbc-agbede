@@ -7,6 +7,7 @@ import {
   FileText,
   LayoutDashboard,
   Lock,
+  LogOut,
   Menu,
   Settings,
   ShieldCheck,
@@ -22,7 +23,7 @@ import { useContent } from '@/context/ContentContext'
 import { useToast } from '@/context/ToastContext'
 import { useVault } from '@/context/VaultContext'
 import { useOnline } from '@/hooks'
-import { isUnlocked } from '@/lib/access'
+import { forgetUnlocked, isUnlocked } from '@/lib/access'
 import { cx, relativeTime } from '@/lib/utils'
 import { AccessGate } from './AccessGate'
 import { VaultGate } from './VaultGate'
@@ -90,6 +91,12 @@ export default function AdminLayout() {
   const [unlocked, setUnlocked] = useState(() => isUnlocked())
   if (!unlocked) return <AccessGate onUnlocked={() => setUnlocked(true)} />
 
+  /** Close both doors: the vault, and the access key for this tab. */
+  const signOut = () => {
+    forgetUnlocked()
+    setUnlocked(false)
+  }
+
   if (status === 'checking') {
     return (
       <div className="grid min-h-screen place-items-center">
@@ -98,14 +105,14 @@ export default function AdminLayout() {
     )
   }
 
-  if (status !== 'unlocked') return <VaultGate />
+  if (status !== 'unlocked') return <VaultGate onSignOut={signOut} />
 
-  return <AdminShell />
+  return <AdminShell onSignOut={signOut} />
 }
 
 // ---------------------------------------------------------------------------
 
-function AdminShell() {
+function AdminShell({ onSignOut }: { onSignOut: () => void }) {
   const { lock, saving, lastSavedAt, data, settings } = useVault()
   const { hasUnpublished, dirty } = useContent()
   const toast = useToast()
@@ -198,6 +205,16 @@ function AdminShell() {
             onClick={() => {
               lock()
               toast.info('Vault locked', 'The records on this device are encrypted again.')
+            }}
+          />
+
+          <IconButton
+            icon={LogOut}
+            label="Sign out of the church office"
+            onClick={() => {
+              lock()
+              onSignOut()
+              toast.info('Signed out', 'The access key is needed to open the office again.')
             }}
           />
         </header>

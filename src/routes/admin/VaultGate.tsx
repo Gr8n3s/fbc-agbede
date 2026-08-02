@@ -25,13 +25,35 @@ import { cx, formatDate } from '@/lib/utils'
  * — without it the data is ciphertext — but it is a *device* boundary, not an
  * account. Stated plainly on screen so nobody assumes otherwise.
  */
-export function VaultGate() {
+export function VaultGate({ onSignOut }: { onSignOut?: () => void }) {
   const { status } = useVault()
 
   if (!isCryptoAvailable()) return <CryptoUnavailable />
   if (status === 'unavailable') return <StorageUnavailable />
-  if (status === 'absent') return <SetupVault />
-  return <UnlockVault />
+  if (status === 'absent') return <SetupVault onSignOut={onSignOut} />
+  return <UnlockVault onSignOut={onSignOut} />
+}
+
+/**
+ * Leaves the office entirely, rather than only locking the vault.
+ *
+ * Offered on the vault screens because that is where someone who opened the
+ * office by mistake ends up, and without it the only way out is the browser
+ * back button.
+ */
+function SignOutLink({ onSignOut }: { onSignOut?: () => void }) {
+  if (!onSignOut) return null
+  return (
+    <p className="mt-6 text-center">
+      <button
+        type="button"
+        onClick={onSignOut}
+        className="text-[0.8125rem] font-medium text-ink-faint underline underline-offset-2 hover:text-ink"
+      >
+        Sign out of the church office
+      </button>
+    </p>
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -134,7 +156,7 @@ function StorageUnavailable() {
 
 // ---------------------------------------------------------------------------
 
-function SetupVault() {
+function SetupVault({ onSignOut }: { onSignOut?: () => void }) {
   const { create, restore } = useVault()
   const toast = useToast()
 
@@ -314,13 +336,15 @@ function SetupVault() {
       <Button variant="secondary" icon={Upload} fullWidth onClick={() => setMode('restore')}>
         Restore from a backup file
       </Button>
+
+      <SignOutLink onSignOut={onSignOut} />
     </Shell>
   )
 }
 
 // ---------------------------------------------------------------------------
 
-function UnlockVault() {
+function UnlockVault({ onSignOut }: { onSignOut?: () => void }) {
   const { unlock, reset } = useVault()
   const toast = useToast()
 
@@ -418,6 +442,8 @@ function UnlockVault() {
           )}
         </>
       )}
+
+      <SignOutLink onSignOut={onSignOut} />
     </Shell>
   )
 }

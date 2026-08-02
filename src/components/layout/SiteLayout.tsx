@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 import { SealSpinner } from '@/components/ui'
 import { BottomNav } from './BottomNav'
 import { Footer } from './Footer'
+import { InstallPrompt } from './InstallPrompt'
 import { Header } from './Header'
 
 export function SiteLayout() {
@@ -16,6 +17,7 @@ export function SiteLayout() {
       </main>
       <Footer />
       <BottomNav />
+      <InstallPrompt />
     </div>
   )
 }
