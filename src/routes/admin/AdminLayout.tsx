@@ -22,7 +22,9 @@ import { useContent } from '@/context/ContentContext'
 import { useToast } from '@/context/ToastContext'
 import { useVault } from '@/context/VaultContext'
 import { useOnline } from '@/hooks'
+import { isUnlocked } from '@/lib/access'
 import { cx, relativeTime } from '@/lib/utils'
+import { AccessGate } from './AccessGate'
 import { VaultGate } from './VaultGate'
 
 /**
@@ -80,6 +82,13 @@ export const ADMIN_NAV: AdminNavItem[] = [
 
 export default function AdminLayout() {
   const { status } = useVault()
+
+  /**
+   * The access key comes before everything, including the vault setup screen,
+   * so a visitor cannot create a vault or look around the office at all.
+   */
+  const [unlocked, setUnlocked] = useState(() => isUnlocked())
+  if (!unlocked) return <AccessGate onUnlocked={() => setUnlocked(true)} />
 
   if (status === 'checking') {
     return (

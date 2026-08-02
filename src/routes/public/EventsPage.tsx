@@ -73,7 +73,7 @@ export default function EventsPage() {
       <PageHeader
         eyebrow="Church calendar"
         title="Events &amp; Programmes"
-        description="Weekly activities, revivals, conventions and special services — everything the church is doing, on any day of the week."
+        description="Weekly activities, revivals, conventions and special services, everything the church is doing, on any day of the week."
       />
 
       <div ref={revealRef} className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-12">

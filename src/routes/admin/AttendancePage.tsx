@@ -173,7 +173,7 @@ export default function AttendancePage() {
         action: existing ? 'update' : 'create',
         entity: 'attendance',
         entityId: record.id,
-        summary: `${existing ? 'Updated' : 'Recorded'} ${SERVICE_TYPE_LABELS[record.serviceType]} on ${formatDate(record.date, 'long')} — ${attendanceTotal(record)} present.`,
+        summary: `${existing ? 'Updated' : 'Recorded'} ${SERVICE_TYPE_LABELS[record.serviceType]} on ${formatDate(record.date, 'long')}, ${attendanceTotal(record)} present.`,
       },
     )
 
@@ -366,7 +366,7 @@ export default function AttendancePage() {
               exportExcel(
                 [{ name: 'Attendance', rows: filtered, columns }],
                 'fbc-attendance',
-                'FBC Agbede — Attendance',
+                'FBC Agbede Attendance',
               )
               toast.success('Excel file downloaded')
             }}
@@ -658,7 +658,7 @@ function RegisterEditor({
             onChange={(next) => set('groups', next)}
             createItem={() => ({ id: newId('grp'), name: '', count: 0 })}
             addLabel="Add a class"
-            emptyLabel="No separate classes — the counts above cover the whole service."
+            emptyLabel="No separate classes, the counts above cover the whole service."
             reorderable={false}
             renderRow={(item, updateItem) => (
               <div className="grid gap-1.5 sm:grid-cols-[1fr_6rem_8rem]">

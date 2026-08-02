@@ -365,7 +365,7 @@ function PublishButton() {
 
   const github = data?.github
   const defaultMessage = useMemo(
-    () => `Update ${dirty.join(', ')} — ${formatDate(new Date(), 'long')}`,
+    () => `Update ${dirty.join(', ')} to ${formatDate(new Date(), 'long')}`,
     [dirty],
   )
 
@@ -387,7 +387,7 @@ function PublishButton() {
 
       toast.error(
         'Some sections did not publish',
-        `${outcome.failed.map((f) => f.label).join(', ')} — ${outcome.failed[0]?.error}`,
+        `${outcome.failed.map((f) => f.label).join(', ')}, ${outcome.failed[0]?.error}`,
       )
     } catch (error) {
       toast.error(

@@ -40,7 +40,7 @@ export default function AnnouncementsPage() {
       <PageHeader
         eyebrow="Announcements"
         title="Notice Board"
-        description="Everything the church needs to know — service changes, celebrations, department notices and urgent messages."
+        description="Everything the church needs to know, service changes, celebrations, department notices and urgent messages."
       />
 
       <div ref={revealRef} className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-12">

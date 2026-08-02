@@ -70,7 +70,7 @@ export const DEFAULT_CHURCH: ChurchProfile = {
   pastorTitle: 'Resident Pastor',
   pastorMessage: '',
   about:
-    'First Baptist Church Agbede, Ikorodu — the Chapel of Grace — is a Baptist congregation committed to the worship of God, the teaching of His word, and the care of one another.',
+    'First Baptist Church Agbede, Ikorodu, the Chapel of Grace, is a Baptist congregation committed to the worship of God, the teaching of His word, and the care of one another.',
   history: '',
   mission: '',
   vision: '',

@@ -65,7 +65,7 @@ export function FileField({
 
     if (file.size > MAX_BYTES) {
       setError(
-        `That file is ${(file.size / 1024 / 1024).toFixed(1)} MB. Please keep uploads under 10 MB — the congregation opens this on mobile data.`,
+        `That file is ${(file.size / 1024 / 1024).toFixed(1)} MB. Please keep uploads under 10 MB. The congregation opens this on mobile data.`,
       )
       return
     }
@@ -122,7 +122,7 @@ export function FileField({
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder ?? `media/${folder}/file.jpg — or paste a link`}
+          placeholder={placeholder ?? `media/${folder}/file.jpg or paste a link`}
           className="h-11 w-full min-w-0 rounded-lg border border-line-strong bg-surface px-3 text-sm text-ink placeholder:text-ink-faint/70 hover:border-ornament/50 focus:border-info focus:outline-none focus:ring-2 focus:ring-info/25"
         />
 

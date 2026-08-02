@@ -259,7 +259,7 @@ export default function ReportsPage() {
         { name: 'Departments', rows: departments, columns: departmentColumns },
       ] as never,
       'fbc-reports',
-      'FBC Agbede — Church Reports',
+      'FBC Agbede Church Reports',
     )
     toast.success('Workbook downloaded', 'Four sheets: growth, attendance, departments and rates.')
   }
@@ -500,6 +500,17 @@ export default function ReportsPage() {
         description="Membership is counted from the register; meeting attendance from department registers"
         icon={UsersRound}
       >
+        {departments.length > 0 && vault.members.length === 0 && (
+          <p className="mb-3 rounded-lg bg-sunken px-3 py-2.5 text-[0.8125rem] leading-relaxed text-ink-soft">
+            Every column here is zero because nothing feeds it yet.{' '}
+            <strong className="text-ink">Members</strong> and{' '}
+            <strong className="text-ink">workers</strong> are counted from the register: open a
+            member under Members, and tick their departments on the “Church life” tab.{' '}
+            <strong className="text-ink">Meetings</strong> and{' '}
+            <strong className="text-ink">average attendance</strong> come from registers taken with
+            the service set to “Department meeting” and a department chosen.
+          </p>
+        )}
         {departments.length === 0 ? (
           <EmptyState
             icon={UsersRound}

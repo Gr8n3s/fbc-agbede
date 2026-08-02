@@ -63,7 +63,7 @@ export default function ProgrammePage() {
       <PageHeader
         eyebrow="Order of service"
         title="Church Programme"
-        description="Our programmes run through the whole week — Sunday worship, midweek Bible study, workers’ meetings, revivals and special services. Every order of service is here, and you can print any of them."
+        description="Our programmes run through the whole week. Sunday worship, midweek Bible study, workers’ meetings, revivals and special services. Every order of service is here, and you can print any of them."
       />
 
       <div ref={revealRef} className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-12">

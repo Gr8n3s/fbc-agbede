@@ -25,7 +25,7 @@ export default function GalleryPage() {
       <PageHeader
         eyebrow="Church life"
         title="Gallery"
-        description="Moments from our services, programmes and outreach — the family of God at the Chapel of Grace."
+        description="Moments from our services, programmes and outreach, the family of God at the Chapel of Grace."
       />
 
       <div ref={revealRef} className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">

@@ -155,7 +155,7 @@ function SetupVault() {
     setError(null)
 
     if (!strength.acceptable) {
-      setError('Please choose a stronger passphrase — this protects the whole membership register.')
+      setError('Please choose a stronger passphrase, this protects the whole membership register.')
       return
     }
     if (passphrase !== confirmPass) {
@@ -278,8 +278,8 @@ function SetupVault() {
           <p className="flex items-start gap-2 text-[0.8125rem] leading-relaxed text-ink-soft">
             <AlertTriangle className="mt-0.5 size-4 shrink-0 text-warning" aria-hidden />
             <span>
-              <strong className="text-ink">There is no password reset.</strong> Nobody — not the
-              church, not the developer, not GitHub — can recover this passphrase. Lose it and the
+              <strong className="text-ink">There is no password reset.</strong> Nobody, not the
+              church, not the developer, not GitHub, can recover this passphrase. Lose it and the
               records on this device are unrecoverable. Write it down and keep it somewhere safe.
             </span>
           </p>
@@ -453,7 +453,7 @@ function RestoreVault({
     setHint(
       `Backup from ${formatDate(envelope.createdAt.slice(0, 10), 'long')}` +
         (envelope.hint
-          ? ` — ${envelope.hint.members} members, ${envelope.hint.attendance} registers.`
+          ? ` to ${envelope.hint.members} members, ${envelope.hint.attendance} registers.`
           : '.'),
     )
   }

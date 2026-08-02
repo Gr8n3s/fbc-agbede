@@ -223,7 +223,7 @@ export function assessPassphrase(pass: string): PassphraseAssessment {
   const lower = pass.toLowerCase()
   if (COMMON.some((c) => lower.includes(c))) {
     bits = Math.min(bits, 28)
-    suggestions.push('Avoid words tied to the church name — they are the first thing guessed.')
+    suggestions.push('Avoid words tied to the church name, they are the first thing guessed.')
   }
   if (/^(.)\1+$/.test(pass)) bits = Math.min(bits, 10)
   if (/^\d+$/.test(pass)) {
@@ -231,7 +231,7 @@ export function assessPassphrase(pass: string): PassphraseAssessment {
     suggestions.push('Digits alone are quick to break. Mix in words.')
   }
 
-  if (length < 12) suggestions.push('Use at least 12 characters — 4 random words works well.')
+  if (length < 12) suggestions.push('Use at least 12 characters, 4 random words works well.')
   if (!/[A-Z]/.test(pass)) suggestions.push('Add a capital letter.')
   if (!/\d/.test(pass)) suggestions.push('Add a number.')
   if (!/[^a-zA-Z0-9]/.test(pass)) suggestions.push('Add a symbol.')

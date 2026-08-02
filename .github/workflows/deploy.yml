@@ -43,6 +43,10 @@ jobs:
           # Project pages are served from /<repo>/. For a user page
           # (<user>.github.io) or a custom domain, set this to "/".
           BASE_PATH: /${{ github.event.repository.name }}/
+          # Locks the /admin door. Generate with `npm run admin:key` and add the
+          # hash as a repository variable. Left unset, the office is open to
+          # anyone who finds the URL.
+          VITE_ADMIN_KEY_HASH: ${{ vars.VITE_ADMIN_KEY_HASH }}
         run: npm run build
 
       - uses: actions/configure-pages@v5

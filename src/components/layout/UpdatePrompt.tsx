@@ -67,7 +67,7 @@ export function UpdatePrompt() {
         >
           <p className="inline-flex items-center gap-2 rounded-full border border-warning/30 bg-warning/12 px-3.5 py-1.5 text-[0.75rem] font-semibold text-warning backdrop-blur">
             <WifiOff className="size-3.5" aria-hidden />
-            Offline — showing the last saved copy
+            Offline, showing the last saved copy
           </p>
         </div>
       )}

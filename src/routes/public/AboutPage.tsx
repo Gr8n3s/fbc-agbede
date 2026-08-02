@@ -139,7 +139,7 @@ export default function AboutPage() {
             {church.motto}
           </h2>
           <p className="mx-auto mt-2 max-w-md text-pretty text-[0.9375rem] leading-relaxed text-ink-soft">
-            You are welcome at {church.shortName}. Come as you are — there is a place for you here.
+            You are welcome at {church.shortName}. Come as you are, there is a place for you here.
           </p>
         </section>
       </div>

@@ -21,7 +21,7 @@ export function Footer() {
 
   return (
     <footer className="relative mt-20 border-t border-line bg-surface pb-24 lg:pb-0">
-      {/* Arch silhouette rising out of the top edge — the motif, used once, quietly. */}
+      {/* Arch silhouette rising out of the top edge, the motif, used once, quietly. */}
       <div
         aria-hidden
         className="pointer-events-none absolute -top-px left-1/2 h-16 w-40 -translate-x-1/2 rounded-t-full border border-b-0 border-line bg-surface"
@@ -119,7 +119,7 @@ export function Footer() {
                       </span>
                       <span className="block text-[0.8125rem] text-ink-faint">
                         {service.day} · {formatTime(service.startTime)}
-                        {service.endTime ? ` – ${formatTime(service.endTime)}` : ''}
+                        {service.endTime ? `, ${formatTime(service.endTime)}` : ''}
                       </span>
                     </span>
                   </li>

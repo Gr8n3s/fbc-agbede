@@ -161,7 +161,7 @@ export default function EventDetailPage() {
           {!event.allDay && (
             <DetailRow label="Time" icon={Clock}>
               {formatTime(event.start.split('T')[1]?.slice(0, 5))}
-              {end && ` – ${formatTime(event.end!.split('T')[1]?.slice(0, 5))}`}
+              {end && `, ${formatTime(event.end!.split('T')[1]?.slice(0, 5))}`}
             </DetailRow>
           )}
           {event.venue && (

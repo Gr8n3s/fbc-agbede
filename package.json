@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Progressive Web App for First Baptist Church Agbede, Ikorodu — Chapel of Grace",
+  "description": "Progressive Web App for First Baptist Church Agbede, Ikorodu \u2014 Chapel of Grace",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
     "icons": "node scripts/generate-icons.mjs",
-    "seed:encrypt": "node scripts/encrypt-seed.mjs"
+    "seed:encrypt": "node scripts/encrypt-seed.mjs",
+    "admin:key": "node scripts/make-admin-key.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.2.5",

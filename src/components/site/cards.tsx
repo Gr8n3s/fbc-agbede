@@ -92,7 +92,7 @@ export function BulletinCard({ bulletin, featured = false }: { bulletin: Bulleti
             </Badge>
             <span className="text-[0.75rem] font-medium text-ink-faint">
               {dayName(bulletin.date)}
-              {multiDay ? ` – ${formatDate(bulletin.endDate, 'medium')}` : ''}
+              {multiDay ? `, ${formatDate(bulletin.endDate, 'medium')}` : ''}
             </span>
           </div>
 

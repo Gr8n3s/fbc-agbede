@@ -81,7 +81,7 @@ export interface ServiceTime {
     | 'Saturday'
     | 'Daily'
   name: string
-  startTime: string // "08:00" — 24h, church local time
+  startTime: string // "08:00", 24h, church local time
   endTime?: string
   note?: string
 }

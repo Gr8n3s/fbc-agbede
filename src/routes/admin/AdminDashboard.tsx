@@ -293,7 +293,7 @@ export default function AdminDashboard() {
             <EmptyState
               icon={CalendarCheck}
               title="No attendance recorded"
-              description="Take the first register after the next service — it takes about a minute."
+              description="Take the first register after the next service, it takes about a minute."
               action={
                 <ButtonLink to="/admin/attendance" size="sm" icon={CalendarCheck}>
                   Take a register

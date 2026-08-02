@@ -48,7 +48,7 @@ export function Header() {
         />
 
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:px-6">
-          <Link to="/" className="shrink-0 rounded-lg" aria-label="FBC Agbede — home">
+          <Link to="/" className="shrink-0 rounded-lg" aria-label="FBC Agbede home">
             <Wordmark />
           </Link>
 

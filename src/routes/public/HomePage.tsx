@@ -494,7 +494,7 @@ function GivingPanel() {
         <h2 className="mt-4 font-display text-2xl font-semibold text-ink">Tithes &amp; offerings</h2>
         <p className="mt-2 max-w-sm text-pretty text-[0.9375rem] leading-relaxed text-ink-soft">
           Give cheerfully, wherever you are. The church account details are published in the app so
-          you can transfer directly — no third-party payment service, no charges.
+          you can transfer directly, no third-party payment service, no charges.
         </p>
         <ButtonLink to="/giving" variant="gold" className="mt-5" iconRight={ArrowRight}>
           View account details
@@ -509,7 +509,7 @@ function InstallPanel() {
 
   const share = async () => {
     const data = {
-      title: 'FBC Agbede — Chapel of Grace',
+      title: 'FBC Agbede Chapel of Grace',
       text: 'Sermons, programmes and events from First Baptist Church Agbede, Ikorodu.',
       url: window.location.origin + import.meta.env.BASE_URL,
     }
@@ -530,7 +530,7 @@ function InstallPanel() {
         <Smartphone className="size-5" aria-hidden />
       </span>
       <h2 className="mt-4 font-display text-2xl font-semibold text-ink">
-        {installed ? 'Installed — thank you' : 'Keep the church in your pocket'}
+        {installed ? 'Installed, thank you' : 'Keep the church in your pocket'}
       </h2>
       <p className="mt-2 max-w-sm text-pretty text-[0.9375rem] leading-relaxed text-ink-soft">
         {installed

@@ -95,7 +95,7 @@ async function request<T>(
       },
     })
   } catch {
-    throw new GitHubError('Could not reach GitHub.', 0, 'Check your internet connection — you can keep editing offline and publish later.')
+    throw new GitHubError('Could not reach GitHub.', 0, 'Check your internet connection, you can keep editing offline and publish later.')
   }
 
   if (res.status === 204) return undefined as T
@@ -329,7 +329,7 @@ export async function publishFiles(
   for (const [index, item] of items.entries()) {
     onProgress?.({ done: index, total: items.length, current: item.label })
     try {
-      committed.push(await putTextFile(token, config, item.path, item.text, `${message} — ${item.label}`))
+      committed.push(await putTextFile(token, config, item.path, item.text, `${message}, ${item.label}`))
     } catch (error) {
       failed.push({
         label: item.label,

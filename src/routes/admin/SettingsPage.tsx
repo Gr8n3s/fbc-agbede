@@ -155,11 +155,22 @@ function BackupPanel() {
   const overdue = vault.members.length > 0 && (!settings.lastBackupAt || Date.now() > dueAt)
   const nextReminder = dueAt ? new Date(dueAt) : new Date()
 
+  /** Brief confirmation, because a field that saves silently reads as broken. */
+  const [reminderSaved, setReminderSaved] = useState(false)
+  const commitReminder = () => {
+    const days = Math.min(365, Math.max(1, Number(reminderDays) || 14))
+    setReminderDays(String(days))
+    if (days === settings.backupReminderDays) return
+    void updateSettings({ backupReminderDays: days })
+    setReminderSaved(true)
+    setTimeout(() => setReminderSaved(false), 2500)
+  }
+
   const runBackup = async () => {
     setBusy(true)
     try {
       await backup()
-      toast.success('Backup saved', 'Keep it somewhere safe — it needs the vault passphrase to open.')
+      toast.success('Backup saved', 'Keep it somewhere safe, it needs the vault passphrase to open.')
     } catch (error) {
       toast.error('Backup failed', error instanceof Error ? error.message : undefined)
     } finally {
@@ -243,8 +254,8 @@ function BackupPanel() {
                   value={mode}
                   onChange={(e) => setMode(e.target.value as 'merge' | 'replace')}
                   options={[
-                    { value: 'merge', label: 'Merge — keep both, newest wins' },
-                    { value: 'replace', label: 'Replace — wipe this device first' },
+                    { value: 'merge', label: 'Merge: keep both, newest wins' },
+                    { value: 'replace', label: 'Replace: wipe this device first' },
                   ]}
                   hint={
                     mode === 'merge'
@@ -269,20 +280,28 @@ function BackupPanel() {
             <Input
               label="Remind me to back up every"
               type="number"
+              inputMode="numeric"
               min={1}
               max={365}
               value={reminderDays}
               onChange={(e) => setReminderDays(e.target.value)}
-              onBlur={() => {
-                const days = Math.min(365, Math.max(1, Number(reminderDays) || 14))
-                setReminderDays(String(days))
-                void updateSettings({ backupReminderDays: days })
+              onBlur={commitReminder}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  commitReminder()
+                }
               }}
               hint="Days between reminders."
               className="w-40"
             />
             <p className="pb-2 text-[0.8125rem] text-ink-soft">
-              {vault.members.length === 0 ? (
+              {reminderSaved ? (
+                <span className="inline-flex items-center gap-1.5 font-semibold text-success">
+                  <CheckCircle2 className="size-4" aria-hidden />
+                  Saved. Reminding every {settings.backupReminderDays} days.
+                </span>
+              ) : vault.members.length === 0 ? (
                 <>Reminders start once there are records worth losing.</>
               ) : overdue ? (
                 <span className="font-semibold text-warning">A backup is due now.</span>
@@ -522,7 +541,7 @@ function SecurityPanel() {
   const submit = async () => {
     setError(null)
     if (!strength.acceptable) {
-      setError('Choose a stronger passphrase — it protects the whole membership register.')
+      setError('Choose a stronger passphrase, it protects the whole membership register.')
       return
     }
     if (next !== confirmValue) {
@@ -536,7 +555,7 @@ function SecurityPanel() {
       setCurrent('')
       setNext('')
       setConfirmValue('')
-      toast.success('Passphrase changed', 'Take a fresh backup — old backups still use the old one.')
+      toast.success('Passphrase changed', 'Take a fresh backup, old backups still use the old one.')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not change the passphrase.')
     } finally {
@@ -609,7 +628,7 @@ function PreferencesPanel() {
       <div className="space-y-4">
         <Switch
           label="Show offering figures on screen"
-          description="Off by default — attendance screens get read over shoulders. Exports and printed reports always include the money."
+          description="Off by default, attendance screens get read over shoulders. Exports and printed reports always include the money."
           checked={settings.showOfferings}
           onChange={(next) => void updateSettings({ showOfferings: next })}
         />

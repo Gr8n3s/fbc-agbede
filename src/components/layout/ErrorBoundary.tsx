@@ -38,7 +38,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
           </h1>
           <p className="mt-2 text-pretty text-sm leading-relaxed text-ink-soft">
             The page could not be displayed. Your church records on this device are safe and
-            untouched — reloading usually clears it.
+            untouched, reloading usually clears it.
           </p>
 
           <div className="mt-6 flex flex-wrap justify-center gap-2">

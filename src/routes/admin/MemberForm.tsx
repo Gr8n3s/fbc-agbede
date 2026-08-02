@@ -401,7 +401,7 @@ export function MemberForm({
             </p>
             {departments.length === 0 ? (
               <p className="rounded-lg border border-dashed border-line-strong px-3 py-4 text-center text-[0.8125rem] text-ink-faint">
-                No departments yet — add them under Departments.
+                No departments yet, add them under Departments.
               </p>
             ) : (
               <ul className="grid gap-1.5 sm:grid-cols-2">

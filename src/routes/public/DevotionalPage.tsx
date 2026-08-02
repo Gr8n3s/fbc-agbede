@@ -52,7 +52,7 @@ export default function DevotionalPage() {
 
   const share = async () => {
     if (!devotional) return
-    const text = `${devotional.title}\n\n"${devotional.verseText}" — ${devotional.verseRef}\n\n${window.location.href}`
+    const text = `${devotional.title}\n\n"${devotional.verseText}", ${devotional.verseRef}\n\n${window.location.href}`
     if (navigator.share) {
       try {
         await navigator.share({ title: devotional.title, text })
@@ -94,7 +94,7 @@ export default function DevotionalPage() {
       <PageHeader
         eyebrow="Daily bread"
         title="Devotional"
-        description="A verse, a thought and a reading for each day. Tick off your reading as you go — that record stays on your phone."
+        description="A verse, a thought and a reading for each day. Tick off your reading as you go, that record stays on your phone."
       />
 
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-12">

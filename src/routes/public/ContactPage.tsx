@@ -129,7 +129,7 @@ export default function ContactPage() {
                       </span>
                       <span className="mt-0.5 block text-[0.875rem] text-ink-soft">
                         {service.day} · {formatTime(service.startTime)}
-                        {service.endTime ? ` – ${formatTime(service.endTime)}` : ''}
+                        {service.endTime ? `, ${formatTime(service.endTime)}` : ''}
                       </span>
                       {service.note && (
                         <span className="mt-1 block text-[0.8125rem] text-ink-faint">

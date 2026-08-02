@@ -48,7 +48,7 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
-      {/* Live region for route announcements — see useDocumentTitle. */}
+      {/* Live region for route announcements, see useDocumentTitle. */}
       <div id="route-announcer" role="status" aria-live="polite" className="sr-only" />
 
       <Routes>

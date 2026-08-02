@@ -54,7 +54,7 @@ export default function SermonsPage() {
       <PageHeader
         eyebrow="From the pulpit"
         title="Sermons"
-        description="Messages preached at the Chapel of Grace — with notes, scripture references and recordings. Everything here works offline once the app is installed."
+        description="Messages preached at the Chapel of Grace, with notes, scripture references and recordings. Everything here works offline once the app is installed."
       />
 
       <div ref={revealRef} className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-12">

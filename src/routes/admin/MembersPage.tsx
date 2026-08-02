@@ -184,7 +184,7 @@ export default function MembersPage() {
         <>
           <strong className="text-ink">{fullName(member)}</strong> will be deleted from this device,
           along with their attendance history. If they have simply moved away, switch them to
-          inactive instead — that keeps the record without losing the history.
+          inactive instead, that keeps the record without losing the history.
         </>
       ),
       confirmLabel: 'Delete permanently',
@@ -277,7 +277,7 @@ export default function MembersPage() {
         },
       ],
       footNote:
-        'Confidential — church member directory. Contains personal contact details; handle accordingly.',
+        'Confidential church member directory. Contains personal contact details; handle accordingly.',
     })
   }
 
@@ -402,7 +402,7 @@ export default function MembersPage() {
               icon={FileSpreadsheet}
               disabled={sorted.length === 0}
               onClick={() => {
-                exportExcel([{ name: 'Members', rows: sorted, columns }], 'fbc-members', 'FBC Agbede — Members')
+                exportExcel([{ name: 'Members', rows: sorted, columns }], 'fbc-members', 'FBC Agbede Members')
                 toast.success('Excel file downloaded')
               }}
             >
@@ -429,7 +429,7 @@ export default function MembersPage() {
           title={members.length === 0 ? 'The register is empty' : 'Nobody matches those filters'}
           description={
             members.length === 0
-              ? 'Register the first member. Everything else — attendance, reports, birthdays — builds on this.'
+              ? 'Register the first member. Everything else builds on this: attendance, reports, birthdays.'
               : 'Try a different search, or clear the filters.'
           }
           action={
@@ -768,7 +768,7 @@ function FamiliesModal({ open, onClose }: { open: boolean; onClose: () => void }
   const remove = async (family: Family) => {
     const ok = await confirm({
       title: 'Delete this family group?',
-      message: `Members of ${family.name} stay on the register — they simply stop being grouped together.`,
+      message: `Members of ${family.name} stay on the register, they simply stop being grouped together.`,
       confirmLabel: 'Delete group',
     })
     if (!ok) return

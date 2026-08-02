@@ -139,7 +139,7 @@ export default function ProgrammeDetailPage() {
           </p>
           <p className="mt-1 text-[0.9375rem] font-medium text-ink-soft">
             Today is {formatDate(bulletin.date, 'long')}
-            {multiDay && ` – ${formatDate(bulletin.endDate, 'long')}`}.
+            {multiDay && `, ${formatDate(bulletin.endDate, 'long')}`}.
           </p>
 
           {bulletin.occasion && (
@@ -170,7 +170,7 @@ export default function ProgrammeDetailPage() {
                   <dt className="text-[0.8125rem] font-medium text-ink-soft">{row.name}</dt>
                   <dd className="text-[0.8125rem] font-semibold tabular-nums text-ink">
                     {formatTime(row.startTime)}
-                    {row.endTime ? ` – ${formatTime(row.endTime)}` : ''}
+                    {row.endTime ? `, ${formatTime(row.endTime)}` : ''}
                   </dd>
                 </div>
               ))}
@@ -182,7 +182,7 @@ export default function ProgrammeDetailPage() {
               <span className="inline-flex items-center gap-1.5">
                 <Clock className="size-3.5 text-ornament" aria-hidden />
                 {formatTime(bulletin.startTime)}
-                {bulletin.endTime ? ` – ${formatTime(bulletin.endTime)}` : ''}
+                {bulletin.endTime ? `, ${formatTime(bulletin.endTime)}` : ''}
               </span>
             )}
             {bulletin.venue && (
@@ -609,7 +609,7 @@ export default function ProgrammeDetailPage() {
 
           {bulletin.message.author && (
             <p className="mt-6 text-right font-display text-[0.9375rem] font-semibold italic text-ink-soft">
-              — {bulletin.message.author}
+             , {bulletin.message.author}
             </p>
           )}
         </section>
@@ -814,7 +814,7 @@ function buildPrintable(bulletin: Bulletin, churchName: string, motto?: string) 
         bulletin.sundaySchool.topicYoruba,
         bulletin.sundaySchool.text,
         bulletin.sundaySchool.memoryVerse &&
-          `“${bulletin.sundaySchool.memoryVerse}” — ${bulletin.sundaySchool.memoryVerseRef ?? ''}`,
+          `“${bulletin.sundaySchool.memoryVerse}”, ${bulletin.sundaySchool.memoryVerseRef ?? ''}`,
       ]
         .filter(Boolean)
         .join(' · '),
@@ -921,10 +921,10 @@ function buildPrintable(bulletin: Bulletin, churchName: string, motto?: string) 
         .join(' · '),
     ]
       .filter(Boolean)
-      .join(' — '),
+      .join(', '),
     churchName,
     motto,
     sections,
-    footNote: bulletin.closingNote ?? `${churchName} — ${motto ?? ''}`,
+    footNote: bulletin.closingNote ?? `${churchName}, ${motto ?? ''}`,
   }
 }

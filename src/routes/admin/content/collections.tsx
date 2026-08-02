@@ -238,7 +238,7 @@ export function SermonsEditor() {
       icon={Mic}
       items={content.sermons}
       onChange={(next) => update('sermons', () => next)}
-      emptyHint="Upload the notes from Sunday's message. Audio and video can be linked from anywhere free — YouTube, Facebook, Google Drive."
+      emptyHint="Upload the notes from Sunday's message. Audio and video can be linked from anywhere free. YouTube, Facebook, Google Drive."
       sortBy={(a, b) => b.date.localeCompare(a.date)}
       searchFields={(sermon) => [
         sermon.title,
@@ -336,7 +336,7 @@ export function SermonsEditor() {
                   .filter(Boolean),
               )
             }
-            hint="Separate with commas — e.g. John 3:16, Romans 8:28"
+            hint="Separate with commas, e.g. John 3:16, Romans 8:28"
           />
 
           <Textarea
@@ -397,7 +397,7 @@ export function SermonsEditor() {
                     .filter(Boolean),
                 )
               }
-              hint="Comma separated — faith, grace, family"
+              hint="Comma separated, faith, grace, family"
             />
           </div>
 
@@ -426,7 +426,7 @@ export function AnnouncementsEditor() {
       icon={Megaphone}
       items={content.announcements}
       onChange={(next) => update('announcements', () => next)}
-      emptyHint="The notice board — anything the church needs everyone to know."
+      emptyHint="The notice board, anything the church needs everyone to know."
       sortBy={(a, b) => b.publishedAt.localeCompare(a.publishedAt)}
       searchFields={(item) => [item.title, item.body]}
       validate={(draft) => (!draft.title.trim() ? 'An announcement needs a title.' : null)}
@@ -631,7 +631,7 @@ export function DevotionalsEditor() {
                   .filter(Boolean),
               )
             }
-            hint="Comma separated — e.g. Genesis 1-2, Matthew 1"
+            hint="Comma separated, e.g. Genesis 1-2, Matthew 1"
           />
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -858,7 +858,7 @@ export function GalleryEditor() {
           icon={Images}
           items={gallery.albums}
           onChange={(next) => update('gallery', (current) => ({ ...current, albums: next }))}
-          emptyHint="Group pictures by programme — harvest, convention, baptism, anniversary."
+          emptyHint="Group pictures by programme, harvest, convention, baptism, anniversary."
           sortBy={(a, b) => b.date.localeCompare(a.date)}
           searchFields={(album) => [album.title, album.description]}
           validate={(draft) => (!draft.title.trim() ? 'An album needs a title.' : null)}
@@ -957,7 +957,7 @@ export function GalleryEditor() {
           publishable={false}
           items={gallery.videos}
           onChange={(next) => update('gallery', (current) => ({ ...current, videos: next }))}
-          emptyHint="Link to YouTube or Facebook — hosting video costs nothing when someone else does it."
+          emptyHint="Link to YouTube or Facebook, hosting video costs nothing when someone else does it."
           searchFields={(video) => [video.title, video.description]}
           validate={(draft) =>
             !draft.title.trim() ? 'A video needs a title.' : !draft.url.trim() ? 'Paste the video link.' : null

@@ -41,7 +41,7 @@ export default function DownloadsPage() {
       <PageHeader
         eyebrow="Resources"
         title="Downloads"
-        description="Bulletins, weekly outlines, study materials and church documents — download once and keep them on your phone."
+        description="Bulletins, weekly outlines, study materials and church documents, download once and keep them on your phone."
       />
 
       <div ref={revealRef} className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-12">

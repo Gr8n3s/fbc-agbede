@@ -54,7 +54,7 @@ export default function PrivacyPage() {
           <h3>Published publicly</h3>
           <p>
             The following is stored in the church’s public GitHub repository, and anyone on the
-            internet can read it. That is intentional — it is the church’s public notice board:
+            internet can read it. That is intentional, it is the church’s public notice board:
           </p>
           <ul>
             <li>Service times, address, church phone number and email</li>

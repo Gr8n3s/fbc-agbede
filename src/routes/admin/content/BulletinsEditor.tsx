@@ -169,7 +169,7 @@ export function BulletinsEditor() {
                 required
                 value={draft.title}
                 onChange={(e) => set('title', e.target.value)}
-                placeholder="e.g. Sunday Worship — 2 August 2026"
+                placeholder="e.g. Sunday Worship, 2 August 2026"
               />
               <Select
                 label="Kind of programme"
@@ -344,7 +344,7 @@ export function BulletinsEditor() {
               rows={6}
               value={(draft.teenagersOrder ?? []).join('\n')}
               onChange={(e) => set('teenagersOrder', splitLines(e.target.value))}
-              hint="One line per item — Call to Worship, Call to Praise Him, and so on."
+              hint="One line per item. Call to Worship, Call to Praise Him, and so on."
             />
           </Group>
 
@@ -402,7 +402,7 @@ export function BulletinsEditor() {
               rows={8}
               value={(draft.notices ?? []).join('\n')}
               onChange={(e) => set('notices', splitLines(e.target.value))}
-              hint="One notice per line. Published publicly — no personal phone numbers."
+              hint="One notice per line. Published publicly, no personal phone numbers."
             />
 
             <ListEditor<Bulletin['weekAhead'][number]>
@@ -440,7 +440,7 @@ export function BulletinsEditor() {
 
             <ListEditor<BulletinProgramme>
               label="Our coming programmes"
-              hint="Dates are free text, because the church writes them as “Sat., 1st – Mon., 3rd”."
+              hint="Dates are free text, because the church writes them as “Sat., 1st. Mon., 3rd”."
               items={draft.comingProgrammes ?? []}
               onChange={(next) => set('comingProgrammes', next)}
               createItem={() => ({ id: newId('prg'), when: '', what: '' })}
@@ -471,7 +471,7 @@ export function BulletinsEditor() {
           {/* ---------------------------------------------- birthdays */}
           <Group
             title="Birthday celebrants"
-            hint="Typed in by hand on purpose — publishing a name is always a deliberate act, never something the member register does on its own."
+            hint="Typed in by hand on purpose, publishing a name is always a deliberate act, never something the member register does on its own."
           >
             <BirthdaysEditor
               rows={draft.birthdays ?? []}
@@ -532,12 +532,12 @@ export function BulletinsEditor() {
             />
 
             <ThemesEditor
-              label="Disciples' Lifestyle — this month"
+              label="Disciples' Lifestyle, this month"
               items={draft.disciplesThisMonth ?? []}
               onChange={(next) => set('disciplesThisMonth', next)}
             />
             <ThemesEditor
-              label="Disciples' Lifestyle — next month"
+              label="Disciples' Lifestyle, next month"
               items={draft.disciplesNextMonth ?? []}
               onChange={(next) => set('disciplesNextMonth', next)}
             />
@@ -557,7 +557,7 @@ export function BulletinsEditor() {
               rows={5}
               value={(draft.projects ?? []).join('\n')}
               onChange={(e) => set('projects', splitLines(e.target.value))}
-              hint="One per line — roofing, generator, tiles, and so on."
+              hint="One per line, roofing, generator, tiles, and so on."
             />
             <Textarea
               label="Offering note"
@@ -853,7 +853,7 @@ function AttendanceEditor({
     <div>
       <ListEditor<BulletinAttendanceRow>
         label="Last Sunday's attendance"
-        hint="Head counts only — no names. These are the figures already printed on the sheet."
+        hint="Head counts only, no names. These are the figures already printed on the sheet."
         items={rows}
         onChange={onChange}
         createItem={() => ({ id: newId('att'), label: '' })}

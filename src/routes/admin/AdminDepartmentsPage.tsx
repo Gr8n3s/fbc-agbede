@@ -266,7 +266,7 @@ export default function AdminDepartmentsPage() {
         <EmptyState
           icon={UsersRound}
           title="No departments yet"
-          description="Add the standard Baptist units — Choir, Ushers, Media, WMU, MMU, RA, Lydia and the rest — then edit each one."
+          description="Add the standard Baptist units. Choir, Ushers, Media, WMU, MMU, RA, Lydia and the rest, then edit each one."
           action={
             <Button icon={Sparkles} onClick={() => void addStarterSet()}>
               Add the standard set
@@ -526,7 +526,7 @@ function DepartmentEditor({
             label="Leader (public name)"
             value={draft.leaderName ?? ''}
             onChange={(e) => set('leaderName', e.target.value)}
-            hint="A name and title only — no phone numbers."
+            hint="A name and title only, no phone numbers."
             placeholder="e.g. Deaconess Grace Adeyemi"
           />
           <Input

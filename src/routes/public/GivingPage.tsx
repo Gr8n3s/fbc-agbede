@@ -30,7 +30,7 @@ export default function GivingPage() {
       <PageHeader
         eyebrow="Tithes &amp; offerings"
         title="Giving"
-        description="“Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.” — 2 Corinthians 9:7"
+        description="“Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.”, 2 Corinthians 9:7"
       />
 
       <div ref={revealRef} className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-12">
@@ -43,7 +43,7 @@ export default function GivingPage() {
           <ShieldCheck className="mt-0.5 size-5 shrink-0 text-success" aria-hidden />
           <p className="text-[0.875rem] leading-relaxed text-ink-soft">
             <strong className="text-ink">Give directly to the church.</strong> These are the church’s
-            own bank accounts — there is no payment processor in between, so nothing is deducted and
+            own bank accounts, there is no payment processor in between, so nothing is deducted and
             your full gift reaches the church. The app never asks for your card details.
           </p>
         </Card>
@@ -139,7 +139,7 @@ export default function GivingPage() {
             <GivingKind
               icon={BadgeCheck}
               title="Special funds"
-              body="Building projects, missions, welfare and outreach — as announced by the church."
+              body="Building projects, missions, welfare and outreach, as announced by the church."
             />
           </div>
         </section>

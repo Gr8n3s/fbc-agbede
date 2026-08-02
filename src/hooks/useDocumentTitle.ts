@@ -11,7 +11,7 @@ const SUFFIX = 'FBC Agbede'
  */
 export function useDocumentTitle(title?: string, description?: string): void {
   useEffect(() => {
-    const full = title ? `${title} — ${SUFFIX}` : `${SUFFIX} — Chapel of Grace`
+    const full = title ? `${title} | ${SUFFIX}` : `${SUFFIX} · Chapel of Grace`
     document.title = full
 
     if (description) {

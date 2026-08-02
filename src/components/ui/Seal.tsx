@@ -1,5 +1,5 @@
-import { useId } from 'react'
-import { cx } from '@/lib/utils'
+import { useId, useState } from 'react'
+import { asset, cx } from '@/lib/utils'
 
 /**
  * The church seal, drawn as vector.
@@ -20,12 +20,49 @@ import { cx } from '@/lib/utils'
 export function Seal({
   variant = 'full',
   className,
-  title = 'First Baptist Church Agbede, Ikorodu — Chapel of Grace',
+  title = 'First Baptist Church Agbede, Ikorodu · Chapel of Grace',
   decorative = false,
 }: {
   variant?: 'full' | 'mark' | 'crest'
   className?: string
   title?: string
+  decorative?: boolean
+}) {
+  /**
+   * Prefer the church's real logo when it has been added to the project.
+   *
+   * Drop the artwork in as `public/logo.png` and every seal in the app picks it
+   * up. Until then, and if the file ever fails to load, the drawn version below
+   * renders instead, so the app is never left with a broken image.
+   */
+  const [logoFailed, setLogoFailed] = useState(false)
+
+  if (!logoFailed && variant !== 'crest') {
+    return (
+      <img
+        src={asset('logo.png')}
+        alt={decorative ? '' : title}
+        aria-hidden={decorative || undefined}
+        loading="eager"
+        decoding="async"
+        onError={() => setLogoFailed(true)}
+        className={cx('shrink-0 object-contain', className)}
+      />
+    )
+  }
+
+  return <DrawnSeal variant={variant} className={className} title={title} decorative={decorative} />
+}
+
+function DrawnSeal({
+  variant = 'full',
+  className,
+  title,
+  decorative = false,
+}: {
+  variant?: 'full' | 'mark' | 'crest'
+  className?: string
+  title: string
   decorative?: boolean
 }) {
   // Ids must be unique per instance or a second seal on the page reuses the
@@ -122,7 +159,7 @@ export function Seal({
             strokeLinejoin="round"
           />
           <path d="M100 140v34" stroke="#8a6d3b" strokeWidth="2" strokeLinecap="round" />
-          {/* Suggested text lines — evocative at size, invisible noise when tiny */}
+          {/* Suggested text lines, evocative at size, invisible noise when tiny */}
           <g stroke="#b9a887" strokeWidth="1.4" strokeLinecap="round" opacity="0.8">
             <path d="M70 141h22M70 147h22M70 153h22M70 159h22M70 165h18" />
             <path d="M108 141h22M108 147h22M108 153h22M108 159h22M112 165h18" />

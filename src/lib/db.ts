@@ -111,7 +111,7 @@ async function idbPut(key: string, value: unknown): Promise<void> {
     tx.objectStore(STORE).put(value, key)
     tx.oncomplete = () => resolve()
     tx.onerror = () => reject(tx.error)
-    tx.onabort = () => reject(tx.error ?? new Error('Write aborted — the device may be out of space.'))
+    tx.onabort = () => reject(tx.error ?? new Error('Write aborted, the device may be out of space.'))
   })
 }
 

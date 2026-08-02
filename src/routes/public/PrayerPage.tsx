@@ -98,7 +98,7 @@ export default function PrayerPage() {
 
   const messageFor = (request: PrayerRequest) =>
     [
-      'Prayer request — FBC Agbede',
+      'Prayer request. FBC Agbede',
       '',
       `Subject: ${request.subject}`,
       `Category: ${request.category}`,
@@ -159,7 +159,7 @@ export default function PrayerPage() {
       <PageHeader
         eyebrow="Stand together"
         title="Prayer"
-        description="“Confess your faults one to another, and pray one for another, that ye may be healed. The effectual fervent prayer of a righteous man availeth much.” — James 5:16"
+        description="“Confess your faults one to another, and pray one for another, that ye may be healed. The effectual fervent prayer of a righteous man availeth much.”. James 5:16"
       />
 
       <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-12">
@@ -213,7 +213,7 @@ export default function PrayerPage() {
           <SectionHeading
             eyebrow="Your request"
             title="Write a prayer request"
-            description="Requests are saved on this phone only — nothing is uploaded anywhere. When you are ready, send it to the pastor with one tap."
+            description="Requests are saved on this phone only, nothing is uploaded anywhere. When you are ready, send it to the pastor with one tap."
             as="h2"
           />
 
@@ -247,7 +247,7 @@ export default function PrayerPage() {
               showCount
               error={errors.body}
               onChange={(e) => setBody(e.target.value)}
-              placeholder="Write freely — nobody sees this until you send it."
+              placeholder="Write freely, nobody sees this until you send it."
             />
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -260,7 +260,7 @@ export default function PrayerPage() {
               {!anonymous && (
                 <Input
                   label="Your name"
-                  hint="Optional — helps the pastor know who to follow up."
+                  hint="Optional, helps the pastor know who to follow up."
                   value={name}
                   maxLength={80}
                   onChange={(e) => setName(e.target.value)}
