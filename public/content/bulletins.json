@@ -1,1 +1,56 @@
-[]
+[
+  {
+    "id": "bul_46a87fc4-f124-40ad-b517-f712bd639506",
+    "date": "2026-08-02",
+    "weekOf": "2026-08-02",
+    "kind": "weekly-bulletin",
+    "title": "fverrbrbrh",
+    "serviceName": "Sunday Worship Service",
+    "orderOfService": [
+      {
+        "id": "oos_6afd72d0-f3bb-48e5-9a07-ed31cbb320ec",
+        "item": "dcecewf",
+        "time": "3554",
+        "minister": "ffererererege"
+      }
+    ],
+    "hymns": [
+      {
+        "id": "hym_140de168-a637-4840-a8b8-d80a973e0f7f",
+        "title": "effeerererff",
+        "number": "543",
+        "slot": "1"
+      }
+    ],
+    "readings": [
+      "rgrgggglu8778o000000000000000000000000000000000000000000000000000000hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+    ],
+    "notices": [
+      "gtgtgrtgrtgrtgrtrrhyuko8p89"
+    ],
+    "weekAhead": [
+      {
+        "id": "wk_b168a791-8529-4c1f-9063-0140e8cbee3a",
+        "day": "3e344",
+        "activity": "r3r4r34",
+        "time": "34r44",
+        "venue": "r34r4434"
+      }
+    ],
+    "featured": true,
+    "published": true,
+    "createdAt": "2026-08-02T20:27:12.860Z",
+    "updatedAt": "2026-08-02T20:31:23.099Z",
+    "startTime": "21:27",
+    "endTime": "21:30",
+    "venue": "cdccc",
+    "preacher": "veregegetg",
+    "theme": "fererereee",
+    "themeVerse": "fewfwfwfw",
+    "themeVerseRef": "fvervwrfsf",
+    "welcomeNote": "dfvesfwfwfr",
+    "offeringNote": "dewtbggtr",
+    "closingNote": "frfegrttyj7",
+    "pdfUrl": "\"C:\\Users\\adenu\\Downloads\\Bulletin August 2nd 2026.docx\""
+  }
+]
