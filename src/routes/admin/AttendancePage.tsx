@@ -295,7 +295,7 @@ export default function AttendancePage() {
           hideLabel
           value={range}
           onChange={(e) => setRange(e.target.value as RangePreset)}
-          className="w-44"
+          className="w-full sm:w-44"
           options={[
             { value: '30d', label: 'Last 30 days' },
             { value: '90d', label: 'Last 90 days' },
@@ -324,7 +324,7 @@ export default function AttendancePage() {
           ))}
         </div>
 
-        <span className="ml-auto flex flex-wrap gap-1.5">
+        <span className="flex w-full flex-wrap gap-1.5 sm:ml-auto sm:w-auto">
           <Button
             variant="ghost"
             size="sm"

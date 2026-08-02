@@ -292,7 +292,7 @@ export default function ReportsPage() {
           hideLabel
           value={range}
           onChange={(e) => setRange(e.target.value as RangePreset)}
-          className="w-44"
+          className="w-full sm:w-44"
           options={(Object.keys(RANGE_LABELS) as RangePreset[]).map((value) => ({
             value,
             label: RANGE_LABELS[value],
@@ -303,7 +303,7 @@ export default function ReportsPage() {
           hideLabel
           value={serviceType}
           onChange={(e) => setServiceType(e.target.value as ServiceType | 'all')}
-          className="w-52"
+          className="w-full sm:w-52"
           options={[
             { value: 'all', label: 'All services' },
             ...(Object.keys(SERVICE_TYPE_LABELS) as ServiceType[]).map((value) => ({
@@ -317,7 +317,7 @@ export default function ReportsPage() {
           hideLabel
           value={String(months)}
           onChange={(e) => setMonths(Number(e.target.value))}
-          className="w-40"
+          className="w-full sm:w-40"
           options={[
             { value: '6', label: 'Last 6 months' },
             { value: '12', label: 'Last 12 months' },

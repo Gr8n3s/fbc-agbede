@@ -293,7 +293,7 @@ function BackupPanel() {
                 }
               }}
               hint="Days between reminders."
-              className="w-40"
+              className="w-full sm:w-40"
             />
             <p className="pb-2 text-[0.8125rem] text-ink-soft">
               {reminderSaved ? (
@@ -637,7 +637,7 @@ function PreferencesPanel() {
           value={String(settings.pageSize)}
           onChange={(e) => void updateSettings({ pageSize: Number(e.target.value) })}
           options={[10, 25, 50, 100].map((n) => ({ value: String(n), label: `${n} rows` }))}
-          className="max-w-xs"
+          className="w-full sm:max-w-xs"
         />
         <Select
           label="Default service for new registers"
@@ -650,7 +650,7 @@ function PreferencesPanel() {
             { value: 'workers-meeting', label: 'Workers’ Meeting' },
             { value: 'prayer-meeting', label: 'Prayer Meeting' },
           ]}
-          className="max-w-xs"
+          className="w-full sm:max-w-xs"
         />
       </div>
     </Panel>

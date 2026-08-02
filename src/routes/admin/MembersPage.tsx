@@ -363,7 +363,7 @@ export default function MembersPage() {
               hideLabel
               value={familyId}
               onChange={(e) => setFamilyId(e.target.value)}
-              className="w-48"
+              className="w-full sm:w-48"
               placeholder="All families"
               options={vault.families.map((f) => ({ value: f.id, label: f.name }))}
             />
@@ -386,7 +386,7 @@ export default function MembersPage() {
             </button>
           )}
 
-          <span className="ml-auto flex flex-wrap gap-1.5">
+          <span className="flex w-full flex-wrap gap-1.5 sm:ml-auto sm:w-auto">
             <Button
               variant="ghost"
               size="sm"
