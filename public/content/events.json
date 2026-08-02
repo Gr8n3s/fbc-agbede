@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "evt_a8dbfaf2-5da3-4a65-b3fc-1f80d3bd9893",
+    "title": "AnnualHarvest",
+    "slug": "a",
+    "description": "aefewfrfrfef",
+    "category": "special",
+    "start": "2026-08-02T09:00",
+    "allDay": true,
+    "recurrence": "none",
+    "venue": "",
+    "featured": true,
+    "published": true,
+    "createdAt": "2026-08-02T20:25:05.957Z",
+    "updatedAt": "2026-08-02T20:25:52.561Z",
+    "end": "2026-08-02T21:25",
+    "host": "efefveb fbgfbgb"
+  }
+]
