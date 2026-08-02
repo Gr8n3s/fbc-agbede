@@ -1,56 +1,346 @@
 [
   {
-    "id": "bul_46a87fc4-f124-40ad-b517-f712bd639506",
+    "id": "bul_2026_08_02",
     "date": "2026-08-02",
     "weekOf": "2026-08-02",
     "kind": "weekly-bulletin",
-    "title": "fverrbrbrh",
-    "serviceName": "Sunday Worship Service",
-    "orderOfService": [
+    "title": "Sunday Worship — 2 August 2026",
+    "yearTheme": "2026: My Year of Fruitful Outpouring!",
+    "sundayNumber": 29,
+    "welcomeLine": "You are welcome to the 29th Sunday.",
+    "occasion": "2026 Social Ministries Emphasis Sunday",
+    "occasionSubtitle": "Deacons as Helpers in the Ministry of Care & Kingdom Expansion (Acts 6:1-7)",
+    "schedule": [
       {
-        "id": "oos_6afd72d0-f3bb-48e5-9a07-ed31cbb320ec",
-        "item": "dcecewf",
-        "time": "3554",
-        "minister": "ffererererege"
+        "id": "sch_prayer",
+        "name": "Pre-Service Prayer for Church Workers",
+        "startTime": "08:30",
+        "endTime": "09:00"
+      },
+      {
+        "id": "sch_school",
+        "name": "Sunday School / New Members' Classes",
+        "startTime": "09:00",
+        "endTime": "10:00"
+      },
+      {
+        "id": "sch_service",
+        "name": "Combined Service / SM",
+        "startTime": "10:00",
+        "endTime": "12:00"
       }
     ],
-    "hymns": [
+    "sundaySchool": {
+      "topic": "Thomas, the Honest Doubter",
+      "topicYoruba": "Toomasi: Oniyemeji Tooto",
+      "text": "John 11:14-16; 14:5-8; 20:24-29; 21:1-2",
+      "memoryVerse": "Then, He said to Thomas, 'Put your finger here, see my hands. Reach out your hand and put it into my side. Stop doubting and believe.'",
+      "memoryVerseRef": "John 20:27"
+    },
+    "serviceMotto": "Encounters for Fruitful Outpouring!",
+    "serviceMottoYoruba": "Ibapade Agbara Fun Itujade Eso Pupo!",
+    "preacher": "Rev Timothy Olatunde Tijani",
+    "serviceName": "Combined Service",
+    "venue": "Church auditorium",
+    "sections": [
       {
-        "id": "hym_140de168-a637-4840-a8b8-d80a973e0f7f",
-        "title": "effeerererff",
-        "number": "543",
-        "slot": "1"
+        "id": "sec_worship",
+        "heading": "In Worship",
+        "headingYoruba": "Ninu Isin",
+        "items": [
+          {
+            "id": "oos_processional",
+            "item": "In Processional Hymn",
+            "itemYoruba": "Ninu Orin Akowole",
+            "hymnNumber": "BH 20",
+            "hymnNumberYoruba": "YBH 8",
+            "minister": "Pastor Jokotoye Peter"
+          },
+          {
+            "id": "oos_call",
+            "item": "In Call to Worship through Prayer of Praise & Thanksgiving",
+            "itemYoruba": "Ipe si Isin nipa Adura Iyin ati Ope",
+            "minister": "Dr Titilope Olatunde"
+          },
+          {
+            "id": "oos_invitation",
+            "item": "Invitation to Worship in Praises and Thanksgiving",
+            "itemYoruba": "Isin ninu Iyin ati Idupe",
+            "minister": "Praise Team"
+          },
+          {
+            "id": "oos_welcome",
+            "item": "In Welcome Address",
+            "itemYoruba": "Ninu Ikinni Kaabo",
+            "minister": "Mr Sunday Adewuyi"
+          }
+        ]
+      },
+      {
+        "id": "sec_warmth",
+        "heading": "In Warmth & Witness",
+        "headingYoruba": "Ninu Ife Ara ati Eri",
+        "items": [
+          {
+            "id": "oos_greetings",
+            "item": "In Kingdom Greetings & News",
+            "itemYoruba": "Ikinni ati Ifilo",
+            "minister": "Bro Gbenga Oyeleye"
+          },
+          {
+            "id": "oos_pastoral",
+            "item": "In Pastoral Prayers for Families, Missions, Nations, Testifiers among others",
+            "minister": "Rev Timothy Olatunde Tijani"
+          },
+          {
+            "id": "oos_social",
+            "item": "In Social Ministry Presentation",
+            "minister": "Drama Group"
+          }
+        ]
+      },
+      {
+        "id": "sec_word",
+        "heading": "Word Ministrations",
+        "headingYoruba": "Ninu Ise Iranse Oro Naa",
+        "items": [
+          {
+            "id": "oos_reading",
+            "item": "In Bible Reading (Acts 6:1-7)",
+            "itemYoruba": "Ninu Bibeli Kika",
+            "minister": "Mrs 'Bolanle Ogunsanya"
+          },
+          {
+            "id": "oos_choir",
+            "item": "In Choir Ministration",
+            "itemYoruba": "Ise Iranse Awon Akorin",
+            "minister": "Choir"
+          },
+          {
+            "id": "oos_word",
+            "item": "In Word & Prayer Ministrations",
+            "itemYoruba": "Ninu Adura ati Oro Naa",
+            "minister": "Rev Timothy Olatunde Tijani"
+          }
+        ]
+      },
+      {
+        "id": "sec_thanksgiving",
+        "heading": "In Worshipful Thanksgiving & Offerings",
+        "headingYoruba": "Ninu Isin Idupe ati Ore fun Oluwa",
+        "items": [
+          {
+            "id": "oos_tithes",
+            "item": "In Giving of Tithes / Offerings",
+            "itemYoruba": "Idamewa ati Ore",
+            "minister": "Dn J.A. Akinbiyi"
+          }
+        ]
+      },
+      {
+        "id": "sec_witness",
+        "heading": "In Witness",
+        "headingYoruba": "Ninu Eri",
+        "items": [
+          {
+            "id": "oos_missions",
+            "item": "Church Missions Emphasis & Updates",
+            "minister": "Dns Titilayo Ogundeji"
+          },
+          {
+            "id": "oos_closing",
+            "item": "In Closing Prayer & Benediction",
+            "minister": "Rev Timothy Olatunde Tijani"
+          },
+          {
+            "id": "oos_recessional",
+            "item": "In Recessional Hymn",
+            "itemYoruba": "Ninu Orin Ipari",
+            "hymnNumber": "EBH 438",
+            "hymnNumberYoruba": "YBH",
+            "minister": "Pastor Peter Jokotoye"
+          }
+        ]
       }
     ],
-    "readings": [
-      "rgrgggglu8778o000000000000000000000000000000000000000000000000000000hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+    "hymns": [],
+    "readings": ["Acts 6:1-7"],
+    "teenagersOrder": [
+      "Call to Worship",
+      "Call to Praise Him",
+      "Call to Sing Hymn",
+      "Call to Corporate Prayers",
+      "Call to Bible Reading",
+      "Call to Choir Ministration",
+      "Call to Teaching the Word of Life",
+      "Call to listen to News",
+      "Call to Give our best to God",
+      "Call to closing Prayer and Benediction"
+    ],
+    "attendanceSummary": [
+      {
+        "id": "att_combined",
+        "label": "Combined Worship",
+        "men": 62,
+        "women": 72,
+        "youth": 46,
+        "teenagers": 49,
+        "children": 53,
+        "total": 282
+      },
+      {
+        "id": "att_midweek",
+        "label": "Mid-Week Prayer and Bible Study",
+        "men": 19,
+        "women": 17,
+        "youth": 7,
+        "teenagers": 1,
+        "children": 11,
+        "total": 55
+      }
     ],
     "notices": [
-      "gtgtgrtgrtgrtgrtrrhyuko8p89"
+      "Enjoy Fruitful Outpouring by paying your Tithes & Offerings correctly.",
+      "Develop yourself spiritually for Fruitful Outpouring through Discipleship programmes — register with Pst. John Olomitutu.",
+      "New Members Class holds every Sunday by 9am with the Church Pastor & his team members.",
+      "There's an ongoing class for baptismal candidates 4pm every Friday and after service on Sundays — see Pst. John Olomitutu.",
+      "Notify the Secretary if your name is omitted from the list of birthday celebrants.",
+      "Pray for Triumphant B.C. for Kingdom Expansion this year and means to build the church.",
+      "Prayer Can Do It programme holds every Wednesday by 9am.",
+      "Pay your Freewill Missions' donations and Benevolence offerings into the church account — see the Giving page for details.",
+      "Please get your change ready before coming to church.",
+      "Every third Sunday of the month: MMU, WMU and Youth meeting.",
+      "Pay your mission offering of ₦100 per month per member of your family to Dns Ajayi.",
+      "Peace House Discipleship Class holds every Monday 5pm – 7pm on the church premises.",
+      "Wedding notices should reach the Pastor's Office six to four months before the date.",
+      "Please save these dates for church members' programmes: August 13th & 14th, 28th & 29th; October 17th; November 7th & 26th; December 18th & 19th — and be praying along for success."
     ],
-    "weekAhead": [
+    "weekAhead": [],
+    "comingProgrammes": [
       {
-        "id": "wk_b168a791-8529-4c1f-9063-0140e8cbee3a",
-        "day": "3e344",
-        "activity": "r3r4r34",
-        "time": "34r44",
-        "venue": "r34r4434"
+        "id": "prg_aug_revival",
+        "month": "August",
+        "when": "Sat 1st – Mon 3rd",
+        "what": "Ahava Canal Revival / Social Ministry Emphasis Week"
+      },
+      {
+        "id": "prg_aug_hbs",
+        "month": "August",
+        "when": "Mon 3rd – Wed 5th",
+        "what": "Holiday Bible School / A Day Camp for Children"
+      },
+      {
+        "id": "prg_aug_pre_ckba",
+        "month": "August",
+        "when": "Fri 7th",
+        "what": "Pre 2nd CKBA-In-Session @ New Spring BC"
+      },
+      {
+        "id": "prg_aug_ckba",
+        "month": "August",
+        "when": "Sat 8th",
+        "what": "2nd CKBA-In-Session (Plenary Session)"
+      },
+      {
+        "id": "prg_aug_bsf",
+        "month": "August",
+        "when": "Sun 9th",
+        "what": "2026 Baptist Student Fellowship (BSF) Week / Parents, Teachers & Teenagers' Forum Sunday / Combined Service"
+      },
+      {
+        "id": "prg_aug_wmu",
+        "month": "August",
+        "when": "Thu 13th – Sat 15th",
+        "what": "WMU Annual Camp @ Ajara"
+      },
+      {
+        "id": "prg_aug_mmu",
+        "month": "August",
+        "when": "Mon 17th – 21st",
+        "what": "MMU National Congress @ Yenagoa"
+      },
+      {
+        "id": "prg_aug_16",
+        "month": "August",
+        "when": "Sun 16th",
+        "what": "English / Yoruba Service · Teens"
+      },
+      {
+        "id": "prg_aug_23",
+        "month": "August",
+        "when": "Sun 23rd",
+        "what": "English / Yoruba Service · Teens"
+      },
+      {
+        "id": "prg_aug_lebc",
+        "month": "August",
+        "when": "Thu 27th – 29th",
+        "what": "LEBC 15th Kingdom Life Assembly"
+      },
+      {
+        "id": "prg_aug_30",
+        "month": "August",
+        "when": "Sun 30th",
+        "what": "Church Workers Seminar / Disciples Life Style Day / LEBC Mission Sunday / August Celebrants' Thanksgiving (Combined Service)"
       }
     ],
+    "birthdays": [],
+    "message": {
+      "heading": "From the Throne of Glory!",
+      "topic": "Deacons as Helpers in the Ministry of Care & Kingdom Expansion",
+      "text": "Acts 6:1–7",
+      "author": "Rev Timothy Olatunde Tijani",
+      "body": "## Introduction\n\nThe office of the deacon is one of the most vital servant-leadership roles in the local church. The term *deacon* is derived from the Greek word *diakonos*, meaning \"servant\" or \"minister.\" This highlights that the deacon is not called to rule, but to serve, particularly in the area of practical and compassionate care within the body of Christ.\n\nThe origin of this ministry is clearly seen in *Acts 6:1–7*, where the early church identified the need for dedicated servants to ensure fair distribution of resources, so that no member, especially widows, was neglected. This model established that ministry is not only spiritual in preaching, but also practical in caring.\n\nThe qualifications of deacons, as outlined in *1 Timothy 3:8–13*, further emphasise that their role is deeply spiritual, requiring integrity, sincerity, faithfulness, and proven character. Welfare ministry is therefore not merely administrative, it flows from a transformed life.\n\n## Practical Areas of Deaconal Care & Kingdom Expansion\n\n### 1. Care for the Poor and Economically Vulnerable\n\nOne of the historic responsibilities of deacons is the relief of poverty. They are tasked with identifying and responding to material needs within the church and, where possible, in the wider community.\n\nKey responsibilities include:\n\n- Identifying members facing financial hardship, unemployment, or crisis\n- Coordinating relief support such as food banks or emergency funds\n- Linking members with community or government assistance\n- Mobilising the church for targeted giving\n\n*James 2:14–16* reminds us that faith must be demonstrated through practical care.\n\n### 2. Care for Widows and Orphans\n\nScripture places special emphasis on caring for widows and orphans (*James 1:27; 1 Timothy 5:3–5*). Deacons ensure that vulnerable individuals are not neglected.\n\nPractical expressions include:\n\n- Regular visitation and emotional support\n- Coordinating meals, transport, and household assistance\n- Advocating for vulnerable children\n- Partnering with care and support networks\n\n### 3. Care for the Sick and Hospitalised\n\nDeacons extend Christ's compassion through visitation, prayer, and support for the sick.\n\nResponsibilities include:\n\n- Organising hospital and home visits\n- Coordinating practical support such as meals\n- Communicating with pastoral leadership on critical cases\n- Assisting with transportation for medical needs\n\n*Matthew 25:36, 40* emphasises that caring for the sick is service unto Christ.\n\n### 4. Care for Strangers and Newcomers\n\nThe Bible calls believers to show hospitality to strangers (*Leviticus 19:34; Hebrews 13:2; Matthew 25:35*). Deacons help integrate newcomers and support displaced or vulnerable persons.\n\n### 5. Administration of Relief Funds\n\nDeacons act as stewards of church welfare resources, ensuring transparency, fairness, and accountability.\n\nBest practices include:\n\n- Clear guidelines for fund distribution\n- Shared decision-making for major disbursements\n- Regular reporting to leadership\n- Proper needs assessment before assistance\n\n## The Spiritual Character of Welfare Ministry\n\nWelfare ministry is not just social work, it is a spiritual calling. Every act of service reflects Christ and becomes an expression of worship.\n\nDeacons must cultivate:\n\n- Prayerful dependence on the Holy Spirit\n- Humility in service\n- Confidentiality and respect for dignity\n- Perseverance in emotionally demanding situations\n\n*Galatians 6:9–10* encourages consistency in doing good without weariness.\n\n## Organisation and Mobilisation of Deacons\n\n### 1. Establishing a Welfare Structure\n\nChurches may organise deacons into functional roles such as:\n\n- Welfare Coordinator\n- Visitation Team\n- Financial Steward\n- Community Liaison\n\n### 2. Needs Assessment Process\n\nA structured approach ensures effective support:\n\n- Initial assessment / interview\n- Documentation and confidentiality\n- Review by multiple deacons\n- Approval and disbursement\n- Follow-up evaluation\n\n### 3. Collaboration with Pastoral Leadership\n\nDeacons handle practical care ministry, allowing pastors to focus on prayer and the Word, as seen in *Acts 6:4*. This partnership strengthens both spiritual and practical aspects of church life.\n\n## Conclusion\n\nThe ministry of deacons is a powerful expression of the gospel in action. When the church cares for the poor, the sick, widows, and strangers, it demonstrates that the Kingdom of God is present and active.\n\nDeacons do more than meet physical needs, they reveal Christ, who came not to be served, but to serve (*Mark 10:45*). Their faithful service preserves unity, supports leadership, meets real needs, and advances the mission of the church.\n\nA church that values and empowers its deacons positions itself for sustainable growth and effective witness. Through them, God continues to build His Church and extend His Kingdom on earth."
+    },
+    "prayerPoints": [
+      "Lord, open the eyes of our Deacons and pastors to more excelling ministries of the church.",
+      "Father, deliver me from selfishness; help me to use my gifts for the benefit of others and not for personal glory.",
+      "Holy Spirit, empower me to function effectively in my gifts for the growth and strength of the Church.",
+      "Lord, let my life truly reflect Your power and presence through the proper use of my spiritual gifts.",
+      "Father, help me to walk in my divine assignment and use every gift You have given me for Your glory and the advancement of the Social Ministries."
+    ],
+    "nextSundaySchool": {
+      "topic": "Stephen, An Early Interpreter of Christianity",
+      "topicYoruba": "Stefanu, Olutumo Igbagbo Ti Awon Kristiani Igba-n-ni Dimu",
+      "text": "Acts 6:7-10; 7:54-60"
+    },
+    "disciplesThisMonth": [
+      {
+        "id": "thm_bequeathing",
+        "topic": "Bequeathing",
+        "topicYoruba": "Fifi Ogun Eni Sile fun Awon Miiran Lati Jogun"
+      },
+      {
+        "id": "thm_leadership",
+        "topic": "Leadership Styles",
+        "topicYoruba": "Ona Awon Ti Aladari N Gba Se Isakoso"
+      }
+    ],
+    "disciplesNextMonth": [
+      {
+        "id": "thm_health",
+        "topic": "Health and Environmental Issues",
+        "topicYoruba": "Oro Ilera ati Ayika"
+      }
+    ],
+    "urgentNeeds": [
+      "Please support our students with your donations — FBC Agbede Student Welfare, Sterling Bank. See the Giving page for the account number."
+    ],
+    "projects": [
+      "Roofing & building of the auditorium continues — roofing sheets, loads of sand, cement, gravel, iron rods, etc.",
+      "Generator (20 KVA)",
+      "Cameras, projector, smart TVs, tripod stand, laptops, HDMI cable (30m), etc.",
+      "Investment",
+      "Tiles",
+      "Decoration materials (please see Dns Ojelabi)",
+      "2 hand dryers (₦160,000)"
+    ],
+    "offeringNote": "Tithes, offerings and gifts, the church project, freewill missions' donations and student welfare each have their own account.",
+    "closingNote": "Go, enjoy Fruitful Outpouring this year 2026 in Jesus name.",
+    "pdfUrl": "",
     "featured": true,
     "published": true,
-    "createdAt": "2026-08-02T20:27:12.860Z",
-    "updatedAt": "2026-08-02T20:31:23.099Z",
-    "startTime": "21:27",
-    "endTime": "21:30",
-    "venue": "cdccc",
-    "preacher": "veregegetg",
-    "theme": "fererereee",
-    "themeVerse": "fewfwfwfw",
-    "themeVerseRef": "fvervwrfsf",
-    "welcomeNote": "dfvesfwfwfr",
-    "offeringNote": "dewtbggtr",
-    "closingNote": "frfegrttyj7",
-    "pdfUrl": "\"C:\\Users\\adenu\\Downloads\\Bulletin August 2nd 2026.docx\""
+    "createdAt": "2026-08-02T00:00:00.000Z",
+    "updatedAt": "2026-08-02T00:00:00.000Z"
   }
 ]

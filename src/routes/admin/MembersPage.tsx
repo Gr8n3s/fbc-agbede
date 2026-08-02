@@ -195,10 +195,6 @@ export default function MembersPage() {
       (current) => ({
         ...current,
         members: current.members.filter((m) => m.id !== member.id),
-        attendance: current.attendance.map((record) => ({
-          ...record,
-          presentMemberIds: record.presentMemberIds.filter((id) => id !== member.id),
-        })),
       }),
       {
         action: 'delete',

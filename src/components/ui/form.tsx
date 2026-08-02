@@ -233,6 +233,65 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
 })
 
 // ---------------------------------------------------------------------------
+// Combobox
+// ---------------------------------------------------------------------------
+
+/**
+ * A select that also accepts anything typed.
+ *
+ * Church vocabulary never fits a fixed list — a category might be "Harvest",
+ * "Thanksgiving Service" or something nobody anticipated. This offers the usual
+ * options for speed while never blocking a word the church actually uses.
+ *
+ * Built on a native `<input list>` + `<datalist>`, so it is a real text field
+ * with real autocomplete on every platform, including mobile, and needs no
+ * popup, no focus trap and no keyboard handling of our own.
+ */
+type ComboboxProps = Omit<FieldProps, 'children'> &
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className' | 'list'> & {
+    options: SelectOption[]
+  }
+
+export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Combobox(
+  { label, hint, error, required, hideLabel, className, options, ...rest },
+  ref,
+) {
+  const listId = useId()
+  return (
+    <Field
+      label={label}
+      hint={hint}
+      error={error}
+      required={required}
+      hideLabel={hideLabel}
+      className={className}
+    >
+      {({ id, describedBy, invalid }) => (
+        <>
+          <input
+            ref={ref}
+            id={id}
+            list={listId}
+            required={required}
+            aria-describedby={describedBy}
+            aria-invalid={invalid}
+            className={cx(CONTROL, 'h-11')}
+            {...rest}
+          />
+          <datalist id={listId}>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label !== option.value ? option.label : undefined}
+              </option>
+            ))}
+          </datalist>
+        </>
+      )}
+    </Field>
+  )
+})
+
+// ---------------------------------------------------------------------------
 // Checkbox, switch, radio
 // ---------------------------------------------------------------------------
 

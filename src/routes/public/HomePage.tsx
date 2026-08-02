@@ -382,11 +382,11 @@ function Hero({
             <Seal className="mx-auto size-24 drop-shadow-lg sm:size-32" decorative />
           </div>
 
-          <p className="eyebrow mt-7 animate-veil">Est. in Agbede, Ikorodu · Nigerian Baptist Convention</p>
+          <p className="eyebrow mt-7 animate-veil">Agbede, Ikorodu · Nigerian Baptist Convention</p>
 
           <h1 className="mt-4 animate-veil text-balance font-display text-hero font-semibold text-ink [animation-delay:80ms]">
             {churchName.replace(/,.*$/, '')}
-            <span className="mt-1 block text-[0.42em] font-semibold uppercase tracking-[0.34em] text-accent">
+            <span className="mt-4 block text-[0.42em] font-semibold uppercase tracking-[0.34em] text-accent">
               {motto}
             </span>
           </h1>
@@ -436,7 +436,9 @@ function NextServiceStrip({
         <p className="text-[0.9375rem] font-semibold">
           {name} · {day} {time}
         </p>
-        <Badge tone="gold" className="border-transparent bg-ornament/25 text-on-brand">
+        {/* Solid gold on near-black: self-contained, so it reads on the brand
+            strip in both light and dark, where a tinted fill did not. */}
+        <Badge tone="gold" className="border-transparent bg-ornament text-vestry-950">
           {relative}
         </Badge>
         {note && <span className="text-[0.8125rem] text-on-brand/75">{note}</span>}

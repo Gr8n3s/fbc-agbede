@@ -68,6 +68,11 @@ const KIND_TONE: Record<string, 'brand' | 'accent' | 'gold' | 'info'> = {
   other: 'brand',
 }
 
+/** Total lines in the order of service, across all its named sections. */
+function itemCount(bulletin: Bulletin): number {
+  return (bulletin.sections ?? []).reduce((total, section) => total + section.items.length, 0)
+}
+
 export function BulletinCard({ bulletin, featured = false }: { bulletin: Bulletin; featured?: boolean }) {
   const multiDay = bulletin.endDate && bulletin.endDate !== bulletin.date
 
@@ -118,10 +123,10 @@ export function BulletinCard({ bulletin, featured = false }: { bulletin: Bulleti
                 {bulletin.preacher}
               </span>
             )}
-            {bulletin.orderOfService.length > 0 && (
+            {itemCount(bulletin) > 0 && (
               <span className="inline-flex items-center gap-1.5">
                 <ScrollText className="size-3.5 text-ornament" aria-hidden />
-                {bulletin.orderOfService.length} items
+                {itemCount(bulletin)} items
               </span>
             )}
           </div>

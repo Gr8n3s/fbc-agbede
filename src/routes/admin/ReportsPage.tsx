@@ -18,11 +18,9 @@ import {
   FileSpreadsheet,
   FileText,
   TrendingUp,
-  UserMinus,
   UsersRound,
 } from 'lucide-react'
 import {
-  Badge,
   Button,
   EmptyState,
   Panel,
@@ -40,11 +38,9 @@ import { useVaultData } from '@/context/VaultContext'
 import { useDocumentTitle } from '@/hooks'
 import { exportExcel, printDocument, type Column } from '@/lib/export'
 import {
-  absentees,
   attendanceByServiceType,
   attendanceTrend,
   departmentStats,
-  memberAttendanceRates,
   membershipGrowth,
   summariseAttendance,
   summariseMembership,
@@ -53,7 +49,7 @@ import {
   type RangePreset,
 } from '@/lib/stats'
 import { MEMBERSHIP_STATUS_LABELS, SERVICE_TYPE_LABELS, type ServiceType } from '@/lib/types'
-import { formatNaira, formatNumber, fullName, pluralise } from '@/lib/utils'
+import { formatNaira, formatNumber, pluralise } from '@/lib/utils'
 
 /**
  * Reports for the church business meeting.
@@ -112,11 +108,6 @@ export default function ReportsPage() {
     () => departmentStats(content.departments, vault.members, vault.attendance),
     [content.departments, vault.members, vault.attendance],
   )
-  const rates = useMemo(
-    () => memberAttendanceRates(vault.members, records),
-    [vault.members, records],
-  )
-  const missing = useMemo(() => absentees(vault.members, records), [vault.members, records])
 
   const grid = resolved === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(21,18,48,0.08)'
   const tick = resolved === 'dark' ? '#a8a3bd' : '#5b5676'
@@ -244,6 +235,7 @@ export default function ReportsPage() {
       { key: 'men', header: 'Men', value: (r) => r.men, type: 'number' },
       { key: 'women', header: 'Women', value: (r) => r.women, type: 'number' },
       { key: 'youth', header: 'Youth', value: (r) => r.youth, type: 'number' },
+      { key: 'teenagers', header: 'Teenagers', value: (r) => r.teenagers, type: 'number' },
       { key: 'children', header: 'Children', value: (r) => r.children, type: 'number' },
       { key: 'visitors', header: 'Visitors', value: (r) => r.visitors, type: 'number' },
     ]
@@ -259,19 +251,12 @@ export default function ReportsPage() {
         type: 'number',
       },
     ]
-    const rateColumns: Column<(typeof rates)[number]>[] = [
-      { key: 'name', header: 'Member', value: (r) => fullName(r.member), width: 180 },
-      { key: 'attended', header: 'Services attended', value: (r) => r.attended, type: 'number' },
-      { key: 'eligible', header: 'Services marked', value: (r) => r.eligible, type: 'number' },
-      { key: 'rate', header: 'Attendance %', value: (r) => r.rate, type: 'number' },
-    ]
 
     exportExcel(
       [
         { name: 'Membership growth', rows: growth, columns: growthColumns },
         { name: 'Attendance trend', rows: trend, columns: trendColumns },
         { name: 'Departments', rows: departments, columns: departmentColumns },
-        { name: 'Attendance rates', rows: rates, columns: rateColumns },
       ] as never,
       'fbc-reports',
       'FBC Agbede — Church Reports',
@@ -416,6 +401,11 @@ export default function ReportsPage() {
                 { label: 'Women', data: trend.map((p) => p.women), backgroundColor: PALETTE.crimson },
                 { label: 'Youth', data: trend.map((p) => p.youth), backgroundColor: PALETTE.azure },
                 {
+                  label: 'Teenagers',
+                  data: trend.map((p) => p.teenagers),
+                  backgroundColor: PALETTE.vestryLight,
+                },
+                {
                   label: 'Children',
                   data: trend.map((p) => p.children),
                   backgroundColor: PALETTE.green,
@@ -551,80 +541,6 @@ export default function ReportsPage() {
         )}
       </Panel>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Panel
-          title="Most faithful in attendance"
-          description="Only counts services where individuals were marked"
-          icon={TrendingUp}
-        >
-          {rates.length === 0 || rates[0]?.eligible === 0 ? (
-            <EmptyState
-              icon={TrendingUp}
-              title="No individual marking yet"
-              description="Mark members present on a register and this list appears."
-            />
-          ) : (
-            <ul className="divide-y divide-line">
-              {rates.slice(0, 10).map((row) => (
-                <li key={row.member.id} className="flex items-center gap-3 py-2 first:pt-0">
-                  <span className="min-w-0 flex-1 truncate text-[0.875rem] text-ink">
-                    {fullName(row.member)}
-                  </span>
-                  <span className="w-24 shrink-0">
-                    <span className="block h-1.5 overflow-hidden rounded-full bg-sunken">
-                      <span
-                        className="block h-full rounded-full bg-brand"
-                        style={{ width: `${row.rate}%` }}
-                      />
-                    </span>
-                  </span>
-                  <span className="w-14 shrink-0 text-right text-[0.8125rem] font-semibold tabular-nums text-ink">
-                    {row.rate}%
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Panel>
-
-        <Panel
-          title="Follow-up list"
-          description="Active members not marked present at any service in this period"
-          icon={UserMinus}
-          action={missing.length > 0 ? <Badge tone="warning">{missing.length}</Badge> : undefined}
-        >
-          {missing.length === 0 ? (
-            <EmptyState
-              icon={UserMinus}
-              title="Nobody has fallen off"
-              description="Either everyone has been seen, or attendance is being recorded as head counts only."
-            />
-          ) : (
-            <ul className="divide-y divide-line">
-              {missing.slice(0, 12).map((member) => (
-                <li key={member.id} className="flex items-center gap-3 py-2 first:pt-0">
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[0.875rem] text-ink">
-                      {fullName(member)}
-                    </span>
-                    <span className="block text-[0.75rem] text-ink-faint">
-                      {member.phone ?? 'No phone recorded'}
-                    </span>
-                  </span>
-                  {member.phone && (
-                    <a
-                      href={`tel:${member.phone}`}
-                      className="shrink-0 text-[0.75rem] font-semibold text-info hover:underline"
-                    >
-                      Call
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </Panel>
-      </div>
     </div>
   )
 }

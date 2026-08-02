@@ -24,7 +24,9 @@ export {
   DetailRow,
   BackLink,
 } from './surfaces'
+export { FileField } from './upload'
 export {
+  Combobox,
   Field,
   Input,
   Textarea,

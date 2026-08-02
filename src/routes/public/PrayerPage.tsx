@@ -6,7 +6,6 @@ import {
   Mail,
   MessageCircle,
   Send,
-  Sparkles,
   Trash2,
 } from 'lucide-react'
 import {
@@ -177,11 +176,9 @@ export default function PrayerPage() {
             <ul className="mt-6 grid gap-4 sm:grid-cols-2">
               {points.map((point) => (
                 <li key={point.id}>
-                  <Card className={point.answered ? 'border-success/35 p-5' : 'p-5'}>
+                  <Card className="p-5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Badge tone={point.answered ? 'success' : 'brand'}>
-                        {point.answered ? 'answered' : point.category}
-                      </Badge>
+                      <Badge tone="brand">{point.category}</Badge>
                       <span className="ml-auto text-[0.75rem] text-ink-faint">
                         {formatDate(point.publishedAt.slice(0, 10), 'medium')}
                       </span>
@@ -194,12 +191,6 @@ export default function PrayerPage() {
                     </p>
                     {point.scripture && (
                       <p className="mt-2.5 text-[0.8125rem] font-medium text-info">{point.scripture}</p>
-                    )}
-                    {point.answered && point.answeredNote && (
-                      <p className="mt-3 flex gap-2 rounded-lg bg-success/8 p-2.5 text-[0.8125rem] text-ink-soft">
-                        <Sparkles className="mt-0.5 size-3.5 shrink-0 text-success" aria-hidden />
-                        {point.answeredNote}
-                      </p>
                     )}
                   </Card>
                 </li>

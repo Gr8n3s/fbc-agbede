@@ -8,7 +8,16 @@ import {
   Mic,
   Video,
 } from 'lucide-react'
-import { Input, ListEditor, RowInput, Select, Switch, Textarea } from '@/components/ui'
+import {
+  Combobox,
+  FileField,
+  Input,
+  ListEditor,
+  RowInput,
+  Select,
+  Switch,
+  Textarea,
+} from '@/components/ui'
 import { useContent } from '@/context/ContentContext'
 import type {
   Announcement,
@@ -102,11 +111,12 @@ export function EventsEditor() {
           />
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Select
+            <Combobox
               label="Category"
               value={draft.category}
               onChange={(e) => set('category', e.target.value as EventCategory)}
               options={EVENT_CATEGORIES}
+              hint="Pick one, or type your own."
             />
             <Input
               label="Venue"
@@ -299,11 +309,12 @@ export function SermonsEditor() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Select
+            <Combobox
               label="Category"
               value={draft.category}
               onChange={(e) => set('category', e.target.value as Sermon['category'])}
               options={SERMON_CATEGORIES}
+              hint="Pick one, or type your own."
             />
             <Input
               label="Series"
@@ -449,10 +460,11 @@ export function AnnouncementsEditor() {
           />
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Select
+            <Combobox
               label="Category"
               value={draft.category}
               onChange={(e) => set('category', e.target.value as Announcement['category'])}
+              hint="Pick one, or type your own."
               options={[
                 { value: 'general', label: 'General' },
                 { value: 'service', label: 'Service' },
@@ -664,7 +676,6 @@ export function PrayerPointsEditor() {
         title: '',
         body: '',
         category: 'church',
-        answered: false,
         publishedAt: nowIso(),
         published: true,
         ...stamps(),
@@ -673,7 +684,6 @@ export function PrayerPointsEditor() {
         title: item.title,
         meta: item.body.slice(0, 120),
         trailing: formatDate(item.publishedAt.slice(0, 10), 'medium'),
-        badges: item.answered ? [{ label: 'Answered', tone: 'success' }] : undefined,
       })}
       renderForm={(draft, set) => (
         <>
@@ -684,10 +694,11 @@ export function PrayerPointsEditor() {
             onChange={(e) => set('title', e.target.value)}
           />
 
-          <Select
+          <Combobox
             label="Category"
             value={draft.category}
             onChange={(e) => set('category', e.target.value as PrayerPoint['category'])}
+            hint="Pick one, or type your own."
             options={[
               { value: 'church', label: 'The church' },
               { value: 'nation', label: 'The nation' },
@@ -713,28 +724,11 @@ export function PrayerPointsEditor() {
             placeholder="e.g. 2 Chronicles 7:14"
           />
 
-          <div className="space-y-3 rounded-lg border border-line bg-sunken/40 p-3.5">
-            <Switch
-              label="Answered"
-              description="Answered prayers stay on the page as a testimony."
-              checked={draft.answered}
-              onChange={(next) => set('answered', next)}
-            />
-            {draft.answered && (
-              <Textarea
-                label="How it was answered"
-                rows={3}
-                maxLength={1000}
-                value={draft.answeredNote ?? ''}
-                onChange={(e) => set('answeredNote', e.target.value || undefined)}
-              />
-            )}
-            <Switch
-              label="Published"
-              checked={draft.published}
-              onChange={(next) => set('published', next)}
-            />
-          </div>
+          <Switch
+            label="Published"
+            checked={draft.published}
+            onChange={(next) => set('published', next)}
+          />
         </>
       )}
     />
@@ -794,10 +788,11 @@ export function DownloadsEditor() {
           />
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Select
+            <Combobox
               label="Category"
               value={draft.category}
               onChange={(e) => set('category', e.target.value as DownloadItem['category'])}
+              hint="Pick one, or type your own."
               options={[
                 { value: 'bulletin', label: 'Bulletin' },
                 { value: 'outline', label: 'Weekly outline' },
@@ -816,12 +811,14 @@ export function DownloadsEditor() {
             />
           </div>
 
-          <Input
-            label="File location"
+          <FileField
+            label="File"
             required
+            folder="downloads"
+            accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt"
             value={draft.url}
-            onChange={(e) => set('url', e.target.value)}
-            hint="A path inside the repository like media/downloads/bulletin.pdf, or a full https:// link."
+            onChange={(next) => set('url', next)}
+            hint="Browse to upload it to the church repository, or paste a link to a file hosted elsewhere."
           />
 
           <Input
@@ -898,11 +895,12 @@ export function GalleryEditor() {
                   value={draft.date}
                   onChange={(e) => set('date', e.target.value)}
                 />
-                <Input
+                <FileField
                   label="Cover image"
+                  folder="gallery"
+                  accept="image/*"
                   value={draft.cover ?? ''}
-                  onChange={(e) => set('cover', e.target.value || undefined)}
-                  placeholder="media/gallery/harvest-01.jpg"
+                  onChange={(next) => set('cover', next || undefined)}
                 />
               </div>
 
@@ -924,10 +922,12 @@ export function GalleryEditor() {
                 emptyLabel="No photos in this album yet."
                 renderRow={(photo, updatePhoto) => (
                   <div className="grid gap-1.5 sm:grid-cols-2">
-                    <RowInput
-                      label="Image path"
+                    <FileField
+                      label="Photo"
+                      folder="gallery"
+                      accept="image/*"
                       value={photo.url}
-                      onChange={(e) => updatePhoto({ url: e.target.value })}
+                      onChange={(next) => updatePhoto({ url: next })}
                     />
                     <RowInput
                       label="Caption"
@@ -992,11 +992,12 @@ export function GalleryEditor() {
                   value={draft.date ?? ''}
                   onChange={(e) => set('date', e.target.value || undefined)}
                 />
-                <Input
+                <FileField
                   label="Thumbnail"
+                  folder="gallery"
+                  accept="image/*"
                   value={draft.thumbnail ?? ''}
-                  onChange={(e) => set('thumbnail', e.target.value || undefined)}
-                  placeholder="media/gallery/thumb.jpg"
+                  onChange={(next) => set('thumbnail', next || undefined)}
                 />
               </div>
               <Textarea

@@ -12,10 +12,10 @@
   "email": "",
   "whatsapp": "",
   "mapUrl": "",
-  "pastorName": "",
-  "pastorTitle": "Resident Pastor",
+  "pastorName": "Rev Timothy Olatunde Tijani",
+  "pastorTitle": "Church Pastor",
   "pastorMessage": "",
-  "about": "First Baptist Church Agbede, Ikorodu - the Chapel of Grace  is a Baptist congregation committed to the worship of God, the teaching of His word, and the care of one another. Whoever you are, and however you arrive, there is a seat for you here.",
+  "about": "First Baptist Church Agbede, Ikorodu, the Chapel of Grace, is a Baptist congregation committed to the worship of God, the teaching of His word, and the care of one another. We worship in both English and Yoruba. Whoever you are, and however you arrive, there is a seat for you here.",
   "history": "",
   "mission": "",
   "vision": "",
@@ -28,36 +28,92 @@
   ],
   "serviceTimes": [
     {
-      "id": "svc_sunday_school",
+      "id": "svc_english",
       "day": "Sunday",
-      "name": "Sunday School",
-      "startTime": "08:00",
+      "name": "English Service",
+      "startTime": "07:30",
       "endTime": "09:00"
     },
     {
-      "id": "svc_sunday_worship",
+      "id": "svc_workers_prayer",
       "day": "Sunday",
-      "name": "Worship Service",
+      "name": "Pre-Service Prayer for Church Workers",
+      "startTime": "08:30",
+      "endTime": "09:00"
+    },
+    {
+      "id": "svc_sunday_school",
+      "day": "Sunday",
+      "name": "Sunday School / New Members' Classes",
       "startTime": "09:00",
-      "endTime": "11:30"
+      "endTime": "10:00"
+    },
+    {
+      "id": "svc_combined",
+      "day": "Sunday",
+      "name": "Combined Service / SM",
+      "startTime": "10:00",
+      "endTime": "12:00"
     },
     {
       "id": "svc_bible_study",
       "day": "Wednesday",
-      "name": "Bible Study",
+      "name": "Bible Study / Prayer Meeting",
       "startTime": "18:00",
       "endTime": "19:00"
+    },
+    {
+      "id": "svc_peace_house",
+      "day": "Monday",
+      "name": "Peace House Discipleship Class",
+      "startTime": "17:00",
+      "endTime": "19:00",
+      "note": "Venue: the church premises"
+    },
+    {
+      "id": "svc_prayer_can_do_it",
+      "day": "Wednesday",
+      "name": "Prayer Can Do It",
+      "startTime": "09:00"
+    },
+    {
+      "id": "svc_baptismal_class",
+      "day": "Friday",
+      "name": "Baptismal Candidates' Class",
+      "startTime": "16:00",
+      "note": "Also after the service on Sundays. See Pst. John Olomitutu."
     }
   ],
   "bankAccounts": [
     {
-      "id": "acc_32bf146e-ed15-4279-bc93-9202d51e504c",
-      "purpose": "Tithes & Offerings",
-      "bankName": "",
-      "accountName": "",
-      "accountNumber": ""
+      "id": "acc_tithes",
+      "purpose": "Tithes, Offerings & Gifts to the Church",
+      "bankName": "Wema Bank",
+      "accountName": "First Baptist Church",
+      "accountNumber": "0121544377"
+    },
+    {
+      "id": "acc_project",
+      "purpose": "Church Project",
+      "bankName": "UBA",
+      "accountName": "First Baptist Church Project Account",
+      "accountNumber": "1028577000"
+    },
+    {
+      "id": "acc_missions",
+      "purpose": "Freewill Missions' Donations & Benevolence Offerings",
+      "bankName": "Wema Bank",
+      "accountName": "First Baptist Church",
+      "accountNumber": "0232195185"
+    },
+    {
+      "id": "acc_student_welfare",
+      "purpose": "Student Welfare",
+      "bankName": "Sterling Bank",
+      "accountName": "FBC Agbede Student Welfare",
+      "accountNumber": "0510595291"
     }
   ],
   "socials": [],
-  "updatedAt": "2026-08-02T21:12:04.084Z"
+  "updatedAt": "2026-08-02T00:00:00.000Z"
 }

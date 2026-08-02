@@ -24,6 +24,7 @@ import {
   Input,
   Panel,
   Select,
+  Switch,
 } from '@/components/ui'
 import { useContent } from '@/context/ContentContext'
 import { useToast } from '@/context/ToastContext'
@@ -40,7 +41,14 @@ import {
 } from '@/lib/github'
 import type { GitHubSettings, Role } from '@/lib/types'
 import { ROLE_LABELS, ROLE_ORDER } from '@/lib/types'
-import { formatDateTime, formatNumber, nowIso, pluralise, relativeTime } from '@/lib/utils'
+import {
+  formatDate,
+  formatDateTime,
+  formatNumber,
+  nowIso,
+  pluralise,
+  relativeTime,
+} from '@/lib/utils'
 
 /**
  * Settings: publishing, backups, security and the audit trail.
@@ -137,11 +145,15 @@ function BackupPanel() {
   const [confirming, setConfirming] = useState(false)
   const fileInput = useRef<HTMLInputElement>(null)
 
-  const overdue =
-    vault.members.length > 0 &&
-    (!settings.lastBackupAt ||
-      Date.now() - new Date(settings.lastBackupAt).getTime() >
-        settings.backupReminderDays * 86_400_000)
+  /** Held locally so typing "3" on the way to "30" does not save a 3-day cycle. */
+  const [reminderDays, setReminderDays] = useState(String(settings.backupReminderDays))
+  useEffect(() => setReminderDays(String(settings.backupReminderDays)), [settings.backupReminderDays])
+
+  const dueAt = settings.lastBackupAt
+    ? new Date(settings.lastBackupAt).getTime() + settings.backupReminderDays * 86_400_000
+    : 0
+  const overdue = vault.members.length > 0 && (!settings.lastBackupAt || Date.now() > dueAt)
+  const nextReminder = dueAt ? new Date(dueAt) : new Date()
 
   const runBackup = async () => {
     setBusy(true)
@@ -253,16 +265,35 @@ function BackupPanel() {
             )}
           </div>
 
-          <Input
-            label="Remind me to back up every"
-            type="number"
-            min={1}
-            max={180}
-            value={settings.backupReminderDays}
-            onChange={(e) => void updateSettings({ backupReminderDays: Number(e.target.value) || 14 })}
-            hint="Days. A reminder appears once per session when a backup is overdue."
-            className="max-w-xs"
-          />
+          <div className="flex flex-wrap items-end gap-3">
+            <Input
+              label="Remind me to back up every"
+              type="number"
+              min={1}
+              max={365}
+              value={reminderDays}
+              onChange={(e) => setReminderDays(e.target.value)}
+              onBlur={() => {
+                const days = Math.min(365, Math.max(1, Number(reminderDays) || 14))
+                setReminderDays(String(days))
+                void updateSettings({ backupReminderDays: days })
+              }}
+              hint="Days between reminders."
+              className="w-40"
+            />
+            <p className="pb-2 text-[0.8125rem] text-ink-soft">
+              {vault.members.length === 0 ? (
+                <>Reminders start once there are records worth losing.</>
+              ) : overdue ? (
+                <span className="font-semibold text-warning">A backup is due now.</span>
+              ) : (
+                <>
+                  Next reminder{' '}
+                  <strong className="text-ink">{formatDate(nextReminder, 'long')}</strong>.
+                </>
+              )}
+            </p>
+          </div>
         </div>
       </Panel>
 
@@ -570,8 +601,18 @@ function PreferencesPanel() {
   const { settings, updateSettings } = useVault()
 
   return (
-    <Panel title="Preferences" icon={Database}>
+    <Panel
+      title="Display preferences"
+      description="How this device shows things. Affects nobody else, and nothing on the public website."
+      icon={Database}
+    >
       <div className="space-y-4">
+        <Switch
+          label="Show offering figures on screen"
+          description="Off by default — attendance screens get read over shoulders. Exports and printed reports always include the money."
+          checked={settings.showOfferings}
+          onChange={(next) => void updateSettings({ showOfferings: next })}
+        />
         <Select
           label="Rows per page"
           value={String(settings.pageSize)}

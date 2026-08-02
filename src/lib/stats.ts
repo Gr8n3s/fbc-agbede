@@ -144,15 +144,38 @@ function lastMonthKeys(months: number): string[] {
 // Attendance
 // ---------------------------------------------------------------------------
 
-/** Total heads at one gathering: bucket counts, or marked members if no counts. */
+/**
+ * Total heads at one gathering.
+ *
+ * Attendance is recorded as head counts per bucket — which is what the ushers
+ * actually hand in, and what the church already prints on its bulletin. There
+ * is no per-person marking to fall back on.
+ */
 export function attendanceTotal(record: AttendanceRecord): number {
-  const counted =
+  const buckets =
     record.counts.men +
     record.counts.women +
     record.counts.youth +
+    (record.counts.teenagers ?? 0) +
     record.counts.children +
     record.counts.visitors
-  return counted > 0 ? counted : record.presentMemberIds.length
+
+  // Sunday School is counted by class rather than by bucket, so fall back to
+  // the class registers when the buckets were left empty.
+  if (buckets > 0) return buckets
+  return sum((record.groups ?? []).map((group) => group.count))
+}
+
+/**
+ * Everything given at one gathering: the register's own figure plus whatever
+ * each class collected. Kept in one place so the dashboard, the reports and
+ * the spreadsheet cannot disagree about what "offering" means.
+ */
+export function recordOffering(record: AttendanceRecord): number {
+  return (
+    (record.offeringTotal ?? 0) +
+    sum((record.groups ?? []).map((group) => group.offering ?? 0))
+  )
 }
 
 export interface AttendanceSummary {
@@ -189,7 +212,7 @@ export function summariseAttendance(records: AttendanceRecord[]): AttendanceSumm
     best: sorted[0] ?? null,
     lowest: sorted[sorted.length - 1] ?? null,
     totalVisitors: sum(records.map((r) => r.counts.visitors)),
-    totalOffering: sum(records.map((r) => r.offeringTotal ?? 0)),
+    totalOffering: sum(records.map(recordOffering)),
   }
 }
 
@@ -202,6 +225,7 @@ export interface AttendanceTrendPoint {
   men: number
   women: number
   youth: number
+  teenagers: number
   children: number
   visitors: number
 }
@@ -235,6 +259,7 @@ export function attendanceTrend(
       men: sum(list.map((r) => r.counts.men)),
       women: sum(list.map((r) => r.counts.women)),
       youth: sum(list.map((r) => r.counts.youth)),
+      teenagers: sum(list.map((r) => r.counts.teenagers ?? 0)),
       children: sum(list.map((r) => r.counts.children)),
       visitors: sum(list.map((r) => r.counts.visitors)),
     }
@@ -262,52 +287,6 @@ export function attendanceByServiceType(
       }
     })
     .sort((a, b) => b.average - a.average)
-}
-
-/**
- * Per-member attendance rate over the records supplied.
- *
- * Only counts services where individual marking actually happened — otherwise
- * a month of head-count-only registers would show everyone at 0% and look like
- * a congregation that stopped coming.
- */
-export function memberAttendanceRates(
-  members: Member[],
-  records: AttendanceRecord[],
-): { member: Member; attended: number; eligible: number; rate: number }[] {
-  const marked = records.filter((r) => r.presentMemberIds.length > 0)
-  const eligible = marked.length
-  const tally = new Map<string, number>()
-
-  for (const record of marked) {
-    for (const id of record.presentMemberIds) {
-      tally.set(id, (tally.get(id) ?? 0) + 1)
-    }
-  }
-
-  return members
-    .map((member) => {
-      const attended = tally.get(member.id) ?? 0
-      return {
-        member,
-        attended,
-        eligible,
-        rate: eligible ? Math.round((attended / eligible) * 100) : 0,
-      }
-    })
-    .sort((a, b) => b.rate - a.rate)
-}
-
-/** Members with no marked attendance in the window — the follow-up list. */
-export function absentees(
-  members: Member[],
-  records: AttendanceRecord[],
-  minServices = 3,
-): Member[] {
-  const marked = records.filter((r) => r.presentMemberIds.length > 0)
-  if (marked.length < minServices) return []
-  const seen = new Set(marked.flatMap((r) => r.presentMemberIds))
-  return members.filter((m) => m.active && m.status === 'member' && !seen.has(m.id))
 }
 
 // ---------------------------------------------------------------------------

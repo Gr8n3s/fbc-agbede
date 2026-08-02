@@ -42,6 +42,12 @@ export interface DeviceSettings {
   backupReminderDays: number
   defaultServiceType: string
   pageSize: number
+  /**
+   * Whether offering figures are shown on screen. Off by default: attendance
+   * registers get read over someone's shoulder far more often than anyone
+   * expects, and the money is the one thing on the page that invites comment.
+   */
+  showOfferings: boolean
   /** Set once a vault exists, so the UI can offer "unlock" vs "set up". */
   vaultInitialised: boolean
 }
@@ -50,6 +56,7 @@ const DEFAULT_SETTINGS: DeviceSettings = {
   backupReminderDays: 14,
   defaultServiceType: 'sunday-worship',
   pageSize: 25,
+  showOfferings: false,
   vaultInitialised: false,
 }
 

@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   CalendarCheck,
   CalendarPlus,
-  Check,
+  Eye,
+  EyeOff,
   FileSpreadsheet,
   FileText,
   Minus,
@@ -19,10 +20,11 @@ import {
   EmptyState,
   IconButton,
   Input,
+  ListEditor,
   Modal,
   Pagination,
   Panel,
-  SearchInput,
+  RowInput,
   Select,
   Stat,
   TableShell,
@@ -36,18 +38,21 @@ import {
 import { useContent } from '@/context/ContentContext'
 import { useToast } from '@/context/ToastContext'
 import { useVault, useVaultData } from '@/context/VaultContext'
-import { useDebounced, useDocumentTitle } from '@/hooks'
+import { useDocumentTitle } from '@/hooks'
 import { exportCsv, exportExcel, printDocument, type Column } from '@/lib/export'
-import { attendanceTotal, summariseAttendance, withinRange, type RangePreset } from '@/lib/stats'
-import type { AttendanceCounts, AttendanceRecord, Member, ServiceType } from '@/lib/types'
+import {
+  attendanceTotal,
+  recordOffering,
+  summariseAttendance,
+  withinRange,
+  type RangePreset,
+} from '@/lib/stats'
+import type { AttendanceCounts, AttendanceGroup, AttendanceRecord, ServiceType } from '@/lib/types'
 import { SERVICE_TYPE_LABELS } from '@/lib/types'
 import {
   formatDate,
   formatNaira,
   formatNumber,
-  fullName,
-  initials,
-  matchesQuery,
   newId,
   nowIso,
   pluralise,
@@ -59,13 +64,14 @@ import {
 /**
  * Service registers.
  *
- * Two ways to record a service, because churches genuinely use both:
- *   • head counts per bucket — what the ushers hand in, fast, always available
- *   • individual marking — slower, but it is what makes follow-up possible
+ * Attendance is recorded the way the ushers actually work: a head count per
+ * group, handed in after the service. Those are the same columns the church
+ * already prints on its bulletin, so the two always agree.
  *
- * A register may carry either or both. `attendanceTotal` prefers the counts and
- * falls back to the marked list, so a register is never worth zero just because
- * it was taken the other way.
+ * Sunday School is the exception — it meets as separate classes, each with its
+ * own register and its own offering, so a register can also carry a per-class
+ * breakdown. `attendanceTotal` uses the buckets when they are filled and falls
+ * back to the class registers when they are not.
  */
 
 const SERVICE_OPTIONS = (Object.keys(SERVICE_TYPE_LABELS) as ServiceType[]).map((value) => ({
@@ -73,14 +79,35 @@ const SERVICE_OPTIONS = (Object.keys(SERVICE_TYPE_LABELS) as ServiceType[]).map(
   label: SERVICE_TYPE_LABELS[value],
 }))
 
-const EMPTY_COUNTS: AttendanceCounts = { men: 0, women: 0, youth: 0, children: 0, visitors: 0 }
+const EMPTY_COUNTS: AttendanceCounts = {
+  men: 0,
+  women: 0,
+  youth: 0,
+  teenagers: 0,
+  children: 0,
+  visitors: 0,
+}
+
+/** The classes Sunday School normally splits into. Editable per register. */
+const SUNDAY_SCHOOL_CLASSES = [
+  'Adults',
+  'Young Adults',
+  'Youth',
+  'Teenagers',
+  'Children',
+  'New Members',
+]
+
+function seedGroup(name: string): AttendanceGroup {
+  return { id: newId('grp'), name, count: 0 }
+}
 
 type Draft = Omit<AttendanceRecord, 'id' | 'createdAt' | 'updatedAt'>
 
 export default function AttendancePage() {
   useDocumentTitle('Attendance')
 
-  const { mutate, settings } = useVault()
+  const { mutate, settings, updateSettings } = useVault()
   const vault = useVaultData()
   const { content } = useContent()
   const toast = useToast()
@@ -118,7 +145,6 @@ export default function AttendancePage() {
         serviceType: (settings.defaultServiceType as ServiceType) || 'sunday-worship',
         title: '',
         counts: { ...EMPTY_COUNTS },
-        presentMemberIds: [],
         notes: '',
       },
     })
@@ -189,11 +215,11 @@ export default function AttendancePage() {
     { key: 'men', header: 'Men', value: (r) => r.counts.men, type: 'number' },
     { key: 'women', header: 'Women', value: (r) => r.counts.women, type: 'number' },
     { key: 'youth', header: 'Youth', value: (r) => r.counts.youth, type: 'number' },
+    { key: 'teenagers', header: 'Teenagers', value: (r) => r.counts.teenagers ?? 0, type: 'number' },
     { key: 'children', header: 'Children', value: (r) => r.counts.children, type: 'number' },
     { key: 'visitors', header: 'Visitors', value: (r) => r.counts.visitors, type: 'number' },
     { key: 'total', header: 'Total', value: (r) => attendanceTotal(r), type: 'number' },
-    { key: 'marked', header: 'Marked present', value: (r) => r.presentMemberIds.length, type: 'number' },
-    { key: 'offering', header: 'Offering (₦)', value: (r) => r.offeringTotal, type: 'number' },
+    { key: 'offering', header: 'Offering (₦)', value: (r) => recordOffering(r), type: 'number' },
     { key: 'notes', header: 'Notes', value: (r) => r.notes, width: 220 },
   ]
 
@@ -228,12 +254,22 @@ export default function AttendancePage() {
           icon={Users}
           tone="accent"
         />
-        <Stat
-          label="Offering"
-          value={formatNaira(summary.totalOffering)}
-          icon={FileText}
-          tone="gold"
-        />
+        <div className="relative">
+          <Stat
+            label="Offering"
+            value={settings.showOfferings ? formatNaira(summary.totalOffering) : '••••••'}
+            icon={FileText}
+            tone="gold"
+            hint={settings.showOfferings ? undefined : 'hidden'}
+          />
+          <IconButton
+            icon={settings.showOfferings ? EyeOff : Eye}
+            size="sm"
+            label={settings.showOfferings ? 'Hide offering figures' : 'Show offering figures'}
+            onClick={() => void updateSettings({ showOfferings: !settings.showOfferings })}
+            className="absolute bottom-2 right-2"
+          />
+        </div>
       </div>
 
       <Panel bodyClassName="flex flex-wrap items-center gap-2">
@@ -298,6 +334,7 @@ export default function AttendancePage() {
                       { header: 'Men', align: 'right' },
                       { header: 'Women', align: 'right' },
                       { header: 'Youth', align: 'right' },
+                      { header: 'Teens', align: 'right' },
                       { header: 'Children', align: 'right' },
                       { header: 'Visitors', align: 'right' },
                       { header: 'Total', align: 'right' },
@@ -308,6 +345,7 @@ export default function AttendancePage() {
                       r.counts.men,
                       r.counts.women,
                       r.counts.youth,
+                      r.counts.teenagers ?? 0,
                       r.counts.children,
                       r.counts.visitors,
                       attendanceTotal(r),
@@ -377,6 +415,7 @@ export default function AttendancePage() {
                 <Th align="right">Men</Th>
                 <Th align="right">Women</Th>
                 <Th align="right">Youth</Th>
+                <Th align="right">Teens</Th>
                 <Th align="right">Children</Th>
                 <Th align="right">Visitors</Th>
                 <Th align="right">Total</Th>
@@ -402,14 +441,14 @@ export default function AttendancePage() {
                     {record.title || SERVICE_TYPE_LABELS[record.serviceType]}
                   </span>
                   <span className="block text-[0.75rem] text-ink-faint">
-                    {record.presentMemberIds.length > 0
-                      ? `${record.presentMemberIds.length} marked individually`
-                      : departmentName(record.departmentId) || SERVICE_TYPE_LABELS[record.serviceType]}
+                    {departmentName(record.departmentId) ||
+                      SERVICE_TYPE_LABELS[record.serviceType]}
                   </span>
                 </Td>
                 <Td align="right">{record.counts.men || '—'}</Td>
                 <Td align="right">{record.counts.women || '—'}</Td>
                 <Td align="right">{record.counts.youth || '—'}</Td>
+                <Td align="right">{record.counts.teenagers || '—'}</Td>
                 <Td align="right">{record.counts.children || '—'}</Td>
                 <Td align="right">
                   {record.counts.visitors > 0 ? (
@@ -465,8 +504,9 @@ export default function AttendancePage() {
           key={editing.record?.id ?? 'new'}
           initial={editing.draft}
           existing={editing.record}
-          members={vault.members}
           departments={content.departments}
+          showOfferings={settings.showOfferings}
+          onToggleOfferings={() => void updateSettings({ showOfferings: !settings.showOfferings })}
           onClose={() => setEditing(null)}
           onSave={save}
         />
@@ -486,26 +526,32 @@ function toDraft(record: AttendanceRecord): Draft {
 // Register editor
 // ---------------------------------------------------------------------------
 
+/**
+ * Take or edit a register.
+ *
+ * Head counts only. The church records attendance the way its ushers actually
+ * work — a count per bucket, handed in after the service — and those are the
+ * same columns it already prints on the bulletin, so the figures line up.
+ */
 function RegisterEditor({
   initial,
   existing,
-  members,
   departments,
+  showOfferings,
+  onToggleOfferings,
   onClose,
   onSave,
 }: {
   initial: Draft
   existing?: AttendanceRecord
-  members: Member[]
   departments: { id: string; name: string }[]
+  showOfferings: boolean
+  onToggleOfferings: () => void
   onClose: () => void
   onSave: (draft: Draft) => Promise<void>
 }) {
   const [draft, setDraft] = useState<Draft>(initial)
   const [busy, setBusy] = useState(false)
-  const [tab, setTab] = useState<'counts' | 'people'>('counts')
-  const [query, setQuery] = useState('')
-  const search = useDebounced(query)
 
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
     setDraft((current) => ({ ...current, [key]: value }))
@@ -517,32 +563,7 @@ function RegisterEditor({
     }))
 
   const countTotal = sum(Object.values(draft.counts))
-
-  /** Only active people can be marked present; the deceased and departed cannot. */
-  const markable = useMemo(
-    () => members.filter((m) => m.active && m.status !== 'deceased' && m.status !== 'transferred-out'),
-    [members],
-  )
-
-  const visible = useMemo(
-    () =>
-      markable
-        .filter((m) =>
-          matchesQuery(search, m.firstName, m.lastName, m.otherNames, m.phone),
-        )
-        .sort((a, b) => `${a.lastName} ${a.firstName}`.localeCompare(`${b.lastName} ${b.firstName}`)),
-    [markable, search],
-  )
-
-  const present = new Set(draft.presentMemberIds)
-
-  const toggleMember = (id: string) =>
-    setDraft((current) => ({
-      ...current,
-      presentMemberIds: current.presentMemberIds.includes(id)
-        ? current.presentMemberIds.filter((existingId) => existingId !== id)
-        : [...current.presentMemberIds, id],
-    }))
+  const groupTotal = sum((draft.groups ?? []).map((group) => group.count))
 
   const submit = async () => {
     setBusy(true)
@@ -558,7 +579,7 @@ function RegisterEditor({
       open
       onClose={onClose}
       title={existing ? 'Edit register' : 'Take a register'}
-      description="Record head counts, mark individuals, or do both — whichever the service allows."
+      description="Head counts for each group, as handed in after the service."
       size="lg"
       footer={
         <>
@@ -608,179 +629,128 @@ function RegisterEditor({
           )}
         </div>
 
-        <div
-          role="tablist"
-          aria-label="How to record attendance"
-          className="flex gap-1 rounded-lg border border-line bg-sunken p-0.5"
-        >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === 'counts'}
-            onClick={() => setTab('counts')}
-            className={tabClass(tab === 'counts')}
-          >
-            Head counts ({countTotal})
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === 'people'}
-            onClick={() => setTab('people')}
-            className={tabClass(tab === 'people')}
-          >
-            Mark individuals ({draft.presentMemberIds.length})
-          </button>
+        <div className="grid gap-2.5 sm:grid-cols-2">
+          {(
+            [
+              ['men', 'Men'],
+              ['women', 'Women'],
+              ['youth', 'Youth'],
+              ['teenagers', 'Teenagers'],
+              ['children', 'Children'],
+              ['visitors', 'Visitors'],
+            ] as const
+          ).map(([key, label]) => (
+            <Counter
+              key={key}
+              label={label}
+              value={draft.counts[key]}
+              onChange={(next) => setCount(key, next)}
+            />
+          ))}
         </div>
 
-        {tab === 'counts' ? (
-          <div className="space-y-3">
-            <div className="grid gap-2.5 sm:grid-cols-2">
-              {(
-                [
-                  ['men', 'Men'],
-                  ['women', 'Women'],
-                  ['youth', 'Youth'],
-                  ['children', 'Children'],
-                  ['visitors', 'Visitors'],
-                ] as const
-              ).map(([key, label]) => (
-                <Counter
-                  key={key}
-                  label={label}
-                  value={draft.counts[key]}
-                  onChange={(next) => setCount(key, next)}
+        {/* Classes. Sunday School always splits; other services rarely do. */}
+        <div className="rounded-lg border border-line bg-sunken/40 p-3.5">
+          <ListEditor<AttendanceGroup>
+            label="Classes / groups"
+            hint="Sunday School meets in separate classes. Record each one's attendance and its own offering."
+            items={draft.groups ?? []}
+            onChange={(next) => set('groups', next)}
+            createItem={() => ({ id: newId('grp'), name: '', count: 0 })}
+            addLabel="Add a class"
+            emptyLabel="No separate classes — the counts above cover the whole service."
+            reorderable={false}
+            renderRow={(item, updateItem) => (
+              <div className="grid gap-1.5 sm:grid-cols-[1fr_6rem_8rem]">
+                <RowInput
+                  label="Class name"
+                  value={item.name}
+                  onChange={(e) => updateItem({ name: e.target.value })}
                 />
-              ))}
-            </div>
+                <RowInput
+                  label="Present"
+                  type="number"
+                  min={0}
+                  value={item.count || ''}
+                  onChange={(e) => updateItem({ count: Number(e.target.value) || 0 })}
+                />
+                <RowInput
+                  label="Offering (₦)"
+                  type={showOfferings ? 'number' : 'password'}
+                  min={0}
+                  value={item.offering ?? ''}
+                  onChange={(e) =>
+                    updateItem({ offering: e.target.value ? Number(e.target.value) : undefined })
+                  }
+                />
+              </div>
+            )}
+          />
 
-            <p className="rounded-lg bg-brand/[0.07] px-3 py-2.5 text-center text-[0.875rem] font-semibold text-brand">
-              Total present: {formatNumber(countTotal)}
-            </p>
+          {(draft.groups?.length ?? 0) > 0 && (
+            <button
+              type="button"
+              onClick={() => set('groups', SUNDAY_SCHOOL_CLASSES.map(seedGroup))}
+              className="mt-2 text-[0.75rem] font-semibold text-info underline underline-offset-2"
+            >
+              Reset to the usual Sunday School classes
+            </button>
+          )}
+          {(draft.groups?.length ?? 0) === 0 && draft.serviceType === 'sunday-school' && (
+            <button
+              type="button"
+              onClick={() => set('groups', SUNDAY_SCHOOL_CLASSES.map(seedGroup))}
+              className="mt-2 text-[0.75rem] font-semibold text-info underline underline-offset-2"
+            >
+              Add the usual Sunday School classes
+            </button>
+          )}
+        </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                label="Offering total (₦)"
-                type="number"
-                inputMode="numeric"
-                min={0}
-                value={draft.offeringTotal ?? ''}
-                onChange={(e) =>
-                  set('offeringTotal', e.target.value === '' ? undefined : Number(e.target.value))
-                }
-                hint="Optional. Kept on this device only."
-              />
-            </div>
+        <p className="rounded-lg bg-brand/[0.07] px-3 py-2.5 text-center text-[0.875rem] font-semibold text-brand">
+          Total present: {formatNumber(countTotal || groupTotal)}
+          {groupTotal > 0 && countTotal > 0 && (
+            <span className="ml-2 font-normal text-ink-faint">
+              ({formatNumber(groupTotal)} across {pluralise(draft.groups?.length ?? 0, 'class', 'classes')})
+            </span>
+          )}
+        </p>
 
-            <Textarea
-              label="Notes"
-              rows={3}
-              value={draft.notes ?? ''}
-              onChange={(e) => set('notes', e.target.value)}
-              maxLength={1000}
-              placeholder="Anything worth remembering about this service."
+        {/* Offering is money, and this screen gets read over shoulders. */}
+        <div className="rounded-lg border border-line bg-sunken/40 p-3.5">
+          <div className="flex items-end gap-2">
+            <Input
+              label="Offering total (₦)"
+              type={showOfferings ? 'number' : 'password'}
+              inputMode="numeric"
+              min={0}
+              className="flex-1"
+              value={draft.offeringTotal ?? ''}
+              onChange={(e) =>
+                set('offeringTotal', e.target.value === '' ? undefined : Number(e.target.value))
+              }
+              hint="Optional. Kept on this device only, and hidden on screen until you show it."
+            />
+            <IconButton
+              icon={showOfferings ? EyeOff : Eye}
+              label={showOfferings ? 'Hide offering figures' : 'Show offering figures'}
+              onClick={onToggleOfferings}
+              className="mb-1"
             />
           </div>
-        ) : (
-          <div className="space-y-3">
-            {markable.length === 0 ? (
-              <EmptyState
-                icon={Users}
-                title="Nobody to mark yet"
-                description="Register members first, then they can be marked present here."
-              />
-            ) : (
-              <>
-                <div className="flex flex-wrap items-center gap-2">
-                  <SearchInput
-                    value={query}
-                    onChange={setQuery}
-                    placeholder="Find a member…"
-                    label="Find a member to mark present"
-                    className="min-w-[12rem] flex-1"
-                  />
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() =>
-                      set(
-                        'presentMemberIds',
-                        draft.presentMemberIds.length === markable.length
-                          ? []
-                          : markable.map((m) => m.id),
-                      )
-                    }
-                  >
-                    {draft.presentMemberIds.length === markable.length ? 'Clear all' : 'Mark all'}
-                  </Button>
-                </div>
+        </div>
 
-                <ul className="max-h-[22rem] space-y-1 overflow-y-auto rounded-lg border border-line p-1.5">
-                  {visible.map((member) => {
-                    const isPresent = present.has(member.id)
-                    return (
-                      <li key={member.id}>
-                        <button
-                          type="button"
-                          onClick={() => toggleMember(member.id)}
-                          aria-pressed={isPresent}
-                          className={
-                            isPresent
-                              ? 'flex w-full items-center gap-2.5 rounded-lg border border-success/40 bg-success/[0.08] px-2.5 py-2 text-left'
-                              : 'flex w-full items-center gap-2.5 rounded-lg border border-transparent px-2.5 py-2 text-left hover:bg-sunken'
-                          }
-                        >
-                          <span
-                            className={
-                              isPresent
-                                ? 'grid size-8 shrink-0 place-items-center rounded-full bg-success text-white'
-                                : 'grid size-8 shrink-0 place-items-center rounded-full bg-sunken text-[0.7rem] font-bold text-ink-faint'
-                            }
-                            aria-hidden
-                          >
-                            {isPresent ? (
-                              <Check className="size-4" />
-                            ) : (
-                              initials(member.firstName, member.lastName)
-                            )}
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate text-[0.875rem] font-medium text-ink">
-                              {fullName(member)}
-                            </span>
-                            <span className="block truncate text-[0.75rem] text-ink-faint">
-                              {member.isWorker ? 'Worker' : 'Member'}
-                              {member.phone ? ` · ${member.phone}` : ''}
-                            </span>
-                          </span>
-                        </button>
-                      </li>
-                    )
-                  })}
-                  {visible.length === 0 && (
-                    <li className="px-3 py-6 text-center text-[0.8125rem] text-ink-faint">
-                      Nobody matches “{search}”.
-                    </li>
-                  )}
-                </ul>
-
-                <p className="text-center text-[0.8125rem] text-ink-faint">
-                  {pluralise(draft.presentMemberIds.length, 'person')} marked present of{' '}
-                  {formatNumber(markable.length)}
-                </p>
-              </>
-            )}
-          </div>
-        )}
+        <Textarea
+          label="Notes"
+          rows={3}
+          value={draft.notes ?? ''}
+          onChange={(e) => set('notes', e.target.value)}
+          maxLength={1000}
+          placeholder="Anything worth remembering about this service."
+        />
       </div>
     </Modal>
   )
-}
-
-function tabClass(active: boolean): string {
-  return active
-    ? 'flex-1 rounded-[0.4rem] bg-surface px-3 py-2 text-[0.8125rem] font-semibold text-ink shadow-pew'
-    : 'flex-1 rounded-[0.4rem] px-3 py-2 text-[0.8125rem] font-medium text-ink-faint hover:text-ink'
 }
 
 /**

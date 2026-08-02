@@ -558,21 +558,13 @@ function DepartmentEditor({
           />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Select
-            label="Card colour"
-            value={draft.accent}
-            onChange={(e) => set('accent', e.target.value as Department['accent'])}
-            options={ACCENT_OPTIONS}
-          />
-          <Input
-            label="Web address"
-            value={draft.slug}
-            onChange={(e) => set('slug', slugify(e.target.value))}
-            prefix="/"
-            hint="Leave blank to generate from the name."
-          />
-        </div>
+        <Select
+          label="Card colour"
+          value={draft.accent}
+          onChange={(e) => set('accent', e.target.value as Department['accent'])}
+          options={ACCENT_OPTIONS}
+          className="sm:max-w-xs"
+        />
 
         <Switch
           label="Show on the church website"

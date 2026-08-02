@@ -234,13 +234,39 @@ export interface Announcement extends Timestamped {
 
 // --- Weekly bulletin / order of service ------------------------------------
 
+/**
+ * One line of the order of service.
+ *
+ * The printed bulletin is bilingual throughout — every item reads
+ * "In Processional Hymn BH 20 / Ninu Orin Akowole – YBH 8". English and Yoruba
+ * are separate fields rather than one string with a slash so the app can lay
+ * them out properly, and so a church that prints English-only loses nothing.
+ */
 export interface OrderOfServiceItem {
   id: string
   /** "08:00" or free text like "After the offering". Optional. */
   time?: string
   item: string
+  /** The same line in Yoruba. */
+  itemYoruba?: string
   minister?: string
+  /** Hymn cited inline on this line, e.g. "BH 20". */
+  hymnNumber?: string
+  /** The Yoruba hymnal number for the same slot, e.g. "YBH 8". */
+  hymnNumberYoruba?: string
   note?: string
+}
+
+/**
+ * A named block of the order of service — "IN WORSHIP / NINU ISIN",
+ * "WORD MINISTRATIONS / NINU ISE IRANSE ORO NAA", and so on. The church groups
+ * the service this way on the printed sheet, so the model does too.
+ */
+export interface OrderOfServiceSection {
+  id: string
+  heading: string
+  headingYoruba?: string
+  items: OrderOfServiceItem[]
 }
 
 export interface BulletinHymn {
@@ -250,6 +276,89 @@ export interface BulletinHymn {
   title: string
   /** e.g. "Opening", "Offertory", "Closing" */
   slot?: string
+}
+
+/** A row of the service timetable printed at the head of the sheet. */
+export interface BulletinScheduleRow {
+  id: string
+  name: string
+  startTime: string
+  endTime?: string
+}
+
+/** The Sunday School / Church-in-Classes lesson, in both languages. */
+export interface SundaySchoolLesson {
+  topic: string
+  topicYoruba?: string
+  /** Passages for the lesson, e.g. "John 11:14-16; 14:5-8; 20:24-29". */
+  text: string
+  memoryVerse?: string
+  memoryVerseRef?: string
+}
+
+/**
+ * A published attendance line.
+ *
+ * Aggregate head counts only — the church already prints these, and no
+ * individual is identifiable from them. Names never appear here. Note the
+ * separate teenagers column: the church counts teenagers apart from both youth
+ * and children.
+ */
+export interface BulletinAttendanceRow {
+  id: string
+  /** "Combined Worship", "English Worship", "Mid-Week Prayer and Bible Study". */
+  label: string
+  men?: number
+  women?: number
+  youth?: number
+  teenagers?: number
+  children?: number
+  /** Printed total. Left blank, it is summed from the columns. */
+  total?: number
+}
+
+/**
+ * A name on the month's birthday list.
+ *
+ * This is a deliberate, church-decided exception to the rule that people are
+ * not published: the congregation already prints this list on paper every
+ * month. It is typed in by hand rather than generated from the member register,
+ * so publishing someone is always an explicit act. See docs/DATA-PRIVACY.md.
+ */
+export interface BulletinBirthday {
+  id: string
+  name: string
+  /** Day of the month, 1–31. */
+  day: number
+}
+
+/** A line of the "Our Coming Programs" table. */
+export interface BulletinProgramme {
+  id: string
+  /** Month heading this falls under, e.g. "August". Optional; groups the table. */
+  month?: string
+  /** Free text, because the church writes "Sat., 1st – Mon., 3rd". */
+  when: string
+  what: string
+}
+
+/** The full sermon printed under "FROM THE THRONE OF GLORY!". */
+export interface BulletinMessage {
+  /** Section heading. Defaults to "From the Throne of Glory!". */
+  heading?: string
+  topic: string
+  /** Scripture the message is built on, e.g. "Acts 6:1–7". */
+  text?: string
+  /** The message itself. Headings start with #, lists with -, quotes with >. */
+  body: string
+  author?: string
+}
+
+/** A bilingual discipleship theme for the month. */
+export interface BulletinTheme {
+  id: string
+  topic: string
+  topicYoruba?: string
 }
 
 export type BulletinKind =
@@ -296,21 +405,66 @@ export interface Bulletin extends Timestamped {
   venue?: string
   /** Multi-day programmes (revival, convention) run to this date inclusive. */
   endDate?: IsoDate
+
+  // --- masthead ------------------------------------------------------------
+  /** The church's theme for the year, e.g. "2026: My Year of Fruitful Outpouring!". */
+  yearTheme?: string
+  /** Which Sunday of the year this is. The sheet opens with it: "the 29th Sunday". */
+  sundayNumber?: number
+  /** "You are welcome to the 29th Sunday." Overrides the generated line. */
+  welcomeLine?: string
+  /** The day's emphasis, e.g. "2026 Social Ministries Emphasis Sunday". */
+  occasion?: string
+  /** Its subtitle — usually the topic and text. */
+  occasionSubtitle?: string
+  /** The timetable printed under the masthead. */
+  schedule: BulletinScheduleRow[]
+
+  // --- lesson & service ----------------------------------------------------
+  sundaySchool?: SundaySchoolLesson
+  /** The boxed motto above the order of service. */
+  serviceMotto?: string
+  serviceMottoYoruba?: string
   theme?: string
   themeVerse?: string
   themeVerseRef?: string
   welcomeNote?: string
   preacher?: string
   serviceName: string
-  orderOfService: OrderOfServiceItem[]
+  /** The order of service, grouped into its named blocks. */
+  sections: OrderOfServiceSection[]
+  /** Hymns called out separately, when the church lists them apart. */
   hymns: BulletinHymn[]
   readings: string[]
+  /** The teenagers' own order of service — a plain list on the printed sheet. */
+  teenagersOrder: string[]
+
+  // --- announcements -------------------------------------------------------
+  /** Last week's head counts, as printed. Aggregate only, never names. */
+  attendanceSummary: BulletinAttendanceRow[]
   /** Free-text notices. Published publicly — no personal contact details. */
   notices: string[]
   /** The rest of the week's activities, one line each. */
   weekAhead: { id: string; day: string; time?: string; activity: string; venue?: string }[]
+  comingProgrammes: BulletinProgramme[]
+  /** Typed by hand, never generated from the register. See BulletinBirthday. */
+  birthdays: BulletinBirthday[]
+
+  // --- the message ---------------------------------------------------------
+  message?: BulletinMessage
+  prayerPoints: string[]
+  /** Next week's Sunday School lesson, trailed at the end of the sheet. */
+  nextSundaySchool?: SundaySchoolLesson
+  disciplesThisMonth: BulletinTheme[]
+  disciplesNextMonth: BulletinTheme[]
+
+  // --- appeals -------------------------------------------------------------
+  urgentNeeds: string[]
+  /** The church projects list — roofing, generator, tiles, and so on. */
+  projects: string[]
   offeringNote?: string
   closingNote?: string
+
   /** Optional path to an uploaded PDF in /media/downloads. */
   pdfUrl?: string
   featured: boolean
@@ -383,8 +537,6 @@ export interface PrayerPoint extends Timestamped {
   body: string
   category: 'church' | 'nation' | 'missions' | 'thanksgiving' | 'healing' | 'family'
   scripture?: string
-  answered: boolean
-  answeredNote?: string
   publishedAt: IsoDateTime
   published: boolean
 }
@@ -504,13 +656,38 @@ export const SERVICE_TYPE_LABELS: Record<ServiceType, string> = {
   special: 'Special Service',
 }
 
-/** Head-count buckets recorded even when individual marking is skipped. */
+/**
+ * Head-count buckets recorded even when individual marking is skipped.
+ *
+ * These mirror the columns on the church's own printed attendance table —
+ * including teenagers, which the church counts separately from both youth and
+ * children. Visitors are ours: the printed sheet does not break them out, but
+ * the office needs the number for follow-up.
+ */
 export interface AttendanceCounts {
   men: number
   women: number
   youth: number
+  teenagers: number
   children: number
   visitors: number
+}
+
+/**
+ * One class or group within a service.
+ *
+ * Sunday School does not meet as a single room — it splits into classes, each
+ * with its own register and its own offering, and the church wants those
+ * figures kept apart rather than merged into one number. Any service can use
+ * groups; Sunday School is simply the one that always does.
+ */
+export interface AttendanceGroup {
+  id: string
+  /** "Adults", "Young Adults", "Teens", "Beginners", … */
+  name: string
+  count: number
+  /** Offering collected in this class, in naira. */
+  offering?: number
 }
 
 export interface AttendanceRecord extends Timestamped {
@@ -520,9 +697,13 @@ export interface AttendanceRecord extends Timestamped {
   title?: string
   departmentId?: string
   counts: AttendanceCounts
-  /** Members marked individually present. May be empty if only counts were taken. */
-  presentMemberIds: string[]
-  /** Recorded offering, in naira. Optional. */
+  /** Per-class breakdown. Empty for services taken as a single head count. */
+  groups?: AttendanceGroup[]
+  /**
+   * Recorded offering, in naira. Optional, and hidden on screen by default —
+   * see `DeviceSettings.showOfferings`. Attendance registers get read over
+   * someone's shoulder far more often than anyone expects.
+   */
   offeringTotal?: number
   notes?: string
   recordedBy?: string

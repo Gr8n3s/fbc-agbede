@@ -70,6 +70,7 @@ export function VaultProvider({ children }: { children: React.ReactNode }) {
     backupReminderDays: 14,
     defaultServiceType: 'sunday-worship',
     pageSize: 25,
+    showOfferings: false,
     vaultInitialised: false,
   })
   const [saving, setSaving] = useState(false)
