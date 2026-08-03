@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "id": "ann_d308127f-1468-44d6-af98-d421e6b573f4",
+    "title": "Come to church",
+    "body": "You will be blessed",
+    "category": "general",
+    "featured": true,
+    "pinned": true,
+    "publishedAt": "2026-08-03T11:02:58.331Z",
+    "published": true,
+    "createdAt": "2026-08-03T11:02:58.331Z",
+    "updatedAt": "2026-08-03T11:03:28.215Z",
+    "expiresAt": "2026-08-03"
+  }
+]
