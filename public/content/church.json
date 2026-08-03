@@ -14,11 +14,11 @@
   "mapUrl": "",
   "pastorName": "Rev Timothy Olatunde Tijani",
   "pastorTitle": "Church Pastor",
-  "pastorMessage": "",
+  "pastorMessage": "BE HONOURED!👌",
   "about": "First Baptist Church Agbede, Ikorodu, the Chapel of Grace, is a Baptist congregation committed to the worship of God, the teaching of His word, and the care of one another. We worship in both English and Yoruba. Whoever you are, and however you arrive, there is a seat for you here.",
-  "history": "",
-  "mission": "",
-  "vision": "",
+  "history": "Founded in 1968",
+  "mission": "To be found",
+  "vision": "To be Seen",
   "beliefs": [
     "The Bible is the inspired word of God and our sole authority for faith and practice.",
     "Salvation is by grace through faith in Jesus Christ alone.",
@@ -114,6 +114,12 @@
       "accountNumber": "0510595291"
     }
   ],
-  "socials": [],
-  "updatedAt": "2026-08-02T00:00:00.000Z"
+  "socials": [
+    {
+      "id": "soc_3d997bd9-d088-46e5-9326-e8fad0dc3cc6",
+      "platform": "facebook",
+      "url": "https://church"
+    }
+  ],
+  "updatedAt": "2026-08-03T10:05:14.999Z"
 }
