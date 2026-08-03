@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "ser_560481ce-dd08-4b17-a605-f55789b0d7ec",
+    "title": "sermon",
+    "slug": "s",
+    "preacher": "Rev",
+    "date": "2026-08-03",
+    "category": "sunday-worship",
+    "scriptures": [
+      "jjhouh"
+    ],
+    "summary": "bvyvv",
+    "notes": "#God loves you all\n-Pray daily\n>God words",
+    "tags": [
+      "faith"
+    ],
+    "published": true,
+    "createdAt": "2026-08-03T10:58:25.788Z",
+    "updatedAt": "2026-08-03T11:00:51.992Z",
+    "audioUrl": "media/sermons/2026-08-03-whatsapp-audio-2026-08-03-at-06-40-21.mp4",
+    "durationMinutes": 14,
+    "series": "ufds"
+  }
+]
