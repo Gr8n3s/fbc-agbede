@@ -28,18 +28,19 @@
     "updatedAt": "2026-08-02T21:19:31.670Z"
   },
   {
-    "id": "dep_44972a7b-318c-4379-976f-f91163cdcf69",
     "key": "choir",
     "name": "Choir",
     "slug": "choir",
     "summary": "Leading the congregation in worship through song.",
     "description": "",
-    "accent": "vestry",
+    "accent": "crimson",
     "icon": "music",
     "active": true,
     "order": 3,
+    "image": "media/departments/2026-08-03-landscape.jpg",
+    "id": "dep_44972a7b-318c-4379-976f-f91163cdcf69",
     "createdAt": "2026-08-02T21:18:33.528Z",
-    "updatedAt": "2026-08-02T21:18:33.528Z"
+    "updatedAt": "2026-08-03T11:04:53.012Z"
   },
   {
     "id": "dep_0c82b549-5a7a-4d52-97da-c230a1606b03",
