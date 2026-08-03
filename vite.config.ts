@@ -61,7 +61,28 @@ export default defineConfig({
           file over the size limit — it meant an admin uploading a large photo
           could break the deploy for the whole church.
         */
-        globIgnores: ['media/**'],
+        /*
+          Uploaded media, and the admin half of the app.
+
+          Precaching every built chunk meant a congregant downloaded ~353 KB of
+          church-office code — chart.js alone is 179 KB — in the background on
+          their first visit, for screens they will never open. On metered mobile
+          data that is a third of the payload wasted.
+
+          These chunks are still cached at runtime the first time the one admin
+          actually opens them, so the office works offline for the person who
+          needs it without charging the congregation for the privilege.
+        */
+        globIgnores: [
+          'media/**',
+          'assets/charts-*.js',
+          'assets/Admin*-*.js',
+          'assets/Members*-*.js',
+          'assets/Attendance*-*.js',
+          'assets/Reports*-*.js',
+          'assets/Settings*-*.js',
+          'assets/ContentPage-*.js',
+        ],
         navigateFallback: `${base}index.html`,
         navigateFallbackDenylist: [/^\/api/],
         cleanupOutdatedCaches: true,

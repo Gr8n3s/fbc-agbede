@@ -287,7 +287,26 @@ export function Stat({
           </span>
         )}
       </div>
-      <p className="mt-2 font-display text-3xl font-semibold tabular-nums tracking-tight text-ink">
+      {/*
+        The value must not be able to escape the tile whatever it is handed.
+        A year of offerings is a twelve-digit naira figure, and the fixed 3xl
+        size pushed it straight through the right-hand edge. Sizing steps down
+        with length, the text may wrap, and the full figure stays in the title
+        attribute so nothing is actually lost.
+      */}
+      <p
+        title={String(value)}
+        className={cx(
+          'mt-2 break-words font-display font-semibold tabular-nums tracking-tight text-ink',
+          String(value).length > 12
+            ? 'text-lg'
+            : String(value).length > 9
+              ? 'text-xl'
+              : String(value).length > 6
+                ? 'text-2xl'
+                : 'text-3xl',
+        )}
+      >
         {value}
       </p>
       <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">

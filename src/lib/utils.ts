@@ -246,9 +246,41 @@ const NAIRA = new Intl.NumberFormat('en-NG', {
   maximumFractionDigits: 0,
 })
 
+/**
+ * Compact form for large sums.
+ *
+ * A year of offerings runs into hundreds of millions of naira, and the full
+ * digit string overflows any tile it is put in. Nobody reads twelve digits
+ * anyway — they read the magnitude — so past a million we show ₦400M and keep
+ * the exact figure for the tooltip and the exports.
+ */
+const NAIRA_COMPACT = new Intl.NumberFormat('en-NG', {
+  style: 'currency',
+  currency: 'NGN',
+  notation: 'compact',
+  maximumFractionDigits: 1,
+})
+
+const NUMBER_COMPACT = new Intl.NumberFormat('en-NG', {
+  notation: 'compact',
+  maximumFractionDigits: 1,
+})
+
 export function formatNaira(amount?: number): string {
   if (amount == null || Number.isNaN(amount)) return '—'
   return NAIRA.format(amount)
+}
+
+/** Naira for a tile: compact past a million, exact below it. */
+export function formatNairaShort(amount?: number): string {
+  if (amount == null || Number.isNaN(amount)) return '—'
+  return Math.abs(amount) >= 1_000_000 ? NAIRA_COMPACT.format(amount) : NAIRA.format(amount)
+}
+
+/** Plain number for a tile, compact past a million. */
+export function formatNumberShort(n?: number): string {
+  if (n == null || Number.isNaN(n)) return '—'
+  return Math.abs(n) >= 1_000_000 ? NUMBER_COMPACT.format(n) : n.toLocaleString('en-NG')
 }
 
 export function formatNumber(n: number): string {

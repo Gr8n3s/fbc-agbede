@@ -3,6 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!--
+      Content Security Policy.
+
+      GitHub Pages serves static files and cannot set headers, so this is a meta
+      policy, which is weaker but not nothing. It is deliberately tight: this app
+      loads no third-party script, no remote font and no analytics, so the only
+      origins it needs are itself, the GitHub API it publishes through, and
+      data: URLs for the inline paper-grain texture.
+
+      The one inline script is the theme applied before first paint, which has
+      to run inline or dark mode flashes white. Its hash is computed and
+      substituted by scripts/post-build.mjs, because a hash maintained by hand
+      drifts the moment anyone touches the script and fails silently.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' '__INLINE_SCRIPT_HASH__'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://api.github.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" type="image/png" sizes="48x48" href="./favicon-48.png" />
     <link rel="alternate icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />

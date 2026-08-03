@@ -32,6 +32,24 @@ entered separately. The public `leaderName` on a department is typed into the
 department editor by an admin who has decided to publish it. It is not read from
 the member register, so ticking "Leads" on someone's record never publishes them.
 
+**A congregant's own prayer requests are a third case, and the table above
+oversimplifies it.** When a member writes a prayer request on the public Prayer
+page, it never reaches the admin's vault and never reaches this repository. It
+is held in ordinary browser storage on *their own phone*, in the clear, until
+they choose to send it to the pastor over WhatsApp or email. Two honest points
+about that:
+
+- There is no congregant passphrase, so there is nothing to encrypt it under.
+  A key derived from the device would be decoration, not protection — anything
+  the page can derive, a script on the page can derive too.
+- Phones here are frequently shared within a family. So a request that has been
+  sent is kept for fourteen days as a record and then cleared automatically, and
+  anything can be deleted by hand at any time. Unsent drafts are never purged:
+  losing someone's unsent request would be worse than keeping it.
+
+The page says all of this on screen. Nothing is transmitted until the member
+presses send, and what is sent is a message they can read in full first.
+
 **The GitHub token lives inside the vault,** not in `localStorage`. It can write
 to this repository, so it gets the same protection as the register. Scope it to
 this one repository with `Contents: read and write` and nothing else — then the

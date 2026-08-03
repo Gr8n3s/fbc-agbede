@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   CheckCircle2,
   HandHeart,
@@ -30,6 +30,9 @@ import { publishedPrayerPoints } from '@/lib/content'
 import type { PrayerRequest } from '@/lib/types'
 import { formatDate, newId, nowIso, sanitiseText, toWhatsAppNumber } from '@/lib/utils'
 
+/** How long a sent request is kept on the device before it is cleared. */
+const PURGE_AFTER_DAYS = 14
+
 const CATEGORIES = [
   { value: 'personal', label: 'Personal' },
   { value: 'family', label: 'Family' },
@@ -58,6 +61,30 @@ export default function PrayerPage() {
    * they choose to send to the pastor — the sending is theirs, not ours.
    */
   const [requests, setRequests] = useLocalState<PrayerRequest[]>('prayer-requests', [])
+
+  /**
+   * Clear out requests that have already been sent.
+   *
+   * A prayer request is the most sensitive thing anyone will type into this
+   * app, and it is kept in ordinary browser storage in the clear — there is no
+   * congregant passphrase to encrypt it under, and inventing a device-derived
+   * key would be theatre rather than protection. What we can do is not keep it
+   * for ever. Phones here are frequently shared within a family, so once a
+   * request has been sent to the pastor it is carried for a fortnight as a
+   * record, then removed on the next visit.
+   *
+   * Anything not yet sent is left alone, however old: that is the congregant's
+   * unsent draft and losing it would be worse than keeping it.
+   */
+  useEffect(() => {
+    const cutoff = Date.now() - PURGE_AFTER_DAYS * 86_400_000
+    const keep = requests.filter(
+      (request) => !request.sharedWithPastor || new Date(request.updatedAt).getTime() > cutoff,
+    )
+    if (keep.length !== requests.length) setRequests(keep)
+    // Once per mount is the right cadence; this is housekeeping, not a subscription.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
@@ -288,7 +315,7 @@ export default function PrayerPage() {
             <SectionHeading
               eyebrow="On this device"
               title="My prayer requests"
-              description="Only visible on this phone. Clearing your browser data will remove them."
+              description={`Kept on this phone only, never sent anywhere until you choose to send it. Requests you have sent are cleared automatically after ${PURGE_AFTER_DAYS} days.`}
               as="h2"
             />
 

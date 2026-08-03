@@ -35,6 +35,7 @@ import { SERVICE_TYPE_LABELS } from '@/lib/types'
 import {
   daysBetween,
   formatDate,
+  formatNairaShort,
   formatNumber,
   fullName,
   initials,
@@ -425,7 +426,7 @@ export default function AdminDashboard() {
         />
         <Stat
           label="Offering recorded"
-          value={formatNumber(attendance.totalOffering)}
+          value={formatNairaShort(attendance.totalOffering)}
           icon={Gift}
           tone="gold"
           hint="last 90 days, naira"

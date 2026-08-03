@@ -16,7 +16,14 @@
  */
 
 import { decryptJson, encryptJson, WrongPassphraseError } from './crypto'
-import type { AuditEntry, EncryptedEnvelope, VaultData } from './types'
+import type {
+  AttendanceGroup,
+  AttendanceRecord,
+  AuditEntry,
+  EncryptedEnvelope,
+  Member,
+  VaultData,
+} from './types'
 import { newId, nowIso } from './utils'
 
 const DB_NAME = 'fbc-agbede'
@@ -27,6 +34,73 @@ const SETTINGS_KEY = 'device-settings'
 
 /** Passphrase held here (not localStorage) so closing the tab locks the vault. */
 const SESSION_PASS_KEY = 'fbc.session.pass'
+
+/**
+ * Schema version of the vault *contents*, not of IndexedDB.
+ *
+ * Bump this whenever a field is added that existing code assumes is present.
+ * `normaliseVault` is what makes that safe; this number is how we know a
+ * backup predates it.
+ */
+export const VAULT_SCHEMA_VERSION = 1
+
+/**
+ * Fill in anything an older vault is missing.
+ *
+ * A backup is the admin's recovery path, and it is opened at the worst
+ * possible moment — a lost laptop, a wiped phone. Spreading `EMPTY_VAULT` over
+ * it restores missing *collections*, but nothing restored missing *fields on
+ * records*, so a backup taken before `leadsDepartmentIds` existed would restore
+ * members without it and then crash the first screen that called `.includes()`
+ * on it.
+ *
+ * Every list this app calls array methods on is guaranteed here. It is
+ * deliberately forgiving rather than strict: a slightly odd record that opens
+ * is worth more to a church than a correct one that refuses to.
+ */
+export function normaliseVault(data: Partial<VaultData> | null | undefined): VaultData {
+  const list = <T>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : [])
+
+  return {
+    ...EMPTY_VAULT,
+    ...data,
+    members: list<Member>(data?.members).map((member) => ({
+      ...member,
+      departmentIds: list<string>(member.departmentIds),
+      leadsDepartmentIds: list<string>(member.leadsDepartmentIds),
+      active: member.active ?? true,
+      isWorker: member.isWorker ?? false,
+      baptised: member.baptised ?? false,
+      status: member.status ?? 'member',
+      role: member.role ?? 'member',
+      gender: member.gender ?? 'male',
+      ageGroup: member.ageGroup ?? 'adult',
+      maritalStatus: member.maritalStatus ?? 'single',
+      createdAt: member.createdAt ?? nowIso(),
+      updatedAt: member.updatedAt ?? nowIso(),
+    })),
+    families: list(data?.families),
+    attendance: list<AttendanceRecord>(data?.attendance).map((record) => ({
+      ...record,
+      groups: list<AttendanceGroup>(record.groups),
+      // Every bucket must be a number: the totals add them unguarded, and one
+      // undefined turns a whole register's attendance into NaN.
+      counts: {
+        men: record.counts?.men ?? 0,
+        women: record.counts?.women ?? 0,
+        youth: record.counts?.youth ?? 0,
+        teenagers: record.counts?.teenagers ?? 0,
+        children: record.counts?.children ?? 0,
+        visitors: record.counts?.visitors ?? 0,
+      },
+      createdAt: record.createdAt ?? nowIso(),
+      updatedAt: record.updatedAt ?? nowIso(),
+    })),
+    prayerRequests: list(data?.prayerRequests),
+    audit: list(data?.audit),
+    schemaVersion: VAULT_SCHEMA_VERSION,
+  }
+}
 
 export const EMPTY_VAULT: VaultData = {
   members: [],
@@ -174,10 +248,8 @@ export async function createVault(passphrase: string, seed: VaultData = EMPTY_VA
 export async function unlockVault(passphrase: string): Promise<VaultData> {
   const envelope = await getVaultEnvelope()
   if (!envelope) throw new Error('No vault on this device yet.')
-  const data = await decryptJson<VaultData>(envelope, passphrase)
-  // Merge over EMPTY_VAULT so a vault written by an older version still opens
-  // once new collections are added.
-  return { ...EMPTY_VAULT, ...data }
+  const data = await decryptJson<Partial<VaultData>>(envelope, passphrase)
+  return normaliseVault(data)
 }
 
 export async function writeVault(data: VaultData, passphrase: string): Promise<void> {
@@ -258,8 +330,8 @@ export async function importVaultFile(file: File, passphrase: string): Promise<V
   } catch {
     throw new Error('That file is not readable. Choose a .fbcvault backup.')
   }
-  const data = await decryptJson<VaultData>(envelope, passphrase)
-  return { ...EMPTY_VAULT, ...data }
+  const data = await decryptJson<Partial<VaultData>>(envelope, passphrase)
+  return normaliseVault(data)
 }
 
 /** Read a backup's hint block without the passphrase, to preview before restoring. */

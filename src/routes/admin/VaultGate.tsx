@@ -315,7 +315,7 @@ function SetupVault({ onSignOut }: { onSignOut?: () => void }) {
 
         <Checkbox
           label="Stay unlocked while this tab is open"
-          description="Locks automatically after 30 minutes idle, and when the tab closes."
+          description="Locks automatically after 30 minutes idle, and when the tab closes. Leave it off on a shared computer."
           checked={remember}
           onChange={(e) => setRemember(e.target.checked)}
         />
@@ -391,6 +391,7 @@ function UnlockVault({ onSignOut }: { onSignOut?: () => void }) {
 
         <Checkbox
           label="Stay unlocked while this tab is open"
+          description="Locks automatically after 30 minutes idle, and when the tab closes. Leave it off on a shared computer."
           checked={remember}
           onChange={(e) => setRemember(e.target.checked)}
         />

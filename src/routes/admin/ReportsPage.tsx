@@ -49,7 +49,12 @@ import {
   type RangePreset,
 } from '@/lib/stats'
 import { MEMBERSHIP_STATUS_LABELS, SERVICE_TYPE_LABELS, type ServiceType } from '@/lib/types'
-import { formatNaira, formatNumber, pluralise } from '@/lib/utils'
+import {
+  formatNaira,
+  formatNairaShort,
+  formatNumber,
+  pluralise,
+} from '@/lib/utils'
 
 /**
  * Reports for the church business meeting.
@@ -343,7 +348,7 @@ export default function ReportsPage() {
         />
         <Stat
           label="Offering"
-          value={formatNaira(attendance.totalOffering)}
+          value={formatNairaShort(attendance.totalOffering)}
           icon={BarChart3}
           tone="gold"
         />

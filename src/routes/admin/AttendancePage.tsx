@@ -52,6 +52,7 @@ import { SERVICE_TYPE_LABELS } from '@/lib/types'
 import {
   formatDate,
   formatNaira,
+  formatNairaShort,
   formatNumber,
   newId,
   nowIso,
@@ -274,7 +275,7 @@ export default function AttendancePage() {
         <div className="relative">
           <Stat
             label="Offering"
-            value={settings.showOfferings ? formatNaira(summary.totalOffering) : '••••••'}
+            value={settings.showOfferings ? formatNairaShort(summary.totalOffering) : '••••••'}
             icon={FileText}
             tone="gold"
             hint={settings.showOfferings ? undefined : 'hidden'}

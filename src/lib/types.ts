@@ -830,6 +830,11 @@ export interface AdminIdentity {
 }
 
 export interface VaultData {
+  /**
+   * Schema version of these contents. Absent on vaults written before
+   * versioning existed, which `normaliseVault` treats as "needs filling in".
+   */
+  schemaVersion?: number
   members: Member[]
   families: Family[]
   attendance: AttendanceRecord[]

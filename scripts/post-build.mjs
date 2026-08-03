@@ -16,7 +16,8 @@
  * Both are pure copies with no build-time dependencies.
  */
 
-import { copyFile, readdir, stat, writeFile } from 'node:fs/promises'
+import { copyFile, readdir, readFile, stat, writeFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -33,10 +34,42 @@ async function directorySize(path) {
   return total
 }
 
+/**
+ * Pin the inline theme script in the Content-Security-Policy.
+ *
+ * The policy is `script-src 'self'`, which would block the small inline script
+ * that applies the saved theme before first paint. That script has to be inline
+ * — an external file means a round trip before paint and dark mode flashes
+ * white — so it is allowed by hash rather than by opening the policy up with
+ * 'unsafe-inline'.
+ *
+ * Computed here rather than written into index.html by hand, because a hash
+ * maintained by hand drifts the moment anyone edits the script, and the failure
+ * is silent: the theme simply stops applying.
+ */
+async function pinCspHash(file) {
+  const html = await readFile(file, 'utf8')
+  const match = /<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/.exec(html)
+
+  if (!match) {
+    // No inline script is a fine outcome; drop the placeholder and move on.
+    await writeFile(file, html.replace(" '__INLINE_SCRIPT_HASH__'", ''), 'utf8')
+    return null
+  }
+
+  const hash = `sha256-${createHash('sha256').update(match[1], 'utf8').digest('base64')}`
+  await writeFile(file, html.replaceAll('__INLINE_SCRIPT_HASH__', hash), 'utf8')
+  return hash
+}
+
 async function main() {
   await writeFile(join(dist, '.nojekyll'), '', 'utf8')
   console.log('  ✓ .nojekyll')
 
+  const hash = await pinCspHash(join(dist, 'index.html'))
+  console.log(`  ✓ CSP inline-script hash ${hash ? `pinned (${hash.slice(0, 24)}…)` : 'not needed'}`)
+
+  // Copied after pinning so the fallback carries the finished policy too.
   await copyFile(join(dist, 'index.html'), join(dist, '404.html'))
   console.log('  ✓ 404.html (SPA fallback)')
 
