@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ChevronLeft, ChevronRight, Images, Play, X } from 'lucide-react'
-import { ArchCard, Badge, EmptyState, IconButton, PageHeader, SegmentedControl } from '@/components/ui'
+import { ArchCard, Badge, EmptyState, IconButton, PageHeader } from '@/components/ui'
 import { useContent } from '@/context/ContentContext'
 import { useDocumentTitle, useLockBodyScroll, useRevealAll } from '@/hooks'
 import { publishedAlbums } from '@/lib/content'
@@ -11,7 +11,6 @@ export default function GalleryPage() {
   const { content } = useContent()
   useDocumentTitle('Gallery', 'Pictures and videos from church life at FBC Agbede.')
 
-  const [view, setView] = useState<'photos' | 'videos'>('photos')
   const [openAlbum, setOpenAlbum] = useState<string | null>(null)
   const [lightbox, setLightbox] = useState<{ photos: GalleryPhoto[]; index: number } | null>(null)
   const revealRef = useRevealAll<HTMLDivElement>()
@@ -28,24 +27,13 @@ export default function GalleryPage() {
         description="Moments from our services, programmes and outreach, the family of God at the Chapel of Grace."
       />
 
+      {/*
+        Photos and videos share one page rather than sitting behind a tab.
+        Nobody switches a tab they have no reason to believe holds anything, so
+        a video the church published was simply never seen.
+      */}
       <div ref={revealRef} className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
-        {videos.length > 0 && (
-          <SegmentedControl
-            label="Gallery view"
-            value={view}
-            onChange={(next) => {
-              setView(next)
-              setOpenAlbum(null)
-            }}
-            options={[
-              { value: 'photos', label: `Photos (${albums.length})` },
-              { value: 'videos', label: `Videos (${videos.length})` },
-            ]}
-            className="mb-8"
-          />
-        )}
-
-        {view === 'photos' ? (
+        {(
           album ? (
             <section>
               <button
@@ -118,34 +106,55 @@ export default function GalleryPage() {
               description="Pictures from services and programmes will appear here."
             />
           )
-        ) : (
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {videos.map((video) => {
-              const href = safeUrl(video.url)
-              if (!href) return null
-              return (
-                <li key={video.id} className="reveal">
-                  <ArchCard
-                    href={href}
-                    image={video.thumbnail ? asset(video.thumbnail) : undefined}
-                    imageAlt=""
-                    fallbackIcon={Play}
-                    aspect="square"
-                  >
-                    <Badge tone="accent">video</Badge>
-                    <h2 className="mt-2 font-display text-[1.0625rem] font-semibold text-ink">
-                      {video.title}
-                    </h2>
-                    {video.date && (
-                      <p className="mt-1 text-[0.8125rem] text-ink-faint">
-                        {formatDate(video.date, 'long')}
-                      </p>
-                    )}
-                  </ArchCard>
-                </li>
-              )
-            })}
-          </ul>
+        )}
+
+        {/* Videos, always visible, below the albums. */}
+        {videos.length > 0 && !album && (
+          <section className="mt-12" aria-labelledby="videos-heading">
+            <h2
+              id="videos-heading"
+              className="flex items-center gap-2 font-display text-2xl font-semibold text-ink"
+            >
+              <Play className="size-5 text-ornament" aria-hidden />
+              Videos
+            </h2>
+            <p className="mt-1 text-[0.9375rem] text-ink-soft">
+              {pluralise(videos.length, 'recording')} from our services and programmes.
+            </p>
+
+            <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {videos.map((video) => {
+                const href = safeUrl(video.url)
+                if (!href) return null
+                return (
+                  <li key={video.id} className="reveal">
+                    <ArchCard
+                      href={href}
+                      image={video.thumbnail ? asset(video.thumbnail) : undefined}
+                      imageAlt=""
+                      fallbackIcon={Play}
+                      aspect="square"
+                    >
+                      <Badge tone="accent">video</Badge>
+                      <h3 className="mt-2 font-display text-[1.0625rem] font-semibold text-ink">
+                        {video.title}
+                      </h3>
+                      {video.description && (
+                        <p className="mt-1 line-clamp-2 text-[0.8125rem] leading-snug text-ink-soft">
+                          {video.description}
+                        </p>
+                      )}
+                      {video.date && (
+                        <p className="mt-1 text-[0.8125rem] text-ink-faint">
+                          {formatDate(video.date, 'long')}
+                        </p>
+                      )}
+                    </ArchCard>
+                  </li>
+                )
+              })}
+            </ul>
+          </section>
         )}
       </div>
 
