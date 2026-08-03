@@ -25,6 +25,68 @@ import { Button } from './primitives'
 /** GitHub rejects Contents API writes over 100 MB, and Pages is slow well before that. */
 const MAX_BYTES = 10 * 1024 * 1024
 
+/** Longest edge for an uploaded photo. Plenty for full-screen on any phone. */
+const MAX_IMAGE_EDGE = 1800
+/** Below this, resizing is not worth the quality loss. */
+const RESIZE_THRESHOLD = 400 * 1024
+
+/**
+ * Shrink a photo before it is committed.
+ *
+ * Phone cameras produce four and five megabyte files. Committed as-is they sit
+ * in the repository for ever and are downloaded over mobile data by every
+ * member who opens the gallery. Resizing in the browser costs nothing and
+ * typically takes a 4 MB photo under 300 KB.
+ *
+ * Anything that is not a raster image, is already small, or fails to decode is
+ * passed through untouched: a slightly large upload is a much better outcome
+ * than a failed one.
+ */
+async function shrinkImage(file: File): Promise<{ bytes: Uint8Array; name: string }> {
+  const passthrough = async () => ({
+    bytes: new Uint8Array(await file.arrayBuffer()),
+    name: file.name,
+  })
+
+  const resizable = /^image\/(jpeg|png|webp)$/.test(file.type)
+  if (!resizable || file.size < RESIZE_THRESHOLD) return passthrough()
+
+  try {
+    const bitmap = await createImageBitmap(file)
+    const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(bitmap.width, bitmap.height))
+
+    // Already small enough in both dimensions, and re-encoding would only lose.
+    if (scale === 1 && file.size < 1024 * 1024) {
+      bitmap.close()
+      return passthrough()
+    }
+
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.round(bitmap.width * scale)
+    canvas.height = Math.round(bitmap.height * scale)
+
+    const context = canvas.getContext('2d')
+    if (!context) return passthrough()
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+    bitmap.close()
+
+    // JPEG unless the source has transparency worth keeping.
+    const keepAlpha = file.type === 'image/png'
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, keepAlpha ? 'image/png' : 'image/jpeg', 0.82),
+    )
+    if (!blob || blob.size >= file.size) return passthrough()
+
+    const stem = file.name.replace(/\.[^.]+$/, '')
+    return {
+      bytes: new Uint8Array(await blob.arrayBuffer()),
+      name: `${stem}.${keepAlpha ? 'png' : 'jpg'}`,
+    }
+  } catch {
+    return passthrough()
+  }
+}
+
 export function FileField({
   label,
   hint,
@@ -76,8 +138,8 @@ export function FileField({
 
     setBusy(true)
     try {
-      const bytes = new Uint8Array(await file.arrayBuffer())
-      const path = buildPath(folder, file.name)
+      const { bytes, name } = await shrinkImage(file)
+      const path = buildPath(folder, name)
 
       await putBinaryFile(
         github.token,
@@ -275,13 +337,14 @@ export function MultiFileField({
 
     for (const [index, file] of chosen.entries()) {
       setProgress({ done: index, total: chosen.length })
-      const path = buildPath(folder, file.name)
       try {
+        const { bytes, name } = await shrinkImage(file)
+        const path = buildPath(folder, name)
         await putBinaryFile(
           github.token,
           { owner: github.owner, repo: github.repo, branch: github.branch },
           `public/${path}`,
-          new Uint8Array(await file.arrayBuffer()),
+          bytes,
           `Upload ${file.name}`,
         )
         added.push(path)

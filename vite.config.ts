@@ -51,6 +51,17 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2,json}'],
+        /*
+          Never precache uploaded media.
+
+          Photos and PDFs the church uploads are served by the runtime
+          CacheFirst rule below, which caches them as people actually view them.
+          Precaching instead would force every visitor to download the entire
+          gallery on first load, and — because Workbox fails the build on any
+          file over the size limit — it meant an admin uploading a large photo
+          could break the deploy for the whole church.
+        */
+        globIgnores: ['media/**'],
         navigateFallback: `${base}index.html`,
         navigateFallbackDenylist: [/^\/api/],
         cleanupOutdatedCaches: true,
