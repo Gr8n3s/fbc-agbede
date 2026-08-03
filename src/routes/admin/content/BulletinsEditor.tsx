@@ -697,6 +697,24 @@ function LessonFields({
       />
 
       {!compact && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Input
+            label="Classes start"
+            type="time"
+            value={lesson.startTime ?? ''}
+            onChange={(e) => set({ startTime: e.target.value })}
+            hint="Printed in the heading, as on the paper sheet."
+          />
+          <Input
+            label="Classes end"
+            type="time"
+            value={lesson.endTime ?? ''}
+            onChange={(e) => set({ endTime: e.target.value })}
+          />
+        </div>
+      )}
+
+      {!compact && (
         <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
           <Textarea
             label="Memory verse"

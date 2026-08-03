@@ -294,6 +294,13 @@ export interface SundaySchoolLesson {
   text: string
   memoryVerse?: string
   memoryVerseRef?: string
+  /**
+   * When the classes run. The printed sheet carries the time in the heading
+   * itself, "CHURCH IN CLASSES (9.00am - 10.00am)", separately from the
+   * timetable above it.
+   */
+  startTime?: string
+  endTime?: string
 }
 
 /**

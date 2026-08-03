@@ -360,10 +360,16 @@ export function Switch({
           checked ? 'bg-brand' : 'bg-line-strong',
         )}
       >
+        {/*
+          Geometry stated explicitly rather than left to a half-step translate:
+          the track is 44x24 with a 20px knob, so anchoring at left-0.5/top-0.5
+          and sliding a whole 20px keeps an even 2px margin at either end. The
+          knob previously overshot and sat outside the track.
+        */}
         <span
           className={cx(
-            'absolute top-0.5 size-5 rounded-full bg-white shadow transition-transform duration-200',
-            checked ? 'translate-x-5.5' : 'translate-x-0.5',
+            'absolute left-0.5 top-0.5 size-5 rounded-full bg-white shadow transition-transform duration-200',
+            checked ? 'translate-x-5' : 'translate-x-0',
           )}
           aria-hidden
         />

@@ -223,7 +223,18 @@ export default function ProgrammeDetailPage() {
       {/* --- Sunday School lesson ------------------------------------------ */}
       {bulletin.sundaySchool?.topic && (
         <Card className="mt-6 p-5 sm:p-7">
-          <p className="eyebrow">Church in Classes</p>
+          <p className="eyebrow">
+            Church in Classes
+            {bulletin.sundaySchool.startTime && (
+              <span className="ml-2 normal-case tracking-normal text-ink-faint">
+                ({formatTime(bulletin.sundaySchool.startTime)}
+                {bulletin.sundaySchool.endTime
+                  ? ` to ${formatTime(bulletin.sundaySchool.endTime)}`
+                  : ''}
+                )
+              </span>
+            )}
+          </p>
           <h2 className="mt-1.5 text-balance font-display text-xl font-semibold text-ink">
             {bulletin.sundaySchool.topic}
           </h2>
@@ -807,8 +818,15 @@ function buildPrintable(bulletin: Bulletin, churchName: string, motto?: string) 
   const sections: PrintSection[] = []
 
   if (bulletin.sundaySchool?.topic) {
+    const classTime = bulletin.sundaySchool.startTime
+      ? ` (${formatTime(bulletin.sundaySchool.startTime)}${
+          bulletin.sundaySchool.endTime
+            ? ` to ${formatTime(bulletin.sundaySchool.endTime)}`
+            : ''
+        })`
+      : ''
     sections.push({
-      heading: 'Church in Classes',
+      heading: `Church in Classes${classTime}`,
       intro: [
         bulletin.sundaySchool.topic,
         bulletin.sundaySchool.topicYoruba,
