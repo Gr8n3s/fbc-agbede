@@ -164,7 +164,9 @@
       }
     ],
     "hymns": [],
-    "readings": ["Acts 6:1-7"],
+    "readings": [
+      "Acts 6:1-7"
+    ],
     "teenagersOrder": [
       "Call to Worship",
       "Call to Praise Him",
@@ -284,7 +286,218 @@
         "what": "Church Workers Seminar / Disciples Life Style Day / LEBC Mission Sunday / August Celebrants' Thanksgiving (Combined Service)"
       }
     ],
-    "birthdays": [],
+    "birthdays": [
+      {
+        "id": "bd_078d7ce9-d85c-4a0a-b34d-5bfb172fc95d",
+        "name": "Mr. Rotimi Ajayí",
+        "day": 1
+      },
+      {
+        "id": "bd_16f59bad-995f-4f15-a1ab-61b7fd1c5388",
+        "name": "Soretire Oluwaseyi",
+        "day": 2
+      },
+      {
+        "id": "bd_378240da-1561-4b41-9135-396fdd506b32",
+        "name": "Akin-ola Eniola",
+        "day": 3
+      },
+      {
+        "id": "bd_b3ca7af6-19db-44ef-81e0-3e25b5b010b4",
+        "name": "Mrs. Omowunmi Bolarin",
+        "day": 4
+      },
+      {
+        "id": "bd_1bcba7dc-5443-4c39-a6f0-114e73e18907",
+        "name": "Bolarin Gbemisola",
+        "day": 5
+      },
+      {
+        "id": "bd_3fa1c12e-9956-4f34-bd88-4a41e34cfdb8",
+        "name": "Akaņmu Boluwatife",
+        "day": 7
+      },
+      {
+        "id": "bd_eebbed1e-d2bb-42ff-bd74-15b74873b7ec",
+        "name": "Babatope Oluwatomiwa",
+        "day": 7
+      },
+      {
+        "id": "bd_513deb65-c7d3-4377-8281-d1f8336940b7",
+        "name": "Kolawole Elizabeth",
+        "day": 8
+      },
+      {
+        "id": "bd_2a0a21a8-f9d1-4e58-adf8-6db6c2ebe443",
+        "name": "Akande Rachael",
+        "day": 8
+      },
+      {
+        "id": "bd_cb35afec-58c0-43cb-8227-f758bbc417ed",
+        "name": "Ayangbola Gbogo",
+        "day": 8
+      },
+      {
+        "id": "bd_59a72a67-fcfe-4433-a3f5-616d19111949",
+        "name": "Mr. A. 0. Ajetukesi",
+        "day": 8
+      },
+      {
+        "id": "bd_ccaf1ead-19be-4b91-9519-0199272dda09",
+        "name": "Mrs. Luretha Olawande",
+        "day": 9
+      },
+      {
+        "id": "bd_4f1eb6ed-09e3-4059-ad20-ed166a44c006",
+        "name": "lesanmi Elizabeth",
+        "day": 9
+      },
+      {
+        "id": "bd_2eeac951-6d79-4e70-9972-1914b29df3b4",
+        "name": "Mr. Sunday Akanmu",
+        "day": 10
+      },
+      {
+        "id": "bd_c44caa35-92c4-469f-a745-78ab8d7c2f51",
+        "name": "Grandma Õlagunju",
+        "day": 10
+      },
+      {
+        "id": "bd_a9474f22-743e-467a-93ba-ac18468c9730",
+        "name": "Mr. Hezekiah Olaniyi",
+        "day": 11
+      },
+      {
+        "id": "bd_14219c8e-650c-4729-92e6-976dd10aae1e",
+        "name": "Johnson Marvelous",
+        "day": 11
+      },
+      {
+        "id": "bd_aae29359-8578-4ab3-b069-e743cb0a331c",
+        "name": "Alabi Ayodele",
+        "day": 12
+      },
+      {
+        "id": "bd_3465bf95-1e6f-46bc-81fb-b2a613729a32",
+        "name": "Anuoluwàpo Adediran",
+        "day": 12
+      },
+      {
+        "id": "bd_134c36e8-2538-4a10-ba59-3416555e0152",
+        "name": "Adepoju Öyinade",
+        "day": 14
+      },
+      {
+        "id": "bd_d943422f-1f99-4c58-a988-802b3c1468fd",
+        "name": "Mr. Míchael Peter",
+        "day": 14
+      },
+      {
+        "id": "bd_d8def86f-8ac5-4c9b-b1ba-243d2075d091",
+        "name": "Mrs. C. 0. Şoretire",
+        "day": 15
+      },
+      {
+        "id": "bd_fd697777-8259-45a9-bd5d-e18df8da782e",
+        "name": "Mr. E. 0. Olawande",
+        "day": 15
+      },
+      {
+        "id": "bd_2aff8833-7f35-49cc-9753-a43a48449487",
+        "name": "Patunola Sarah",
+        "day": 15
+      },
+      {
+        "id": "bd_03cf16cf-feb2-4449-9a6b-5d3e47c33cc2",
+        "name": "Ireoluwa Oyeleye",
+        "day": 15
+      },
+      {
+        "id": "bd_70c29133-d9fb-4c44-b518-97a8ddeae89c",
+        "name": "Adefila Alaba",
+        "day": 16
+      },
+      {
+        "id": "bd_278ed4cd-d568-4134-b1d9-d544d79fc689",
+        "name": "Ogunsanyà Temitope",
+        "day": 19
+      },
+      {
+        "id": "bd_6a114298-9a59-4bc0-9779-45bf07015eec",
+        "name": "Emmanuella Ogundele",
+        "day": 19
+      },
+      {
+        "id": "bd_384ecae2-0861-42b2-8143-54db5f1409a9",
+        "name": "Mrs. Funmilayo Gbadebo",
+        "day": 19
+      },
+      {
+        "id": "bd_6dea7bed-b843-4d48-ba1b-890e0ba09e2e",
+        "name": "Mr. Sunday Adewuyi",
+        "day": 20
+      },
+      {
+        "id": "bd_6cadfbbb-f7b8-4df9-b322-2dfbbee38392",
+        "name": "Akinola Amos",
+        "day": 24
+      },
+      {
+        "id": "bd_37fa4289-31ca-42fc-9196-bb42fb4de215",
+        "name": "Soretire Oluwabukunmi",
+        "day": 25
+      },
+      {
+        "id": "bd_4f6ca76d-df48-4108-837b-a72a09b54660",
+        "name": "Oyalakun Adeola",
+        "day": 26
+      },
+      {
+        "id": "bd_a444a2d9-2f56-42e6-bf74-16c0cec28374",
+        "name": "Mr. S. O. Oyalakun",
+        "day": 28
+      },
+      {
+        "id": "bd_da2cc212-a819-4039-81eb-e661392d7f23",
+        "name": "Mr. A. O. Adenubi",
+        "day": 28
+      },
+      {
+        "id": "bd_c43b1479-37b6-47e8-8890-acfd58ceeca9",
+        "name": "Onaolapo Tobiloba",
+        "day": 28
+      },
+      {
+        "id": "bd_26459ec4-76a2-4838-bb05-a700e60ef26c",
+        "name": "Gbadebo Adesewą",
+        "day": 30
+      },
+      {
+        "id": "bd_18ec0a1e-8436-4257-a1fa-1bef6daaaf79",
+        "name": "Mrs. Olanike Oyalakun",
+        "day": 31
+      },
+      {
+        "id": "bd_ce9bf20d-5e08-4cc6-9b17-1f2f8207b6a1",
+        "name": "Ilesanmi Jimilade",
+        "day": 31
+      },
+      {
+        "id": "bd_00761a7d-81a0-4b0e-a8f2-9dcf4628f98f",
+        "name": "Edoh Favour",
+        "day": 31
+      },
+      {
+        "id": "bd_0224c8b3-0e15-44a8-b7c9-9a2dbf9dd74e",
+        "name": "Bolarin Damilola",
+        "day": 31
+      },
+      {
+        "id": "bd_c5a7f2d2-b666-4f09-9628-e9d291a3f4c6",
+        "name": "Abiona Adebola",
+        "day": 31
+      }
+    ],
     "message": {
       "heading": "From the Throne of Glory!",
       "topic": "Deacons as Helpers in the Ministry of Care & Kingdom Expansion",
@@ -341,6 +554,6 @@
     "featured": true,
     "published": true,
     "createdAt": "2026-08-02T00:00:00.000Z",
-    "updatedAt": "2026-08-02T00:00:00.000Z"
+    "updatedAt": "2026-08-03T07:30:09.059Z"
   }
 ]
