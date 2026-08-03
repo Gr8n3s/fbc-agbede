@@ -12,7 +12,7 @@ import {
 } from '@/components/ui'
 import { useContent } from '@/context/ContentContext'
 import { useDebounced, useDocumentTitle, useLocalState, useRevealAll } from '@/hooks'
-import { currentReadingPlan, devotionalForToday, publishedTeachings } from '@/lib/content'
+import { currentReadingPlan, publishedTeachings, readingForToday } from '@/lib/content'
 import { formatDate, matchesQuery, todayIso } from '@/lib/utils'
 
 /**
@@ -34,10 +34,14 @@ export default function BiblePage() {
   const current = useMemo(() => currentReadingPlan(content.readingPlans), [content.readingPlans])
   const teachings = useMemo(() => publishedTeachings(content.teachings), [content.teachings])
 
-  /** Fallback readings, taken from the devotional the church already publishes. */
-  const todayFromDevotional = useMemo(
-    () => devotionalForToday(content.devotionals)?.readingPlan ?? [],
-    [content.devotionals],
+  /**
+   * Today's readings, whichever source the church has actually filled in.
+   * `source` tells us whether to present it as the plan or as the devotional's
+   * list, so the heading never claims a plan that does not exist.
+   */
+  const reading = useMemo(
+    () => readingForToday(content.readingPlans, content.devotionals),
+    [content.readingPlans, content.devotionals],
   )
 
   const [query, setQuery] = useState('')
@@ -196,7 +200,7 @@ export default function BiblePage() {
               </ul>
             )}
           </section>
-        ) : todayFromDevotional.length > 0 ? (
+        ) : reading.references.length > 0 ? (
           /*
             No standalone plan published, but the church already puts a reading
             list on each devotional. Showing that here means the page is useful
@@ -206,7 +210,7 @@ export default function BiblePage() {
             <p className="eyebrow">Today's reading</p>
             <p className="mt-1 text-[0.8125rem] text-ink-faint">{formatDate(todayIso(), 'full')}</p>
             <ul className="mt-4 flex flex-wrap gap-2">
-              {todayFromDevotional.map((reference) => (
+              {reading.references.map((reference) => (
                 <li
                   key={reference}
                   className="rounded-lg border border-line bg-sunken px-3 py-2 font-display text-[1.0625rem] font-semibold text-ink"

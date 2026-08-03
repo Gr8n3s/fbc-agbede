@@ -323,6 +323,47 @@ export function publishedTeachings(items: Teaching[]): Teaching[] {
   return items.filter(isPublished).sort((a, b) => a.order - b.order)
 }
 
+// ---------------------------------------------------------------------------
+// Falling back to what the church already publishes
+//
+// This church writes its notices onto the weekly programme sheet and its
+// readings onto the devotional. Pages that looked only at their own collection
+// therefore sat empty while the same information sat one file away. These
+// selectors express "use the dedicated collection, else fall back", and they
+// live here rather than in the components because it is a rule about the
+// content, not about how a page draws. Each reports which source it used so
+// the page can be honest in its heading.
+// ---------------------------------------------------------------------------
+
+/**
+ * Notices written onto the current programme sheet.
+ *
+ * The notice board shows these when no announcement has been published. Kept
+ * as a plain selector rather than folded into a combined "notice board" call:
+ * announcements and notice lines are different shapes, and a function returning
+ * a union of the two is harder to use than the two lines it saves.
+ */
+export function bulletinNotices(bulletins: Bulletin[]): string[] {
+  return currentBulletin(bulletins)?.notices ?? []
+}
+
+/**
+ * Today's reading: the dedicated plan, else the references on the devotional.
+ */
+export function readingForToday(
+  plans: ReadingPlan[],
+  devotionals: Devotional[],
+): { references: string[]; source: 'primary' | 'devotional' } {
+  const current = currentReadingPlan(plans)
+  if (current?.day?.references.length) {
+    return { references: current.day.references, source: 'primary' }
+  }
+  return {
+    references: devotionalForToday(devotionals)?.readingPlan ?? [],
+    source: 'devotional',
+  }
+}
+
 /** Today's devotional, else the most recent one already published. */
 export function devotionalForToday(items: Devotional[]): Devotional | undefined {
   const today = new Date().toISOString().slice(0, 10)

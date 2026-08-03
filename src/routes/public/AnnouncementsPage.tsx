@@ -4,7 +4,7 @@ import { AnnouncementCard } from '@/components/site/cards'
 import { Chip, EmptyState, PageHeader, SearchInput } from '@/components/ui'
 import { useContent } from '@/context/ContentContext'
 import { useDebounced, useDocumentTitle, useRevealAll } from '@/hooks'
-import { currentBulletin, publishedAnnouncements } from '@/lib/content'
+import { bulletinNotices as noticesFromBulletin, publishedAnnouncements } from '@/lib/content'
 import { matchesQuery } from '@/lib/utils'
 
 export default function AnnouncementsPage() {
@@ -23,7 +23,7 @@ export default function AnnouncementsPage() {
 
   /** Notices from the current programme sheet, used when the board is empty. */
   const bulletinNotices = useMemo(
-    () => currentBulletin(content.bulletins)?.notices ?? [],
+    () => noticesFromBulletin(content.bulletins),
     [content.bulletins],
   )
 
