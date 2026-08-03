@@ -221,6 +221,134 @@ export function FileField({
 }
 
 /**
+ * Pick many files at once and publish them all.
+ *
+ * A gallery album is a dozen photos from one programme, so adding an empty row
+ * and browsing for a single file each time is not a workflow. This takes a
+ * whole selection and reports the paths back once they are committed.
+ *
+ * Uploads run one after another rather than in parallel: the GitHub Contents
+ * API serialises writes to a branch, and firing a dozen at once produces 409
+ * conflicts against each other. A handful of photos takes a few seconds, which
+ * is the right trade for every one of them actually landing.
+ */
+export function MultiFileField({
+  label,
+  hint,
+  folder,
+  accept,
+  onAdd,
+}: {
+  label: string
+  hint?: string
+  folder: string
+  accept?: string
+  onAdd: (paths: string[]) => void
+}) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { data } = useVault()
+  const toast = useToast()
+
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const github = data?.github
+
+  const pick = async (files: FileList | null) => {
+    if (!files || files.length === 0) return
+    setError(null)
+
+    if (!github) {
+      setError('Connect GitHub under Settings before uploading files.')
+      return
+    }
+
+    const chosen = [...files]
+    const tooBig = chosen.find((f) => f.size > MAX_BYTES)
+    if (tooBig) {
+      setError(`${tooBig.name} is over 10 MB. Please resize it before uploading.`)
+      return
+    }
+
+    const added: string[] = []
+    const failed: string[] = []
+
+    for (const [index, file] of chosen.entries()) {
+      setProgress({ done: index, total: chosen.length })
+      const path = buildPath(folder, file.name)
+      try {
+        await putBinaryFile(
+          github.token,
+          { owner: github.owner, repo: github.repo, branch: github.branch },
+          `public/${path}`,
+          new Uint8Array(await file.arrayBuffer()),
+          `Upload ${file.name}`,
+        )
+        added.push(path)
+      } catch {
+        failed.push(file.name)
+      }
+    }
+
+    setProgress(null)
+    if (inputRef.current) inputRef.current.value = ''
+
+    // Keep whatever landed, even if some of the batch failed.
+    if (added.length > 0) onAdd(added)
+    if (failed.length > 0) {
+      setError(`${failed.length} of ${chosen.length} did not upload: ${failed.join(', ')}`)
+    } else {
+      toast.success(
+        `${added.length} file${added.length === 1 ? '' : 's'} uploaded`,
+        'Remember to save, then publish.',
+      )
+    }
+  }
+
+  return (
+    <div className="rounded-lg border border-dashed border-line-strong p-3.5">
+      <p className="text-[0.8125rem] font-semibold text-ink">{label}</p>
+      {hint && <p className="mt-1 text-[0.75rem] leading-snug text-ink-faint">{hint}</p>}
+
+      <Button
+        variant="secondary"
+        icon={FileUp}
+        size="sm"
+        className="mt-2.5"
+        loading={progress !== null}
+        disabled={progress !== null}
+        onClick={() => inputRef.current?.click()}
+      >
+        {progress ? `Uploading ${progress.done + 1} of ${progress.total}` : 'Choose files'}
+      </Button>
+
+      <input
+        ref={inputRef}
+        type="file"
+        multiple
+        accept={accept}
+        className="sr-only"
+        tabIndex={-1}
+        onChange={(e) => void pick(e.target.files)}
+      />
+
+      {error && (
+        <p role="alert" className="mt-2 flex items-start gap-1.5 text-[0.75rem] font-medium text-danger">
+          <AlertCircle className="mt-px size-3.5 shrink-0" aria-hidden />
+          {error}
+        </p>
+      )}
+
+      {!github && !error && (
+        <p className="mt-2 text-[0.75rem] text-ink-faint">
+          Uploading needs the GitHub connection from Settings.
+        </p>
+      )}
+    </div>
+  )
+}
+
+/**
  * Where an uploaded file lands.
  *
  * The original name is slugified and stamped, so two people uploading

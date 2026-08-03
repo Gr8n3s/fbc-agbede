@@ -11,6 +11,7 @@ import {
 import {
   Combobox,
   FileField,
+  MultiFileField,
   Input,
   ListEditor,
   RowInput,
@@ -912,9 +913,21 @@ export function GalleryEditor() {
                 onChange={(e) => set('description', e.target.value || undefined)}
               />
 
+              <MultiFileField
+                label="Add photos"
+                hint="Choose several at once. Each one is committed to the church repository, then listed below where you can caption and reorder them. Remember to save, then publish."
+                folder="gallery"
+                accept="image/*"
+                onAdd={(paths) =>
+                  set('photos', [
+                    ...draft.photos,
+                    ...paths.map((url) => ({ id: newId('img'), url })),
+                  ])
+                }
+              />
+
               <ListEditor<GalleryPhoto>
-                label="Photos"
-                hint="Upload images to media/gallery in the repository, then reference their paths here."
+                label="Photos in this album"
                 items={draft.photos}
                 onChange={(next) => set('photos', next)}
                 createItem={() => ({ id: newId('img'), url: '' })}

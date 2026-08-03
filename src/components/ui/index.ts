@@ -24,7 +24,7 @@ export {
   DetailRow,
   BackLink,
 } from './surfaces'
-export { FileField } from './upload'
+export { FileField, MultiFileField } from './upload'
 export {
   Combobox,
   Field,
