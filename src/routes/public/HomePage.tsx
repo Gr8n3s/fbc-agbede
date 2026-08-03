@@ -43,7 +43,7 @@ import {
   publishedDepartments,
   publishedSermons,
 } from '@/lib/content'
-import { nextService, upcomingOccurrences } from '@/lib/schedule'
+import { nextService, upcomingOrRecent } from '@/lib/schedule'
 import { cx, dayName, formatTime, relativeTime } from '@/lib/utils'
 
 export default function HomePage() {
@@ -58,7 +58,10 @@ export default function HomePage() {
     () => publishedBulletins(content.bulletins).filter((b) => b.id !== programme?.id).slice(0, 2),
     [content.bulletins, programme],
   )
-  const events = useMemo(() => upcomingOccurrences(content.events, 5), [content.events])
+  const { occurrences: events, isPast: eventsArePast } = useMemo(
+    () => upcomingOrRecent(content.events, 5),
+    [content.events],
+  )
   const sermons = useMemo(() => publishedSermons(content.sermons).slice(0, 3), [content.sermons])
   const notices = useMemo(
     () => publishedAnnouncements(content.announcements).slice(0, 3),
@@ -160,7 +163,9 @@ export default function HomePage() {
             <div className="reveal">
               <Card className="p-4 sm:p-5">
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="font-display text-lg font-semibold text-ink">Coming up</h3>
+                  <h3 className="font-display text-lg font-semibold text-ink">
+                    {eventsArePast ? 'Recently at church' : 'Coming up'}
+                  </h3>
                   <Link
                     to="/events"
                     className="text-[0.8125rem] font-medium text-info hover:underline"

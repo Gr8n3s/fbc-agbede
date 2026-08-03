@@ -360,12 +360,13 @@ export function SermonsEditor() {
           />
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Input
-              label="Audio link"
-              type="url"
+            <FileField
+              label="Audio"
+              folder="sermons"
+              accept="audio/*"
               value={draft.audioUrl ?? ''}
-              onChange={(e) => set('audioUrl', e.target.value || undefined)}
-              placeholder="https://…"
+              onChange={(next) => set('audioUrl', next || undefined)}
+              hint="Upload a recording, or paste a link. For anything long, a link to YouTube or Drive keeps the app light."
             />
             <Input
               label="Video link"

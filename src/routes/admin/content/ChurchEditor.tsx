@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Building2, Clock, Landmark, Save, Share2, Sparkles } from 'lucide-react'
-import { Button, Input, ListEditor, Panel, RowInput, Textarea } from '@/components/ui'
+import { Button, FileField, Input, ListEditor, Panel, RowInput, Textarea } from '@/components/ui'
 import { useContent } from '@/context/ContentContext'
 import { useToast } from '@/context/ToastContext'
 import type { BankAccount, ChurchProfile, ServiceTime, SocialLink } from '@/lib/types'
@@ -176,6 +176,15 @@ export function ChurchEditor() {
               placeholder="Resident Pastor"
             />
           </div>
+          <FileField
+            label="Pastor's photograph"
+            folder="church"
+            accept="image/*"
+            value={draft.pastorPhoto ?? ''}
+            onChange={(next) => set('pastorPhoto', next || undefined)}
+            hint="Shown on the About page beside the welcome message."
+          />
+
           <Textarea
             label="Pastor's welcome message"
             rows={5}

@@ -96,6 +96,13 @@ export default function AdminDashboard() {
   )
 
   const upcoming = useMemo(() => upcomingEvents(content.events, 5), [content.events])
+  const hasFutureEvents = useMemo(
+    () =>
+      publishedEvents(content.events).some(
+        (event) => (event.end ?? event.start).slice(0, 10) >= todayIso(),
+      ),
+    [content.events],
+  )
 
   const backupOverdue = useMemo(() => {
     if (members.length === 0) return false
@@ -240,8 +247,12 @@ export default function AdminDashboard() {
 
         {/* --- upcoming events ----------------------------------------------- */}
         <Panel
-          title="Upcoming programmes"
-          description="From the published church calendar"
+          title={hasFutureEvents ? 'Upcoming programmes' : 'Recent programmes'}
+          description={
+            hasFutureEvents
+              ? 'From the published church calendar'
+              : 'Nothing scheduled ahead, showing the most recent'
+          }
           icon={CalendarDays}
           action={
             <ButtonLink to="/admin/content/events" variant="ghost" size="sm">
@@ -435,13 +446,25 @@ function greeting(): string {
   return 'Good evening'
 }
 
-/** Next `limit` published events that have not already finished. */
+/**
+ * The next `limit` events, or the most recent ones when nothing is scheduled.
+ *
+ * A panel that says "no upcoming events" while the church has a calendar full
+ * of past ones reads as broken rather than as empty. Falling back to the most
+ * recent keeps the dashboard useful the morning after a programme, which is
+ * exactly when someone opens it.
+ */
 function upcomingEvents(events: ChurchEvent[], limit: number): ChurchEvent[] {
   const today = todayIso()
-  return publishedEvents(events)
+  const published = publishedEvents(events)
+
+  const ahead = published
     .filter((event) => (event.end ?? event.start).slice(0, 10) >= today)
     .sort((a, b) => a.start.localeCompare(b.start))
-    .slice(0, limit)
+
+  if (ahead.length > 0) return ahead.slice(0, limit)
+
+  return [...published].sort((a, b) => b.start.localeCompare(a.start)).slice(0, limit)
 }
 
 function cxTone(kind: 'birthday' | 'anniversary'): string {

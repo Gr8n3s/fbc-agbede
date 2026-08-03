@@ -17,7 +17,7 @@ import {
   expandEvents,
   monthGrid,
   occurrencesByDate,
-  upcomingOccurrences,
+  upcomingOrRecent,
   type Occurrence,
 } from '@/lib/schedule'
 import type { EventCategory } from '@/lib/types'
@@ -51,7 +51,10 @@ export default function EventsPage() {
     return category === 'all' ? all : all.filter((e) => e.category === category)
   }, [content.events, category])
 
-  const upcoming = useMemo(() => upcomingOccurrences(events, 40, 365), [events])
+  const { occurrences: upcoming, isPast: showingPast } = useMemo(
+    () => upcomingOrRecent(events, 40),
+    [events],
+  )
 
   const year = cursor.getFullYear()
   const month = cursor.getMonth()
@@ -104,6 +107,11 @@ export default function EventsPage() {
 
         {view === 'list' ? (
           <div className="mt-8 space-y-4">
+            {showingPast && (
+              <p className="rounded-xl border border-ornament/35 bg-ornament/[0.07] px-4 py-3 text-[0.875rem] leading-relaxed text-ink-soft">
+                Nothing is scheduled ahead just yet. Here is what the church has held recently.
+              </p>
+            )}
             {upcoming.length > 0 ? (
               upcoming.map((occurrence) => (
                 <div key={occurrence.key} className="reveal">

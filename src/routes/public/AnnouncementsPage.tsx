@@ -4,7 +4,7 @@ import { AnnouncementCard } from '@/components/site/cards'
 import { Chip, EmptyState, PageHeader, SearchInput } from '@/components/ui'
 import { useContent } from '@/context/ContentContext'
 import { useDebounced, useDocumentTitle, useRevealAll } from '@/hooks'
-import { publishedAnnouncements } from '@/lib/content'
+import { currentBulletin, publishedAnnouncements } from '@/lib/content'
 import { matchesQuery } from '@/lib/utils'
 
 export default function AnnouncementsPage() {
@@ -19,6 +19,12 @@ export default function AnnouncementsPage() {
   const announcements = useMemo(
     () => publishedAnnouncements(content.announcements),
     [content.announcements],
+  )
+
+  /** Notices from the current programme sheet, used when the board is empty. */
+  const bulletinNotices = useMemo(
+    () => currentBulletin(content.bulletins)?.notices ?? [],
+    [content.bulletins],
   )
 
   const categories = useMemo(() => {
@@ -78,6 +84,28 @@ export default function AnnouncementsPage() {
                 <AnnouncementCard announcement={announcement} />
               </div>
             ))
+          ) : announcements.length === 0 && bulletinNotices.length > 0 ? (
+            /*
+              The church already writes its notices onto the weekly programme
+              sheet. Leaving the notice board empty while that sheet is full of
+              them helps nobody, so they are shown here too.
+            */
+            <div className="sm:col-span-2">
+              <h2 className="font-display text-xl font-semibold text-ink">
+                From this week's programme
+              </h2>
+              <ul className="mt-4 space-y-2.5">
+                {bulletinNotices.map((notice, index) => (
+                  <li
+                    key={index}
+                    className="flex gap-3 rounded-xl border border-line bg-surface px-4 py-3"
+                  >
+                    <span className="mt-1.5 size-1.5 shrink-0 rotate-45 bg-ornament" aria-hidden />
+                    <span className="text-[0.9375rem] leading-relaxed text-ink-soft">{notice}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : (
             <div className="sm:col-span-2">
               <EmptyState

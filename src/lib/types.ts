@@ -121,6 +121,8 @@ export interface ChurchProfile {
   pastorName: string
   pastorTitle: string
   pastorMessage?: string
+  /** Path to the pastor's photograph, e.g. media/church/pastor.jpg. */
+  pastorPhoto?: string
   about: string
   history: string
   mission: string

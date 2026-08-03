@@ -116,6 +116,31 @@ export function upcomingOccurrences(
     .slice(0, count)
 }
 
+/**
+ * What is coming up, or what happened most recently.
+ *
+ * A church calendar is not always full. Between programmes there is often
+ * nothing ahead at all, and a panel reading "no events scheduled" while the
+ * church has run events all year looks broken rather than empty. This returns
+ * the upcoming occurrences when there are any, and the most recent otherwise,
+ * telling the caller which it gave so the heading can be honest about it.
+ */
+export function upcomingOrRecent(
+  events: ChurchEvent[],
+  count = 5,
+  lookBackDays = 365,
+): { occurrences: Occurrence[]; isPast: boolean } {
+  const ahead = upcomingOccurrences(events, count, 365)
+  if (ahead.length > 0) return { occurrences: ahead, isPast: false }
+
+  const today = new Date()
+  const recent = expandEvents(events, toIsoDate(addDays(today, -lookBackDays)), toIsoDate(today))
+    .sort((a, b) => b.start.getTime() - a.start.getTime())
+    .slice(0, count)
+
+  return { occurrences: recent, isPast: recent.length > 0 }
+}
+
 export function occurrencesOn(events: ChurchEvent[], date: string): Occurrence[] {
   return expandEvents(events, date, date)
 }

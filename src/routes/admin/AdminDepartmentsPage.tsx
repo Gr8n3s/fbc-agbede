@@ -16,6 +16,7 @@ import {
   Badge,
   Button,
   EmptyState,
+  FileField,
   IconButton,
   Input,
   Modal,
@@ -557,6 +558,15 @@ function DepartmentEditor({
             placeholder="e.g. Church auditorium"
           />
         </div>
+
+        <FileField
+          label="Department picture"
+          folder="departments"
+          accept="image/*"
+          value={draft.image ?? ''}
+          onChange={(next) => set('image', next || undefined)}
+          hint="Shown on the departments page. A photograph says more than a summary."
+        />
 
         <Select
           label="Card colour"

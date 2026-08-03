@@ -12,7 +12,7 @@ import {
 } from '@/components/ui'
 import { useContent } from '@/context/ContentContext'
 import { useDebounced, useDocumentTitle, useLocalState, useRevealAll } from '@/hooks'
-import { currentReadingPlan, publishedTeachings } from '@/lib/content'
+import { currentReadingPlan, devotionalForToday, publishedTeachings } from '@/lib/content'
 import { formatDate, matchesQuery, todayIso } from '@/lib/utils'
 
 /**
@@ -33,6 +33,12 @@ export default function BiblePage() {
   const revealRef = useRevealAll<HTMLDivElement>()
   const current = useMemo(() => currentReadingPlan(content.readingPlans), [content.readingPlans])
   const teachings = useMemo(() => publishedTeachings(content.teachings), [content.teachings])
+
+  /** Fallback readings, taken from the devotional the church already publishes. */
+  const todayFromDevotional = useMemo(
+    () => devotionalForToday(content.devotionals)?.readingPlan ?? [],
+    [content.devotionals],
+  )
 
   const [query, setQuery] = useState('')
   const search = useDebounced(query)
@@ -190,6 +196,29 @@ export default function BiblePage() {
               </ul>
             )}
           </section>
+        ) : todayFromDevotional.length > 0 ? (
+          /*
+            No standalone plan published, but the church already puts a reading
+            list on each devotional. Showing that here means the page is useful
+            from day one instead of asking for the same work twice.
+          */
+          <Card className="reveal border-ornament/40 p-5 sm:p-7">
+            <p className="eyebrow">Today's reading</p>
+            <p className="mt-1 text-[0.8125rem] text-ink-faint">{formatDate(todayIso(), 'full')}</p>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {todayFromDevotional.map((reference) => (
+                <li
+                  key={reference}
+                  className="rounded-lg border border-line bg-sunken px-3 py-2 font-display text-[1.0625rem] font-semibold text-ink"
+                >
+                  {reference}
+                </li>
+              ))}
+            </ul>
+            <ButtonLink to="/devotional" variant="secondary" icon={BookOpenText} className="mt-5">
+              Read today's devotional
+            </ButtonLink>
+          </Card>
         ) : (
           <EmptyState
             icon={BookMarked}

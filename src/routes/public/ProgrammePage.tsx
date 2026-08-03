@@ -35,14 +35,30 @@ export default function ProgrammePage() {
     return [...counts.entries()].sort((a, b) => b[1] - a[1])
   }, [all])
 
+  /**
+   * True when "Upcoming" is empty but programmes exist.
+   *
+   * Sunday's sheet stops being upcoming on Monday morning, and a member tapping
+   * Programme then saw a blank page with a perfectly good order of service
+   * sitting one filter away. The page falls back to the most recent instead,
+   * and says that is what it has done.
+   */
+  const nothingUpcoming = useMemo(
+    () => all.length > 0 && !all.some((b) => (b.endDate ?? b.date) >= today),
+    [all, today],
+  )
+
   const filtered = useMemo(() => {
     let list = all
     switch (filter) {
-      case 'upcoming':
-        list = all
+      case 'upcoming': {
+        const upcoming = all
           .filter((b) => (b.endDate ?? b.date) >= today)
           .sort((a, b) => a.date.localeCompare(b.date))
+        // Never show an empty page while the church has published something.
+        list = upcoming.length > 0 ? upcoming : all
         break
+      }
       case 'this-week':
         list = thisWeek
         break
@@ -101,6 +117,13 @@ export default function ProgrammePage() {
             </Chip>
           </div>
         </div>
+
+        {filter === 'upcoming' && nothingUpcoming && (
+          <p className="mt-6 rounded-xl border border-ornament/35 bg-ornament/[0.07] px-4 py-3 text-[0.875rem] leading-relaxed text-ink-soft">
+            Nothing is scheduled yet. Showing the most recent programmes until the next one is
+            published.
+          </p>
+        )}
 
         <div className="mt-8 space-y-4">
           {filtered.length > 0 ? (

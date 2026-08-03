@@ -3,6 +3,7 @@ import { RichText } from '@/components/site/RichText'
 import { Card, PageHeader, Rule, Seal, SectionHeading } from '@/components/ui'
 import { useChurch } from '@/context/ContentContext'
 import { useDocumentTitle, useRevealAll } from '@/hooks'
+import { asset } from '@/lib/utils'
 
 export default function AboutPage() {
   const church = useChurch()
@@ -58,9 +59,19 @@ export default function AboutPage() {
               <Card className="mt-6 overflow-hidden">
                 <div className="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:p-8">
                   <div className="mx-auto sm:mx-0">
-                    <div className="seal size-24">
-                      <Users className="size-10" aria-hidden />
-                    </div>
+                    {church.pastorPhoto ? (
+                      <img
+                        src={asset(church.pastorPhoto)}
+                        alt={church.pastorName}
+                        loading="lazy"
+                        decoding="async"
+                        className="size-24 rounded-full border-2 border-ornament/40 object-cover"
+                      />
+                    ) : (
+                      <div className="seal size-24">
+                        <Users className="size-10" aria-hidden />
+                      </div>
+                    )}
                   </div>
                   <div className="min-w-0">
                     <Quote className="size-6 text-ornament/50" aria-hidden />

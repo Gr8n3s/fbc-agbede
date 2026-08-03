@@ -1,16 +1,16 @@
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
+import { CalendarDays, CalendarPlus, Clock, Download, MapPin, Repeat, Share2, User, Users } from 'lucide-react'
 import {
-  CalendarDays,
-  CalendarPlus,
-  Clock,
-  MapPin,
-  Repeat,
-  Share2,
-  User,
-  Users,
-} from 'lucide-react'
-import { Badge, BackLink, Button, ButtonLink, Card, DetailRow, EmptyState } from '@/components/ui'
+  BackLink,
+  Badge,
+  Button,
+  ButtonLink,
+  Card,
+  DetailRow,
+  EmptyState,
+  ExternalButton,
+} from '@/components/ui'
 import { useContent } from '@/context/ContentContext'
 import { useToast } from '@/context/ToastContext'
 import { useDocumentTitle } from '@/hooks'
@@ -63,6 +63,34 @@ export default function EventDetailPage() {
 
   const start = parseLocal(event.start)
   const end = event.end ? parseLocal(event.end) : undefined
+
+  /**
+   * One-tap add for Google Calendar.
+   *
+   * Google's template URL takes local wall-clock times without a Z suffix, the
+   * same convention the .ics uses, so a service at nine in the morning stays at
+   * nine wherever the member happens to open it. An event with no end time is
+   * given two hours, which is roughly a service and better than a zero-length
+   * entry Google would otherwise hide.
+   */
+  const googleCalendarUrl = (() => {
+    const stamp = (d: Date) =>
+      `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(
+        d.getDate(),
+      ).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}${String(
+        d.getMinutes(),
+      ).padStart(2, '0')}00`
+
+    const finish = end ?? new Date(start.getTime() + 2 * 60 * 60 * 1000)
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: event.title,
+      dates: `${stamp(start)}/${stamp(finish)}`,
+      details: [event.description, content.church.name].filter(Boolean).join('\n\n'),
+      location: event.venue || content.church.address,
+    })
+    return `https://calendar.google.com/calendar/render?${params.toString()}`
+  })()
 
   /**
    * Calendar file, built by hand.
@@ -184,8 +212,16 @@ export default function EventDetailPage() {
         </dl>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          <Button icon={CalendarPlus} onClick={addToCalendar}>
-            Add to my calendar
+          {/*
+            Google first, because that is what most people here actually use and
+            it adds the event in one tap. The .ics download stays for Outlook,
+            Apple Calendar and anyone offline.
+          */}
+          <ExternalButton href={googleCalendarUrl} variant="primary" icon={CalendarPlus}>
+            Add to Google Calendar
+          </ExternalButton>
+          <Button variant="secondary" icon={Download} onClick={addToCalendar}>
+            Other calendar
           </Button>
           <Button variant="secondary" icon={Share2} onClick={() => void share()}>
             Share
