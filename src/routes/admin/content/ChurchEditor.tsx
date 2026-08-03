@@ -196,6 +196,48 @@ export function ChurchEditor() {
         </div>
       </Panel>
 
+      <Panel
+        title="Welcome to the new month"
+        description="A banner shown on the home page for one month, then it retires itself."
+        icon={Sparkles}
+      >
+        <div className="space-y-4">
+          <FileField
+            label="Month picture"
+            folder="church"
+            accept="image/*"
+            value={draft.monthlyWelcomeImage ?? ''}
+            onChange={(next) => set('monthlyWelcomeImage', next || undefined)}
+            hint="The designed greeting the church shares at the start of each month."
+          />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Input
+              label="Which month is this for"
+              type="month"
+              value={draft.monthlyWelcomeFor ?? ''}
+              onChange={(e) => set('monthlyWelcomeFor', e.target.value || undefined)}
+              hint="It disappears on its own once the month is over."
+            />
+            <Input
+              label="Heading"
+              value={draft.monthlyWelcomeTitle ?? ''}
+              onChange={(e) => set('monthlyWelcomeTitle', e.target.value || undefined)}
+              placeholder="Welcome to August"
+            />
+          </div>
+
+          <Textarea
+            label="Message"
+            rows={3}
+            maxLength={600}
+            value={draft.monthlyWelcomeMessage ?? ''}
+            onChange={(e) => set('monthlyWelcomeMessage', e.target.value || undefined)}
+            placeholder="A word for the month ahead."
+          />
+        </div>
+      </Panel>
+
       <Panel title="About the church" icon={Building2}>
         <div className="space-y-4">
           <Textarea

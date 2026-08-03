@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, ShieldCheck, WifiOff, X } from 'lucide-react'
 import { Drawer, IconButton, Wordmark } from '@/components/ui'
+import { useChurch } from '@/context/ContentContext'
 import { useOnline } from '@/hooks'
 import { cx } from '@/lib/utils'
 import { PRIMARY_NAV, SECONDARY_NAV } from './nav'
 import { ThemeToggle } from './ThemeToggle'
 
 export function Header() {
+  const church = useChurch()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const online = useOnline()
@@ -48,8 +50,8 @@ export function Header() {
         />
 
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:px-6">
-          <Link to="/" className="shrink-0 rounded-lg" aria-label="FBC Agbede home">
-            <Wordmark />
+          <Link to="/" className="shrink-0 rounded-lg" aria-label={`${church.shortName || church.name} home`}>
+            <Wordmark name={church.shortName || church.name} motto={church.motto} />
           </Link>
 
           <nav aria-label="Main" className="ml-auto hidden items-center gap-0.5 lg:flex">
@@ -94,7 +96,7 @@ export function Header() {
 
       <Drawer open={menuOpen} onClose={() => setMenuOpen(false)} title="Menu">
         <div className="flex items-center justify-between border-b border-line px-4 py-3.5">
-          <Wordmark />
+          <Wordmark name={church.shortName || church.name} motto={church.motto} />
           <IconButton icon={X} label="Close menu" onClick={() => setMenuOpen(false)} />
         </div>
 

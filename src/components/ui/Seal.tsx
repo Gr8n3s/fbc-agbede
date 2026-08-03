@@ -192,19 +192,24 @@ function DrawnSeal({
 export function Wordmark({
   className,
   compact = false,
+  name,
+  motto,
 }: {
   className?: string
   compact?: boolean
+  /** Defaults to the church's short name. "FBC" is First Baptist Church. */
+  name?: string
+  motto?: string
 }) {
   return (
     <span className={cx('flex items-center gap-2.5', className)}>
       <Seal variant={compact ? 'mark' : 'full'} className="size-9 sm:size-10" decorative />
       <span className={cx('min-w-0 leading-none', compact && 'sr-only')}>
         <span className="block font-display text-[0.95rem] font-semibold tracking-tight text-ink">
-          FBC Agbede
+          {name ?? 'First Baptist Church Agbede'}
         </span>
         <span className="mt-0.5 block text-[0.6rem] font-semibold uppercase tracking-[0.22em] text-ornament">
-          Chapel of Grace
+          {motto ?? 'Chapel of Grace'}
         </span>
       </span>
     </span>

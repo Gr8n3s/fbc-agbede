@@ -44,7 +44,8 @@ import {
   publishedSermons,
 } from '@/lib/content'
 import { nextService, upcomingOrRecent } from '@/lib/schedule'
-import { cx, dayName, formatTime, relativeTime } from '@/lib/utils'
+import type { ChurchProfile } from '@/lib/types'
+import { asset, cx, dayName, formatTime, relativeTime, todayIso } from '@/lib/utils'
 
 export default function HomePage() {
   const { content, loading } = useContent()
@@ -77,6 +78,8 @@ export default function HomePage() {
   return (
     <div ref={revealRef}>
       <Hero churchName={church.name} motto={church.motto} tagline={church.tagline} />
+
+      <MonthlyWelcome church={church} />
 
       {upNext && (
         <NextServiceStrip
@@ -561,5 +564,51 @@ function InstallPanel() {
         </Button>
       </div>
     </Card>
+  )
+}
+
+/**
+ * The month's welcome banner.
+ *
+ * Shown only for the month it was made for, so a forgotten banner does not
+ * greet the congregation into August all the way through September. The
+ * picture carries the message, so the heading and text are optional and the
+ * whole section disappears when there is no image.
+ */
+function MonthlyWelcome({ church }: { church: ChurchProfile }) {
+  const thisMonth = todayIso().slice(0, 7)
+  if (!church.monthlyWelcomeImage) return null
+  if (church.monthlyWelcomeFor && church.monthlyWelcomeFor !== thisMonth) return null
+
+  const heading =
+    church.monthlyWelcomeTitle ||
+    `Welcome to ${new Date().toLocaleDateString('en-NG', { month: 'long' })}`
+
+  return (
+    <section className="border-b border-line bg-surface" aria-labelledby="month-welcome">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+        <figure className="reveal overflow-hidden rounded-2xl border border-ornament/35 bg-sunken">
+          <img
+            src={asset(church.monthlyWelcomeImage)}
+            alt={heading}
+            loading="lazy"
+            decoding="async"
+            className="w-full object-contain"
+          />
+          {(church.monthlyWelcomeTitle || church.monthlyWelcomeMessage) && (
+            <figcaption className="px-5 py-4 text-center">
+              <h2 id="month-welcome" className="font-display text-xl font-semibold text-ink">
+                {heading}
+              </h2>
+              {church.monthlyWelcomeMessage && (
+                <p className="mx-auto mt-1.5 max-w-2xl text-pretty text-[0.9375rem] leading-relaxed text-ink-soft">
+                  {church.monthlyWelcomeMessage}
+                </p>
+              )}
+            </figcaption>
+          )}
+        </figure>
+      </div>
+    </section>
   )
 }

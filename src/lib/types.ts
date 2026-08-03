@@ -123,6 +123,19 @@ export interface ChurchProfile {
   pastorMessage?: string
   /** Path to the pastor's photograph, e.g. media/church/pastor.jpg. */
   pastorPhoto?: string
+
+  /**
+   * The month's welcome banner.
+   *
+   * Churches here mark the turn of a month, and the greeting is usually a
+   * designed picture rather than text. `monthlyWelcomeFor` is a YYYY-MM stamp
+   * so last month's banner takes itself down instead of greeting the
+   * congregation into August all through September.
+   */
+  monthlyWelcomeImage?: string
+  monthlyWelcomeTitle?: string
+  monthlyWelcomeMessage?: string
+  monthlyWelcomeFor?: string
   about: string
   history: string
   mission: string
