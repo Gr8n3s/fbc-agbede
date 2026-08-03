@@ -418,6 +418,15 @@ export function SermonsEditor() {
 // Announcements
 // ---------------------------------------------------------------------------
 
+/** Plain-English reading of an announcement's expiry date. */
+function expiryHint(expiresAt?: string): string {
+  if (!expiresAt) return 'Leave blank to keep it on the board until you remove it.'
+  const today = todayIso()
+  if (expiresAt < today) return 'This date has passed.'
+  if (expiresAt === today) return 'Today, so it drops off the board tomorrow morning.'
+  return `Stays on the board up to and including ${formatDate(expiresAt, 'long')}.`
+}
+
 export function AnnouncementsEditor() {
   const { content, update } = useContent()
 
@@ -505,7 +514,17 @@ export function AnnouncementsEditor() {
               type="date"
               value={draft.expiresAt ?? ''}
               onChange={(e) => set('expiresAt', e.target.value || undefined)}
-              hint="It disappears from the notice board on its own."
+              /*
+                Say what the chosen date actually does. "Remove after" with a
+                bare date reads as harmless, and picking today looks like
+                "show it today" when it means "gone tomorrow morning".
+              */
+              hint={expiryHint(draft.expiresAt)}
+              error={
+                draft.expiresAt && draft.expiresAt < todayIso()
+                  ? 'That date has already passed, so this notice will not appear at all.'
+                  : undefined
+              }
             />
           </div>
 
