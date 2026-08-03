@@ -1,19 +1,15 @@
 {
   "albums": [
     {
-      "id": "alb_4ee4df5b-a514-4027-b0d1-2c05da298520",
-      "title": "desfesfef",
-      "slug": "d",
+      "id": "alb_c4b6f22f-97fd-4ada-a9e6-4daa7a9deefa",
+      "title": "booefooo",
+      "slug": "b",
       "date": "2026-08-03",
-      "photos": [
-        {
-          "id": "img_2a31fddc-b599-48dc-bf2d-42d2a7c920bd",
-          "url": "media/gallery/2026-08-03-fbc-logo-redesign.png"
-        }
-      ],
+      "photos": [],
       "published": true,
-      "createdAt": "2026-08-03T07:47:12.526Z",
-      "updatedAt": "2026-08-03T07:47:43.181Z"
+      "createdAt": "2026-08-03T07:49:05.011Z",
+      "updatedAt": "2026-08-03T07:49:23.230Z",
+      "cover": "media/gallery/2026-08-03-fbc-logo-redesign.png"
     }
   ],
   "videos": []
