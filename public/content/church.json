@@ -9,8 +9,8 @@
   "state": "Lagos",
   "country": "Nigeria",
   "phone": "",
-  "email": "",
-  "whatsapp": "",
+  "email": "fbcagbedemedia1@gmail.com",
+  "whatsapp": "+234 807 378 0310",
   "mapUrl": "",
   "pastorName": "Rev Timothy Olatunde Tijani",
   "pastorTitle": "Church Pastor",
@@ -116,10 +116,15 @@
   ],
   "socials": [
     {
-      "id": "soc_3d997bd9-d088-46e5-9326-e8fad0dc3cc6",
+      "id": "soc_3f4a4c28-86a0-405c-a00e-151593d4efa7",
+      "platform": "instagram",
+      "url": "https://www.instagram.com/fbcagbede?igsh=MXUwMWIxbTc4NmpyeA=="
+    },
+    {
+      "id": "soc_e76a0b7d-0707-4327-8b1f-1efed9cae00f",
       "platform": "facebook",
-      "url": "https://church"
+      "url": "https://www.facebook.com/share/18RDdm9a9s/ "
     }
   ],
-  "updatedAt": "2026-08-03T10:05:14.999Z"
+  "updatedAt": "2026-08-06T17:30:56.163Z"
 }
